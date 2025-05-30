@@ -42,14 +42,12 @@ class OwnerService
                 }
             })
             ->addColumn('status', function ($owner){
-                if ($owner->status == USER_STATUS_ACTIVE) {
+                if ($owner->status == ACTIVE) {
                     return '<div class="status-btn status-btn-green font-13 radius-4">Active</div>';
-                } else if ($owner->status == USER_STATUS_INACTIVE){
-                    return '<div class="status-btn status-btn-purple font-13 radius-4">Inactive</div>';
-                } else if ($owner->status == USER_STATUS_DELETED){
-                    return '<div class="status-btn status-btn-red font-13 radius-4">Deleted</div>';
-                } else if ($owner->status == USER_STATUS_UNVERIFIED){
-                    return '<div class="status-btn status-btn-orange font-13 radius-4">Unverified</div>';
+                } else if ($owner->status == DEACTIVATE){
+                    return '<div class="status-btn status-btn-orange font-13 radius-4">Deactivate</div>';
+                } else{
+                    return '<div class="status-btn status-btn-red font-13 radius-4">Cancel</div>';
                 }
             })
             ->addColumn('action', function ($owner) {
@@ -77,7 +75,7 @@ class OwnerService
     {
         $data['status'] = false;
         $data['tenants'] =  Tenant::query()
-            ->where('tenants.owner_user_id', getOwnerUserId())
+            ->where('tenants.owner_user_id', auth()->id())
             ->join('users', 'tenants.user_id', '=', 'users.id')
             ->whereNull('users.deleted_at')
             ->where(DB::raw("concat(users.first_name, ' ', users.last_name)"), 'LIKE', "%" . $request->keyword . "%")
@@ -85,13 +83,13 @@ class OwnerService
             ->get();
 
         $data['properties'] =  Property::query()
-            ->where('owner_user_id', getOwnerUserId())
+            ->where('owner_user_id', auth()->id())
             ->where('name', 'LIKE', '%' . $request->keyword . '%')
             ->select('id', 'name')
             ->get();
 
         $data['invoices'] =  Invoice::query()
-            ->where('owner_user_id', getOwnerUserId())
+            ->where('owner_user_id', auth()->id())
             ->where('invoice_no', 'LIKE', '%' . $request->keyword . '%')
             ->select('id', 'invoice_no')
             ->get();

@@ -4,7 +4,6 @@
 namespace App\Services\Payment;
 
 use App\Models\Gateway;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class MercadoPagoService extends BasePaymentService
@@ -17,114 +16,83 @@ class MercadoPagoService extends BasePaymentService
     public function __construct($method, $object)
     {
         parent::__construct($method, $object);
-
-        $this->orderId = $object['id'] ?? null;
-        $this->client_id = $this->gateway->key;
-        $this->client_secret = $this->gateway->secret;
-        $this->test_mode = $this->gateway->mode === GATEWAY_MODE_SANDBOX;
-    }
-
-    private function getAccessToken()
-    {
-        $response = Http::asForm()->post('https://api.mercadopago.com/oauth/token', [
-            'grant_type' => 'client_credentials',
-            'client_id' => $this->client_id,
-            'client_secret' => $this->client_secret,
-        ]);
-
-        if ($response->successful()) {
-            return $response->json('access_token');
+        if (isset($object['id'])) {
+            $this->orderId = $object['id'];
         }
 
-        throw new \Exception('Unable to retrieve access token: ' . $response->body());
+        $this->client_id = $this->gateway->key;
+        $this->client_secret = $this->gateway->secret;
+        $this->test_mode = ($this->gateway->mode == GATEWAY_MODE_SANDBOX) ? true : false;
+    }
+
+    protected function setAccessToken()
+    {
+        return \MercadoPago\SDK::setAccessToken($this->client_secret);
     }
 
     public function makePayment($amount)
     {
         $this->setAmount($amount);
-
-        $data = [
-            'success' => false,
-            'redirect_url' => '',
-            'payment_id' => '',
-            'message' => SOMETHING_WENT_WRONG,
-        ];
-
+        $data['success'] = false;
+        $data['redirect_url'] = '';
+        $data['payment_id'] = '';
+        $data['message'] = SOMETHING_WENT_WRONG;
         try {
+            $order_id =  $this->orderId;
             $this->verify_currency();
-            $accessToken = $this->getAccessToken();
+            $this->setAccessToken();
+            $preference = new \MercadoPago\Preference();
 
-            $response = Http::withToken($accessToken)->post('https://api.mercadopago.com/checkout/preferences', [
-                'items' => [
-                    [
-                        'id' => $this->orderId,
-                        'title' => "Order #{$this->orderId}",
-                        'quantity' => 1,
-                        'unit_price' => $this->amount,
-                    ]
-                ],
-                'back_urls' => [
-                    'success' => $this->callbackUrl,
-                    'failure' => $this->callbackUrl,
-                    'pending' => $this->callbackUrl,
-                ],
-                'auto_return' => 'approved',
-                'metadata' => [
-                    'order_id' => $this->orderId,
-                ],
-            ]);
+            $item = new \MercadoPago\Item();
+            $item->id = $order_id;
+            $item->title = "";
+            $item->quantity = 1;
+            $item->unit_price = $this->amount;
 
-            if ($response->successful()) {
-                $responseBody = $response->json();
-                $data['success'] = true;
-                $data['redirect_url'] = $responseBody['init_point'];
-                $data['payment_id'] = $responseBody['id'];
-            } else {
-                $data['message'] = $response->body();
-            }
+            $preference->items = array($item);
+
+            $preference->back_urls = array(
+                "success" => $this->callbackUrl,
+                "failure" => $this->callbackUrl,
+                "pending" => $this->callbackUrl
+            );
+            $preference->auto_return = "approved";
+            $preference->metadata = array(
+                "order_id" => $order_id,
+            );
+
+            $preference->save();
+            $data['redirect_url'] = $preference->init_point;
+            $data['payment_id'] = $preference->id;
+            $data['success'] = true;
+            return $data;
         } catch (\Exception $ex) {
-            Log::error('MercadoPago makePayment error: ' . $ex->getMessage());
+            Log::info($ex);
             $data['message'] = $ex->getMessage();
+            return $data;
         }
-
-        return $data;
     }
 
     public function paymentConfirmation($payment_id)
     {
-        $data = [
-            'success' => false,
-            'data' => null,
-        ];
 
-        try {
-            $accessToken = $this->getAccessToken();
+        $data['success'] = false;
+        $data['data'] = null;
+        $this->setAccessToken();
 
-            $response = Http::withToken($accessToken)->get("https://api.mercadopago.com/v1/payments/{$payment_id}");
-            if ($response->successful()) {
-                $payment = $response->json();
+        $payment = \MercadoPago\Payment::find_by_id($payment_id);
 
-                if ($payment['status'] === 'approved') {
-                    $data['success'] = true;
-                    $data['data'] = [
-                        'amount' => $payment['transaction_amount'],
-                        'currency' => $this->currency,
-                        'payment_status' => 'success',
-                        'payment_method' => MERCADOPAGO,
-                    ];
-                } else {
-                    $data['data'] = [
-                        'currency' => $this->currency,
-                        'payment_status' => 'unpaid',
-                        'payment_method' => MERCADOPAGO,
-                    ];
-                }
-            } else {
-                $data['message'] = $response->body();
-            }
-        } catch (\Exception $ex) {
-            Log::error('MercadoPago paymentConfirmation error: ' . $ex->getMessage());
-            $data['message'] = $ex->getMessage();
+        if (!is_null($payment) && $payment->status == 'approved') {
+            $data['success'] = true;
+            $data['data']['amount'] = $payment->transaction_amount;
+            $data['data']['currency'] = $this->currency;
+            $data['data']['payment_status'] =  'success';
+            $data['data']['payment_method'] = MERCADOPAGO;
+        } else {
+            $data['success'] = false;
+            $data['data']['currency'] = $this->currency;
+            $data['data']['payment_status'] =  'unpaid';
+            $data['data']['payment_method'] = MERCADOPAGO;
         }
 
         return $data;
@@ -132,17 +100,17 @@ class MercadoPagoService extends BasePaymentService
 
     public function verify_currency()
     {
-        if (!in_array($this->currency, $this->supported_currency_list(), true)) {
-            throw new \Exception($this->currency . __(' is not supported by ' . $this->gateway_name()));
+        if (in_array($this->currency, $this->supported_currency_list(), true)) {
+            return true;
         }
-
-        return true;
+        return throw new \Exception($this->currency . __(' is not supported by ' . $this->gateway_name()));
     }
 
     public function supported_currency_list()
     {
-        return ['BRL', 'ARS', 'MXN', 'USD', 'COP', 'CLP', 'UYU', 'PEN', 'VEF', 'PYG'];
+        return ['BRL'];
     }
+
 
     public function gateway_name()
     {

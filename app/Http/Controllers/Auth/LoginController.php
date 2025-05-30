@@ -83,7 +83,7 @@ class LoginController extends Controller
             Auth::logout();
             return redirect("login")->with('error', __('Your account has been deleted.'));
         } elseif (isset($user) && ($user->status == USER_STATUS_ACTIVE)) {
-            if (isset($user) && ($user->role == USER_ROLE_OWNER) || ($user->role == USER_ROLE_TEAM_MEMBER)) {
+            if (isset($user) && $user->role == USER_ROLE_OWNER) {
                 return redirect()->route('owner.dashboard');
             } elseif (isset($user) && ($user->role == USER_ROLE_TENANT)) {
                 if (!is_null($user->tenant->property_id) && !is_null($user->tenant->property_id)) {

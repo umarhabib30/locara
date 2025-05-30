@@ -26,13 +26,13 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <div class="currency-settings-page-area">
                                         <div class="account-settings-content-box">
                                             <div class="account-settings-title border-bottom mb-20 pb-20">
                                                 <div class="row align-items-center">
-                                                    <div class="col-xl-6">
+                                                    <div class="col-md-6">
                                                         <h4>{{ $pageTitle }}</h4>
                                                     </div>
                                                 </div>
@@ -77,9 +77,9 @@
                                                             </tr>
                                                             <tr class="row-item">
                                                                 <td>{{ __('2') }}</td>
-                                                                <td>{{ __('Amazing Features Section') }}</td>
+                                                                <td>{{ __('Features Section') }}</td>
                                                                 <td>
-                                                                    @if (getOption('home_amazing_feature_section_status', 1) == ACTIVE)
+                                                                    @if (getOption('home_feature_section_status', 1) == ACTIVE)
                                                                         <div
                                                                             class="status-btn status-btn-green font-13 radius-4">
                                                                             {{ __('Active') }}</div>
@@ -93,7 +93,7 @@
                                                                     <div class="tbl-action-btns d-inline-flex">
                                                                         <button type="button" class="p-1 tbl-action-btn"
                                                                             data-bs-toggle="modal"
-                                                                            data-bs-target="#editAmazingFeaturesModal">
+                                                                            data-bs-target="#editFeaturesModal">
                                                                             <span class="iconify"
                                                                                 data-icon="clarity:note-edit-solid"></span>
                                                                         </button>
@@ -152,9 +152,9 @@
                                                             </tr>
                                                             <tr class="row-item">
                                                                 <td>{{ __('5') }}</td>
-                                                                <td>{{ __('Advance Feature Section') }}</td>
+                                                                <td>{{ __('Core Pages Section') }}</td>
                                                                 <td>
-                                                                    @if (getOption('home_advance_feature_section_status', 1) == ACTIVE)
+                                                                    @if (getOption('home_core_pages_section_status', 1) == ACTIVE)
                                                                         <div
                                                                             class="status-btn status-btn-green font-13 radius-4">
                                                                             {{ __('Active') }}</div>
@@ -168,7 +168,7 @@
                                                                     <div class="tbl-action-btns d-inline-flex">
                                                                         <button type="button" class="p-1 tbl-action-btn"
                                                                             data-bs-toggle="modal"
-                                                                            data-bs-target="#advanceFeatureModal">
+                                                                            data-bs-target="#editCorePagesModal">
                                                                             <span class="iconify"
                                                                                 data-icon="clarity:note-edit-solid"></span>
                                                                         </button>
@@ -200,7 +200,7 @@
                                                                     </div>
                                                                 </td>
                                                             </tr>
-                                                            <tr class="row-item d-none">
+                                                            <tr class="row-item">
                                                                 <td>{{ __('7') }}</td>
                                                                 <td>{{ __('Integrations Section') }}</td>
                                                                 <td>
@@ -226,7 +226,7 @@
                                                                 </td>
                                                             </tr>
                                                             <tr class="row-item">
-                                                                <td>{{ __('7') }}</td>
+                                                                <td>{{ __('8') }}</td>
                                                                 <td>{{ __('Testimonial Section') }}</td>
                                                                 <td>
                                                                     @if (getOption('home_testimonial_section_status', 1) == ACTIVE)
@@ -251,7 +251,7 @@
                                                                 </td>
                                                             </tr>
                                                             <tr class="row-item">
-                                                                <td>{{ __('8') }}</td>
+                                                                <td>{{ __('9') }}</td>
                                                                 <td>{{ __('Faq Section') }}</td>
                                                                 <td>
                                                                     @if (getOption('home_faq_section_status', 1) == ACTIVE)
@@ -347,12 +347,12 @@
         </div>
     </div>
 
-    <div class="modal fade" id="editAmazingFeaturesModal" tabindex="-1" aria-labelledby="editAmazingFeaturesModalLabel"
+    <div class="modal fade" id="editFeaturesModal" tabindex="-1" aria-labelledby="editFeaturesModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="editAmazingFeaturesModalLabel">{{ __('Features Section') }}</h4>
+                    <h4 class="modal-title" id="editFeaturesModalLabel">{{ __('Features Section') }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span class="iconify" data-icon="akar-icons:cross"></span>
                     </button>
@@ -366,22 +366,22 @@
                                 <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Name') }}</label>
-                                    <input type="text" name="home_amazing_features_name" class="form-control"
-                                        value="{{ getOption('home_amazing_features_name') }}">
+                                    <input type="text" name="home_features_name" class="form-control"
+                                        value="{{ getOption('home_features_name') }}">
                                 </div>
                                 <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Title') }}</label>
-                                    <input type="text" name="home_amazing_features_title" class="form-control"
-                                        value="{{ getOption('home_amazing_features_title') }}">
+                                    <input type="text" name="home_features_title" class="form-control"
+                                        value="{{ getOption('home_features_title') }}">
                                 </div>
 
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Summary') }}</label>
                                     <textarea name="home_features_summery" id="home_features_summery" class="form-control">{{ getOption('home_features_summery') }}</textarea>
                                 </div>
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Image') }}</label>
                                     <input type="file" class="form-control" name="home_features_image">
@@ -389,12 +389,12 @@
                                 <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Status') }}</label>
-                                    <select name="home_amazing_feature_section_status" class="form-control">
+                                    <select name="home_feature_section_status" class="form-control">
                                         <option value="1"
-                                            {{ getOption('home_amazing_feature_section_status', 1) == 1 ? 'selected' : '' }}>
+                                            {{ getOption('home_feature_section_status', 1) == 1 ? 'selected' : '' }}>
                                             {{ __('Active') }}</option>
                                         <option value="0"
-                                            {{ getOption('home_amazing_feature_section_status', 1) == 0 ? 'selected' : '' }}>
+                                            {{ getOption('home_feature_section_status', 1) == 0 ? 'selected' : '' }}>
                                             {{ __('Deactivate') }}</option>
                                     </select>
                                 </div>
@@ -431,55 +431,20 @@
                             <div class="row">
                                 <div class="col-md-12 mb-25">
                                     <label
+                                        class="label-text-title color-heading font-medium mb-2">{{ __('Name') }}</label>
+                                    <input type="text" name="home_about_us_name" class="form-control"
+                                        value="{{ getOption('home_about_us_name') }}">
+                                </div>
+                                <div class="col-md-12 mb-25">
+                                    <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Title') }}</label>
                                     <input type="text" name="home_about_us_title" class="form-control"
                                         value="{{ getOption('home_about_us_title') }}">
                                 </div>
                                 <div class="col-md-12 mb-25">
                                     <label
-                                        class="label-text-title color-heading font-medium mb-2">{{ __('Sub Title') }}</label>
-                                    <input type="text" name="home_about_us_sub_title" class="form-control"
-                                        value="{{ getOption('home_about_us_sub_title') }}">
-                                </div>
-                                <div class="col-md-12 mb-25">
-                                    <label
-                                        class="label-text-title color-heading font-medium mb-2">{{ __('Description') }}</label>
-                                    <input type="text" name="home_about_us_description" class="form-control"
-                                        value="{{ getOption('home_about_us_description') }}">
-                                </div>
-                                <div class="col-md-6 mb-25">
-                                    <label
-                                        class="label-text-title color-heading font-medium mb-2">{{ __('Counter One Title') }}</label>
-                                    <input type="text" name="home_about_us_counter_one_title" class="form-control"
-                                        value="{{ getOption('home_about_us_counter_one_title') }}">
-                                </div>
-                                <div class="col-md-6 mb-25">
-                                    <label
-                                        class="label-text-title color-heading font-medium mb-2">{{ __('Counter One Number') }}</label>
-                                    <input type="text" name="home_about_us_counter_one_number" class="form-control"
-                                        value="{{ getOption('home_about_us_counter_one_number') }}">
-                                </div>
-                                <div class="col-md-6 mb-25">
-                                    <label
-                                        class="label-text-title color-heading font-medium mb-2">{{ __('Counter Two Title') }}</label>
-                                    <input type="text" name="home_about_us_counter_two_title" class="form-control"
-                                        value="{{ getOption('home_about_us_counter_two_title') }}">
-                                </div>
-                                <div class="col-md-6 mb-25">
-                                    <label
-                                        class="label-text-title color-heading font-medium mb-2">{{ __('Counter Two Number') }}</label>
-                                    <input type="text" name="home_about_us_counter_two_number" class="form-control"
-                                        value="{{ getOption('home_about_us_counter_two_number') }}">
-                                </div>
-                                <div class="col-md-6 mb-25">
-                                    <label
-                                        class="label-text-title color-heading font-medium mb-2">{{ __('About Us Image One') }}</label>
-                                    <input type="file" class="form-control" name="home_about_us_image_one">
-                                </div>
-                                <div class="col-md-6 mb-25">
-                                    <label
-                                        class="label-text-title color-heading font-medium mb-2">{{ __('About Us Image Two') }}</label>
-                                    <input type="file" class="form-control" name="home_about_us_image_two">
+                                        class="label-text-title color-heading font-medium mb-2">{{ __('Image') }}</label>
+                                    <input type="file" class="form-control" name="home_about_us_image">
                                 </div>
                                 <div class="col-md-12 mb-25">
                                     <label
@@ -535,7 +500,7 @@
                                     <input type="text" name="home_how_it_word_section_title" class="form-control"
                                         value="{{ getOption('home_how_it_word_section_title') }}">
                                 </div>
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Summary') }}</label>
                                     <textarea name="home_how_it_word_section_summery" class="form-control">{{ getOption('home_how_it_word_section_summery') }}</textarea>
@@ -567,12 +532,12 @@
         </div>
     </div>
 
-    <div class="modal fade" id="advanceFeatureModal" tabindex="-1" aria-labelledby="advanceFeatureModalLabel"
+    <div class="modal fade" id="editCorePagesModal" tabindex="-1" aria-labelledby="editCorePagesModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="advanceFeatureModalLabel">{{ __('Advance Feature Section') }}</h4>
+                    <h4 class="modal-title" id="editCorePagesModalLabel">{{ __('Core Pages Section') }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span class="iconify" data-icon="akar-icons:cross"></span>
                     </button>
@@ -586,18 +551,18 @@
                                 <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Name') }}</label>
-                                    <input type="text" name="home_advance_feature_section_name" class="form-control"
-                                        value="{{ getOption('home_advance_feature_section_name') }}"
+                                    <input type="text" name="home_core_pages_section_name" class="form-control"
+                                        value="{{ getOption('home_core_pages_section_name') }}"
                                         placeholder="{{ __('Name') }}">
                                 </div>
                                 <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Title') }}</label>
-                                    <input type="text" name="home_advance_feature_section_title" class="form-control"
-                                        value="{{ getOption('home_advance_feature_section_title') }}"
+                                    <input type="text" name="home_core_pages_section_title" class="form-control"
+                                        value="{{ getOption('home_core_pages_section_title') }}"
                                         placeholder="{{ __('Title') }}">
                                 </div>
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Summary') }}</label>
                                     <textarea name="home_core_pages_section_summery" class="form-control">{{ getOption('home_core_pages_section_summery') }}</textarea>
@@ -605,12 +570,12 @@
                                 <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Status') }}</label>
-                                    <select name="home_advance_feature_section_status" class="form-control">
+                                    <select name="home_core_pages_section_status" class="form-control">
                                         <option value="1"
-                                            {{ getOption('home_advance_feature_section_status', 1) == 1 ? 'selected' : '' }}>
+                                            {{ getOption('home_core_pages_section_status', 1) == 1 ? 'selected' : '' }}>
                                             {{ __('Active') }}</option>
                                         <option value="0"
-                                            {{ getOption('home_advance_feature_section_status', 1) == 0 ? 'selected' : '' }}>
+                                            {{ getOption('home_core_pages_section_status', 1) == 0 ? 'selected' : '' }}>
                                             {{ __('Deactivate') }}</option>
                                     </select>
                                 </div>
@@ -811,7 +776,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="editFaqModalLabel">{{ __('Faq Section') }}</h4>
+                    <h4 class="modal-title" id="editFaqModalLabel">{{ __('Testimonial Section') }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span class="iconify" data-icon="akar-icons:cross"></span>
                     </button>

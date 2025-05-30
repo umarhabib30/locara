@@ -23,11 +23,10 @@ class FileManager extends Model
             }
 
             if ($name == '') {
-                $file_name = mt_rand(100000, 999999) . time() . '.' . $extension;
+                $file_name = time() . '.' . $extension;
             } else {
-                $file_name = $name . '-' . mt_rand(100000, 999999) . time() . '.' . $extension;
+                $file_name = $name . '-' . time() . '.' . $extension;
             }
-
             $file_name = str_replace(' ', '_', $file_name);
 
             Storage::disk(config('app.STORAGE_DRIVER'))
@@ -62,11 +61,10 @@ class FileManager extends Model
             }
 
             if ($name == '') {
-                $file_name = mt_rand(100000, 999999) . time() . '.' . $extension;
+                $file_name = time() . '.' . $extension;
             } else {
-                $file_name = $name . '-' . mt_rand(100000, 999999) . time() . '.' . $extension;
+                $file_name = $name . '-' . time() . '.' . $extension;
             }
-
             $file_name = str_replace(' ', '_', $file_name);
 
             Storage::disk(config('app.STORAGE_DRIVER'))

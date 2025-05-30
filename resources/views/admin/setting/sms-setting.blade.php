@@ -28,7 +28,7 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <div class="language-settings-page-area">
                                         <div class="account-settings-content-box">
@@ -53,7 +53,7 @@
                                                 <div class="settings-inner-box bg-white theme-border radius-4 mb-25">
                                                     <div class="settings-inner-box-fields p-20 pb-0">
                                                         <div class="row">
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('Status') }}</label>
                                                                 <select name="TWILIO_STATUS" class="form-control">
@@ -65,7 +65,7 @@
                                                                         {{ __('Enable') }}</option>
                                                                 </select>
                                                             </div>
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('Twilio account SID') }}</label>
                                                                 <input type="password" name="TWILIO_ACCOUNT_SID"
@@ -73,7 +73,7 @@
                                                                     class="form-control"
                                                                     placeholder="{{ __('Twilio Account SID') }}">
                                                             </div>
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('Twilio Auth Token') }}</label>
                                                                 <input type="password" name="TWILIO_AUTH_TOKEN"
@@ -81,7 +81,7 @@
                                                                     class="form-control"
                                                                     placeholder="{{ __('Twilio auth token') }}">
                                                             </div>
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('Twilio Phone Number') }}</label>
                                                                 <input type="text" name="TWILIO_PHONE_NUMBER"
@@ -95,7 +95,7 @@
                                                 <div class="settings-inner-box bg-white theme-border radius-4 mb-25">
                                                     <div class="settings-inner-box-fields p-20 pb-0">
                                                         <div class="row">
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('Send Email Status') }}</label>
                                                                 <select name="send_email_status"
@@ -110,7 +110,7 @@
                                                                 <small
                                                                     class="small">{{ __('Sent mail to Owner sign Up, New invoice generate, Subscription payment success, New tenant add, New maintainer add, New contact message etc.') }}</small>
                                                             </div>
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('Email Verify Status') }}</label>
                                                                 <select name="email_verification_status"

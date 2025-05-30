@@ -74,12 +74,6 @@
                                     <input type="text" name="name" class="form-control"
                                         placeholder="{{ __('Name') }}">
                                 </div>
-                                <div class="col-md-12 mb-25">
-                                    <label class="label-text-title color-heading font-medium mb-2">{{ __('Description') }}
-                                        <span class="text-danger">*</span></label>
-                                    <input type="text" name="description" class="form-control"
-                                        placeholder="{{ __('Description') }}">
-                                </div>
                                 {{--                                <div class="col-md-6 mb-25"> --}}
                                 {{--                                    <label --}}
                                 {{--                                        class="label-text-title color-heading font-medium mb-2">{{ __('Pricing Type') }}<span --}}
@@ -215,6 +209,10 @@
                                         <option value="1">{{ __('Yes') }}</option>
                                     </select>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="modal-inner-form-box">
+                            <div class="row">
                                 <div class="col-md-6 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Monthly Price') }}
@@ -228,22 +226,6 @@
                                         <span class="text-danger">*</span></label>
                                     <input type="number" min="0" step="any" name="yearly_price"
                                         class="form-control" placeholder="10">
-                                </div>
-                                <div class="col-md-6 mb-25">
-                                    <label
-                                        class="label-text-title color-heading font-medium mb-2">{{ __('Stripe Subscription') }}</label>
-                                    <select name="stripe_subscription" id="stripe_subscription" class="form-control">
-                                        <option value="0">{{ __('No') }}</option>
-                                        <option value="1">{{ __('Yes') }}</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-25">
-                                    <label
-                                        class="label-text-title color-heading font-medium mb-2">{{ __('Paypal Subscription') }}</label>
-                                    <select name="paypal_subscription" id="paypal_subscription" class="form-control">
-                                        <option value="0">{{ __('No') }}</option>
-                                        <option value="1">{{ __('Yes') }}</option>
-                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -279,12 +261,6 @@
                                         <span class="text-danger">*</span></label>
                                     <input type="text" name="name" class="form-control"
                                         placeholder="{{ __('Name') }}">
-                                </div>
-                                <div class="col-md-12 mb-25">
-                                    <label class="label-text-title color-heading font-medium mb-2">{{ __('Description') }}
-                                        <span class="text-danger">*</span></label>
-                                    <input type="text" name="description" class="form-control"
-                                        placeholder="{{ __('Description') }}">
                                 </div>
                                 {{--                                <div class="col-md-6 mb-25"> --}}
                                 {{--                                    <label --}}
@@ -416,6 +392,10 @@
                                         <option value="1">{{ __('Yes') }}</option>
                                     </select>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="modal-inner-form-box">
+                            <div class="row">
                                 <div class="col-md-6 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Monthly Price') }}
@@ -429,22 +409,6 @@
                                         <span class="text-danger">*</span></label>
                                     <input type="number" min="0" step="any" name="yearly_price"
                                         class="form-control" placeholder="10">
-                                </div>
-                                <div class="col-md-6 mb-25">
-                                    <label
-                                        class="label-text-title color-heading font-medium mb-2">{{ __('Stripe Subscription') }}</label>
-                                    <select name="stripe_subscription" id="stripe_subscription" class="form-control">
-                                        <option value="0">{{ __('No') }}</option>
-                                        <option value="1">{{ __('Yes') }}</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-25">
-                                    <label
-                                        class="label-text-title color-heading font-medium mb-2">{{ __('Paypal Subscription') }}</label>
-                                    <select name="paypal_subscription" id="paypal_subscription" class="form-control">
-                                        <option value="0">{{ __('No') }}</option>
-                                        <option value="1">{{ __('Yes') }}</option>
-                                    </select>
                                 </div>
                             </div>
                         </div>

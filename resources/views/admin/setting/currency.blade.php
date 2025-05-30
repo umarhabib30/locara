@@ -28,7 +28,7 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <div class="currency-settings-page-area">
                                         <div class="account-settings-content-box">
@@ -50,7 +50,8 @@
                                             </div>
                                             <div class="currency-list-table-area">
                                                 <div class="bg-off-white theme-border radius-4 p-25">
-                                                    <table id="datatableCurrencySettings" class="table bg-off-white theme-border p-20 dt-responsive">
+                                                    <table id="datatableCurrencySettings"
+                                                        class="table bg-off-white theme-border p-20 dt-responsive">
                                                         <thead>
                                                             <tr>
                                                                 <th>{{ __('Currency Code') }}</th>
@@ -63,7 +64,7 @@
                                                             @foreach ($currencies as $currency)
                                                                 <tr>
                                                                     <td>{{ $currency->currency_code }}
-                                                                        {{ $currency->current_currency == ACTIVE ? '(Current Currency)' : '' }}
+                                                                        {{ $currency->current_currency == 'on' ? '(Current Currency)' : '' }}
                                                                     </td>
                                                                     <td>{{ $currency->symbol }}</td>
                                                                     <td>{{ ucwords($currency->currency_placement) }}</td>
@@ -119,8 +120,7 @@
                             class="iconify" data-icon="akar-icons:cross"></span>
                     </button>
                 </div>
-                <form action="{{ route('admin.setting.currency.store') }}" method="POST" enctype="multipart/form-data"
-                      class="ajax" data-handler="getShowMessage">
+                <form action="{{ route('admin.setting.currency.store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="modal-inner-form-box">
@@ -151,7 +151,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group custom-checkbox" title="{{ __('Make Current Currency') }}">
-                                        <input type="checkbox" value="1" id="makeCurrentCurrency" name="current_currency">
+                                        <input type="checkbox" id="makeCurrentCurrency" name="current_currency">
                                         <label class="fw-normal"
                                             for="makeCurrentCurrency">{{ __('Make Current Currency') }}</label>
                                     </div>
@@ -180,8 +180,7 @@
                             class="iconify" data-icon="akar-icons:cross"></span>
                     </button>
                 </div>
-                <form action="" id="updateEditModal" method="POST" enctype="multipart/form-data"
-                      class="ajax" data-handler="getShowMessage">
+                <form action="" id="updateEditModal" method="post">
                     @csrf
                     {{ method_field('PUT') }}
                     <div class="modal-body">
@@ -213,7 +212,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group custom-checkbox" title="{{ __('Make Current Currency') }}">
-                                        <input type="checkbox" value="1" id="updateMakeCurrentCurrency" name="current_currency">
+                                        <input type="checkbox" id="updateMakeCurrentCurrency" name="current_currency">
                                         <label class="fw-normal"
                                             for="updateMakeCurrentCurrency">{{ __('Make Current Currency') }}</label>
                                     </div>

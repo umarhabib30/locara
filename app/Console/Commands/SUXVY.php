@@ -46,13 +46,12 @@ class SUXVY extends Command
                 $lqs = $this->option('lqs');
                 $logger->log('LQS', $lqs);
 
-                setCustomerAddonBuildVersion('PROTYSAAS', $v);
-                setCustomerAddonCurrentVersion('PROTYSAAS');
-
                 $lqs = utf8_decode(urldecode($lqs));
                 if (!is_null($lqs) && $lqs != '') {
                     DB::unprepared($lqs);
                 }
+                setCustomerAddonBuildVersion('PROTYSAAS', $v);
+                setCustomerAddonCurrentVersion('PROTYSAAS');
                 DB::commit();
                 $logger->log('Command RUN', 'DONE');
                 $logger->log('Command suxvy', '===========END==========');

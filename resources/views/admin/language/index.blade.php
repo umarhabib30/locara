@@ -25,7 +25,7 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <div class="language-settings-page-area">
                                         <div class="account-settings-content-box">

@@ -9,35 +9,46 @@
                     <!-- start page title -->
                     <div class="row">
                         <div class="col-12">
-                            <div
-                                class="page-title-box d-sm-flex align-items-center justify-content-between border-bottom mb-20">
-                                <div class="page-title-left">
-                                    <h3 class="mb-sm-0">{{ $pageTitle }}<span
-                                            class="property-count theme-text-color">({{ count($properties) }})</span></h3>
+                            <div class="page-title-box d-sm-flex align-items-center justify-content-between border-bottom mb-20">
+                                <div class="d-flex flex-wrap align-items-center gap-3">
+                                    <div class="page-title-left me-sm-4">
+                                        <h3 class="mb-sm-0">{{ $pageTitle }}
+                                            <span class="property-count theme-text-color">({{ count($properties) }})</span>
+                                        </h3>
+                                    </div>
+                                    <!-- Add property button -->
+                                    <a href="{{ route('owner.property.add') }}" class="theme-btn mt-2 mt-sm-0" title="{{ __('Add New Property') }}">
+                                        {{ __('Add New Property') }}
+                                    </a>
                                 </div>
-                                <div class="page-title-right">
+                                <div class="page-title-right mt-3 mt-sm-0">
                                     <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a href="{{ route('owner.dashboard') }}"
-                                                title={{ __('Dashboard') }}>{{ __('Dashboard') }}</a></li>
+                                        <li class="breadcrumb-item">
+                                            <a href="{{ route('owner.dashboard') }}" title="{{ __('Dashboard') }}">
+                                                {{ __('Dashboard') }}
+                                            </a>
+                                        </li>
                                         <li class="breadcrumb-item active" aria-current="page">{{ __('Properties') }}</li>
                                     </ol>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
+                    
                     <!-- end page title -->
 
                     <!-- All Property Area row Start -->
                     <div class="row">
                         <!-- Property Top Search Bar Start -->
-                        <div class="property-top-search-bar">
+                        {{-- <div class="property-top-search-bar">
                             <div class="row">
                                 <div class="col-md-6">
                                     <a href="{{ route('owner.property.add') }}" class="theme-btn mb-25"
                                         title={{ __('Add New Property') }}>{{ __('Add New Property') }}</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!-- Property Top Search Bar End -->
 
                         <!-- Properties Item Wrap Start -->

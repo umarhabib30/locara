@@ -30,10 +30,12 @@
                         <!-- Property Top Search Bar Start -->
                         <h4 class="mb-20">{{ __('All Maintanance') }}</h4>
                         <div class="property-top-search-bar">
-                            <div class="property-search-inner-bg bg-off-white theme-border radius-4 p-25 mb-25">
-                                <div class="row align-items-center rg-25">
+                            <div class="property-search-inner-bg bg-off-white theme-border radius-4 p-25 pb-0 mb-25">
+                                <div class="row align-items-center">
                                     <div class="col-md-6">
                                         <div class="property-top-search-bar-left">
+                                            <div class="row">
+                                                <div class="col-md-6 col-lg-6 col-xl-4 mb-25">
                                                     <select class="form-select flex-shrink-0 " id="search_property">
                                                         <option value="" selected>{{ __('Select Property') }}</option>
                                                         @foreach ($properties as $property)
@@ -41,11 +43,13 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="property-top-search-bar-right text-md-end">
-                                            <button type="button" class="theme-btn" id="add"
+                                        <div class="property-top-search-bar-right text-end">
+                                            <button type="button" class="theme-btn mb-25" id="add"
                                                 title="{{ __('Add Maintenance Request') }}">{{ __('Add Maintenance Request') }}</button>
                                         </div>
                                     </div>

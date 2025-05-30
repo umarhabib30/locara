@@ -28,7 +28,7 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <div class="language-settings-page-area">
                                         <div class="account-settings-content-box">
@@ -45,7 +45,7 @@
                                                 <div class="settings-inner-box bg-white theme-border radius-4 mb-25">
                                                     <div class="settings-inner-box-fields p-20 pb-0">
                                                         <div class="row">
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('Status') }}</label>
                                                                 <select name="GOOGLE_RECAPTCHA_MAIL_STATUS"
@@ -58,7 +58,7 @@
                                                                         {{ __('Enable') }}</option>
                                                                 </select>
                                                             </div>
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('Google reCaptcha Key') }}</label>
                                                                 <input type="text" name="GOOGLE_RECAPTCHA_KEY"
@@ -66,7 +66,7 @@
                                                                     class="form-control"
                                                                     placeholder="{{ __('Google reCaptcha Key') }}">
                                                             </div>
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('Google reCaptcha Secret') }}</label>
                                                                 <input type="text" name="GOOGLE_RECAPTCHA_SECRET"

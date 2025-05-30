@@ -39,10 +39,31 @@ class HowItWorkService
             }
             $howItWork->title = $request->title;
             $howItWork->summary = $request->summary;
-            $howItWork->content = $request->content ?? 0;
+            $howItWork->content = $request->content;
             $howItWork->status = $request->status;
             $howItWork->save();
 
+            /*File Manager Call upload*/
+            if ($request->hasFile('image')) {
+                $new_file = FileManager::where('origin_type', 'App\Models\HowItWork')->where('origin_id', $howItWork->id)->first();
+
+                if ($new_file) {
+                    $new_file->removeFile();
+                    $upload = $new_file->updateUpload($new_file->id, 'HowItWork', $request->image);
+                } else {
+                    $new_file = new FileManager();
+                    $upload = $new_file->upload('HowItWork', $request->image);
+                }
+
+                if ($upload['status']) {
+                    $upload['file']->origin_id = $howItWork->id;
+                    $upload['file']->origin_type = "App\Models\HowItWork";
+                    $upload['file']->save();
+                } else {
+                    throw new Exception($upload['message']);
+                }
+            }
+            /*End*/
 
             DB::commit();
             $message = $request->id ? __(UPDATED_SUCCESSFULLY) : __(CREATED_SUCCESSFULLY);

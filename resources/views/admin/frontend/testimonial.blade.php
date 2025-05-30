@@ -28,17 +28,17 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <div class="currency-settings-page-area">
                                         <div class="account-settings-content-box">
                                             <div class="account-settings-title border-bottom mb-20 pb-20">
-                                                <div class="row align-items-center rg-24">
-                                                    <div class="col-xl-6">
+                                                <div class="row align-items-center">
+                                                    <div class="col-md-6">
                                                         <h4>{{ $pageTitle }}</h4>
                                                     </div>
-                                                    <div class="col-xl-6">
-                                                        <div class="property-details-right text-xl-end">
+                                                    <div class="col-md-6">
+                                                        <div class="property-details-right text-end">
                                                             <button type="button" class="theme-btn" id="add"
                                                                 title="{{ __('Add Testimonial') }}">{{ __('Add Testimonial') }}</button>
                                                         </div>
@@ -53,6 +53,7 @@
                                                             <tr>
                                                                 <th>{{ __('SL') }}</th>
                                                                 <th data-priority="1">{{ __('Name') }}</th>
+                                                                <th>{{ __('Image') }}</th>
                                                                 <th>{{ __('Designation') }}</th>
                                                                 <th>{{ __('Status') }}</th>
                                                                 <th>{{ __('Action') }}</th>
@@ -63,6 +64,11 @@
                                                                 <tr>
                                                                     <td>{{ $loop->iteration }}</td>
                                                                     <td>{{ $testimonial->name }}</td>
+                                                                    <td>
+                                                                        <img src="{{ $testimonial->image }}"
+                                                                            class="rounded avatar-md tbl-user-image"
+                                                                            alt="">
+                                                                    </td>
                                                                     <td>{{ $testimonial->designation }}</td>
                                                                     <td>
                                                                         @if ($testimonial->status == ACTIVE)
@@ -151,7 +157,7 @@
                                     <input type="number" name="star" class="form-control"
                                         placeholder="{{ __('Star') }}">
                                 </div>
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Image') }}</label>
                                     <input type="file" name="image" class="form-control">
@@ -215,7 +221,7 @@
                                     <input type="number" name="star" class="form-control"
                                         placeholder="{{ __('Star') }}">
                                 </div>
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Image') }}</label>
                                     <input type="file" name="image" class="form-control">

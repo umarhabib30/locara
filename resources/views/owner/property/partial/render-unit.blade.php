@@ -67,26 +67,53 @@
                                                 <div class="col-md-2 col-lg-2 col-xl-2 mb-25">
                                                     <label
                                                         class="label-text-title color-heading font-medium mb-2">{{ __('Condition') }}</label>
-                                                    <input type="text" name="multiple[condition][]"
-                                                        value="{{ $propertyUnit->condition }}"
-                                                        class="form-control multiple-condition"
-                                                        placeholder="{{ __('Condition') }}">
+                                                    <select name="multiple[condition][]"
+                                                        class="form-select multiple-condition">
+                                                        <option value="New"
+                                                            {{ $propertyUnit->condition == 'New' ? 'selected' : '' }}>
+                                                            {{ __('New') }}</option>
+                                                        <option value="Renovated"
+                                                            {{ $propertyUnit->condition == 'Renovated' ? 'selected' : '' }}>
+                                                            {{ __('Renovated') }}</option>
+                                                        <option value="Used"
+                                                            {{ $propertyUnit->condition == 'Used' ? 'selected' : '' }}>
+                                                            {{ __('Used') }}</option>
+                                                    </select>
                                                 </div>
+
                                                 <div class="col-md-2 col-lg-2 col-xl-2 mb-25">
                                                     <label
                                                         class="label-text-title color-heading font-medium mb-2">{{ __('Parking') }}</label>
-                                                    <input type="text" name="multiple[parking][]"
-                                                        value="{{ $propertyUnit->parking }}"
-                                                        class="form-control multiple-parking"
-                                                        placeholder="{{ __('Parking') }}">
+                                                    <select name="multiple[parking][]"
+                                                        class="form-select multiple-parking">
+                                                        <option value="" disabled
+                                                            {{ empty($propertyUnit->parking) ? 'selected' : '' }}>
+                                                            {{ __('Select Parking') }}</option>
+                                                        <option value="none"
+                                                            {{ $propertyUnit->parking === 'none' ? 'selected' : '' }}>
+                                                            {{ __('None') }}</option>
+                                                        <option value="street"
+                                                            {{ $propertyUnit->parking === 'street' ? 'selected' : '' }}>
+                                                            {{ __('Street Parking') }}</option>
+                                                        <option value="garage"
+                                                            {{ $propertyUnit->parking === 'garage' ? 'selected' : '' }}>
+                                                            {{ __('Garage Parking') }}</option>
+                                                        <option value="driveway"
+                                                            {{ $propertyUnit->parking === 'driveway' ? 'selected' : '' }}>
+                                                            {{ __('Driveway') }}</option>
+                                                        <option value="shared"
+                                                            {{ $propertyUnit->parking === 'shared' ? 'selected' : '' }}>
+                                                            {{ __('Shared Parking') }}</option>
+                                                    </select>
                                                 </div>
+
                                                 <div class="col-md-2 col-lg-2 col-xl-2 mb-25">
                                                     <label
                                                         class="label-text-title color-heading font-medium mb-2">{{ __('Images') }}</label>
                                                     <input type="file" name="multiple[images][]"
                                                         class="form-control multiple-images">
                                                 </div>
-                                                <div class="col-md-6 col-lg-6 col-xl-6 mb-25">
+                                                <div class="col-md-4 col-lg-4 col-xl-4 mb-25">
                                                     <label
                                                         class="label-text-title color-heading font-medium mb-2">{{ __('Description') }}</label>
                                                     <input type="text" name="multiple[description][]"
@@ -94,6 +121,73 @@
                                                         class="form-control multiple-description"
                                                         placeholder="{{ __('Description') }}">
                                                 </div>
+                                                <style>
+                                                    input[type="hidden"] {
+                                                        display: none;
+                                                    }
+                                                </style>
+                                                <div class="col-md-2 col-lg-2 col-xl-2 mb-25">
+                                                    <label
+                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Keycode') }}</label>
+                                                    <div class="input-group">
+                                                        <input id="show_start" type="text" value="*******"
+                                                            class="form-control multiple-description" readonly>
+                                                        <input id="show_after" type="hidden"
+                                                            name="multiple[keycode][]"
+                                                            value="{{ isset($propertyUnit->keycode) ? decrypt($propertyUnit->keycode) : '' }}"
+                                                            class="form-control multiple-description"
+                                                            placeholder="{{ __('Keycode') }}">
+
+                                                        @if (Auth::user()->role == USER_ROLE_OWNER)
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="mt-3 toggle-keycode"
+                                                                    onclick="toggleKeycode(this)">
+                                                                    <i class="ri-eye-line"></i>
+                                                                </button>
+                                                            </div>
+                                                        @elseif(Auth::user()->role == USER_ROLE_TENANT)
+                                                            <button type="button" class="mt-3 toggle-keycode"
+                                                                onclick="toggleKeycode(this)">
+                                                                <i class="ri-eye-line"></i>
+                                                            </button>
+                                                        @endif
+
+                                                    </div>
+
+                                                </div>
+                                                <script>
+                                                   function toggleKeycode(button) {
+                                                        const showStart = document.getElementById('show_start');
+                                                        const showAfter = document.getElementById('show_after');
+                                                        const icon = button.querySelector('i'); 
+
+                                                        
+                                                        if (showStart.style.display !== 'none') {
+                                                            showStart.style.display = 'none';
+                                                            showAfter.type = 'text'; // Change hidden input to text
+                                                            showAfter.style.display = 'block'; // Show the text input
+                                                            showAfter.focus(); // Optionally focus on the input
+
+                                                            // Change the eye icon to 'eye-off'
+                                                            icon.classList.remove('ri-eye-line');
+                                                            icon.classList.add('ri-eye-off-line');
+                                                        } else {
+                                                            // Show the text input and hide the hidden input
+                                                            showStart.style.display = 'block';
+                                                            showAfter.type = 'hidden'; // Change text input back to hidden
+                                                            showAfter.style.display = 'none'; // Hide the text input
+
+                                                            // Change the eye icon back to 'eye'
+                                                            icon.classList.remove('ri-eye-off-line');
+                                                            icon.classList.add('ri-eye-line');
+                                                        }
+                                                    }
+
+                                                </script>
+
+
+
+
                                             </div>
                                         </div>
                                     @endif

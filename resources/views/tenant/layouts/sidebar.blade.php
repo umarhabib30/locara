@@ -12,6 +12,13 @@
                         <span>{{ __('Dashboard') }}</span>
                     </a>
                 </li>
+
+                <li class="{{ @$navMyRentMMActiveClass }}">
+                    <a href="{{ route('tenant.myrent.index') }}" class="{{ @$navMyRentMMActiveClass }}">
+                        <i class="ri-home-5-line"></i>
+                        <span>{{ __('My Rent') }}</span>
+                    </a>
+                </li>
                 <li class="{{ @$navInvoiceMMActiveClass }}">
                     <a href="{{ route('tenant.invoice.index') }}" class="{{ @$navInvoiceActiveClass }}">
                         <i class="ri-bill-line"></i>

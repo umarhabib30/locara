@@ -1,7 +1,7 @@
-<div class="col-md-12 col-lg-4 col-xxl-3">
+<div class="col-md-12 col-lg-12 col-xl-4 col-xxl-3">
     <div class="account-settings-leftside bg-white theme-border radius-4 p-20 mb-25">
         <div class="tenants-details-leftsidebar-wrap d-flex">
-            <ul class="account-settings-menu list-group flex-row flex-lg-column flex-wrap flex-lg-nowrap">
+            <ul class="account-settings-menu list-group">
                 <li>
                     <a href="{{ route('admin.setting.general-setting') }}"
                         class="account-settings-menu-item {{ @$subGeneralSettingActiveClass }}">
@@ -121,7 +121,7 @@
                     <li>
                         <a href="{{ route('admin.feature.index') }}"
                             class="account-settings-menu-item {{ @$subFeatureActiveClass }}">
-                            <span class="iconify" data-icon="carbon:settings"></span>{{ __('Amazing Features') }}
+                            <span class="iconify" data-icon="carbon:settings"></span>{{ __('Features') }}
                         </a>
                     </li>
 
@@ -134,7 +134,7 @@
                     <li>
                         <a href="{{ route('admin.core-page.index') }}"
                             class="account-settings-menu-item {{ @$subCorePageActiveClass }}">
-                            <span class="iconify" data-icon="carbon:settings"></span>{{ __('Advance Feature') }}
+                            <span class="iconify" data-icon="carbon:settings"></span>{{ __('Core Page') }}
                         </a>
                     </li>
                     <li>
@@ -147,18 +147,6 @@
                         <a href="{{ route('admin.faq.index') }}"
                             class="account-settings-menu-item {{ @$subFaqActiveClass }}">
                             <span class="iconify" data-icon="carbon:settings"></span>{{ __('Faq') }}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.blogs.categories.index') }}"
-                           class="account-settings-menu-item {{ @$subBlogCategoryActiveClass }}">
-                            <span class="iconify" data-icon="carbon:settings"></span>{{ __('Blog Category') }}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.blogs.index') }}"
-                           class="account-settings-menu-item {{ @$subBlogActiveClass }}">
-                            <span class="iconify" data-icon="carbon:settings"></span>{{ __('Blog') }}
                         </a>
                     </li>
                 @endif

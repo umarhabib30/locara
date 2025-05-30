@@ -69,38 +69,44 @@
                                                     value="{{ $tenant->user_id }}">
                                                 <div
                                                     class="form-card add-property-box bg-off-white theme-border radius-4 p-20">
-                                                    <div class="add-property-title border-bottom pb-25 mb-25">
-                                                        <h4>{{ __('Tenant Information') }}</h4>
-                                                    </div>
-                                                    <!-- Upload Profile Photo Box Start -->
-                                                    <div class="upload-profile-photo-box mb-25">
-                                                        <div class="profile-user position-relative d-inline-block">
-                                                            <img src="{{ $tenant->image }}"
-                                                                class="rounded-circle avatar-xl user-profile-image"
-                                                                alt="user-profile-image">
-                                                            <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                                                                <input id="profile-img-file-input" name="image"
-                                                                    type="file" class="profile-img-file-input">
-                                                                <label for="profile-img-file-input"
-                                                                    class="profile-photo-edit avatar-xs">
-                                                                    <span class="avatar-title rounded-circle"
-                                                                        title="Upload Image">
-                                                                        <i class="ri-camera-fill"></i>
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Upload Profile Photo Box End -->
 
-                                                    <div
-                                                        class="add-property-inner-box bg-white theme-border radius-4 p-20 pb-0 mb-25">
+
+                                                    <div class="settings-inner-box bg-white theme-border radius-4 mb-25">
+
                                                         <div class="tenants-inner-box-block">
-                                                            <div class="add-property-title border-bottom pb-25 mb-25">
+                                                            <div class="settings-inner-box-title border-bottom p-20">
                                                                 <h4>{{ __('Personal Information') }}</h4>
                                                             </div>
+                                                        </div>
+
+                                                        <div class="settings-inner-box-fields p-20 pb-0">
                                                             <div class="row">
-                                                                <div class="col-md-6 mb-25">
+
+                                                                <!-- Upload Profile Photo Box Start -->
+                                                                <div class="upload-profile-photo-box mb-25">
+                                                                    <div
+                                                                        class="profile-user position-relative d-inline-block">
+                                                                        <img src="{{ $tenant->image }}"
+                                                                            class="rounded-circle avatar-xl user-profile-image"
+                                                                            alt="user-profile-image">
+                                                                        <div
+                                                                            class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                                                                            <input id="profile-img-file-input"
+                                                                                name="image" type="file"
+                                                                                class="profile-img-file-input">
+                                                                            <label for="profile-img-file-input"
+                                                                                class="profile-photo-edit avatar-xs">
+                                                                                <span class="avatar-title rounded-circle"
+                                                                                    title="Upload Image">
+                                                                                    <i class="ri-camera-fill"></i>
+                                                                                </span>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Upload Profile Photo Box End -->
+
+                                                                <div class="col-md-4 mb-25">
                                                                     <label
                                                                         class="label-text-title color-heading font-medium mb-2">{{ __('First Name') }}</label>
                                                                     <input type="text" name="first_name"
@@ -108,7 +114,8 @@
                                                                         class="form-control" role="alert"
                                                                         placeholder="{{ __('First Name') }}">
                                                                 </div>
-                                                                <div class="col-md-6 mb-25">
+
+                                                                <div class="col-md-4 mb-25">
                                                                     <label
                                                                         class="label-text-title color-heading font-medium mb-2">{{ __('Last Name') }}</label>
                                                                     <input type="text" name="last_name"
@@ -116,9 +123,21 @@
                                                                         class="form-control"
                                                                         placeholder="{{ __('Last Name') }}">
                                                                 </div>
+
+                                                                <div class="col-md-4 mb-25">
+                                                                    <label
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Email') }}</label>
+                                                                    <input type="email" name="email"
+                                                                        value="{{ $tenant->email }}" class="form-control"
+                                                                        placeholder="{{ __('Email') }}">
+                                                                </div>
+
                                                             </div>
+
+
                                                             <div class="row">
-                                                                <div class="col-md-6 mb-25">
+
+                                                                <div class="col-md-4 mb-25">
                                                                     <label
                                                                         class="label-text-title color-heading font-medium mb-2">{{ __('Contact Number') }}</label>
                                                                     <input type="text" name="contact_number"
@@ -126,58 +145,39 @@
                                                                         name="contact_number" class="form-control"
                                                                         placeholder="{{ __('Contact Number') }}">
                                                                 </div>
-                                                                <div class="col-md-6 mb-25">
+
+                                                                <div class="col-md-4 mb-25">
                                                                     <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Job') }}</label>
-                                                                    <input type="text" name="job"
-                                                                        value="{{ $tenant->job }}" class="form-control"
-                                                                        placeholder="{{ __('Job') }}">
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Date of birth') }}</label>
+                                                                    <input type="date" name="date_of_birth"
+                                                                        value="{{ $tenant->date_of_birth }}"
+                                                                        name="date_of_birth" class="form-control"
+                                                                        placeholder="{{ __('Date of birth') }}">
                                                                 </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-md-6 mb-25">
+
+                                                                <div class="col-md-4 mb-25">
                                                                     <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Age') }}</label>
-                                                                    <input type="number" name="age"
-                                                                        value="{{ $tenant->age }}" class="form-control"
-                                                                        placeholder="{{ __('Age') }}">
-                                                                </div>
-                                                                <div class="col-md-6 mb-25">
-                                                                    <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Family Members') }}</label>
-                                                                    <input type="number" name="family_member"
-                                                                        value="{{ $tenant->family_member }}"
-                                                                        class="form-control"
-                                                                        placeholder="{{ __('Family Members') }}">
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-md-6 mb-25">
-                                                                    <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Email') }}</label>
-                                                                    <input type="email" name="email"
-                                                                        value="{{ $tenant->email }}" class="form-control"
-                                                                        placeholder="{{ __('Email') }}">
-                                                                </div>
-                                                                <div class="col-md-6 mb-25">
-                                                                    <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Password') }}</label>
-                                                                    <input type="password" name="password"
-                                                                        class="form-control"
-                                                                        placeholder="{{ __('Password') }}">
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('NID Number') }}</label>
+                                                                    <input type="text" name="nid_number"
+                                                                        value="{{ $tenant->nid_number }}"
+                                                                        name="nid_number" class="form-control"
+                                                                        placeholder="{{ __('NID Number') }}">
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div
-                                                        class="add-property-inner-box bg-white theme-border radius-4 p-20 pb-0 mb-25">
+                                                    <div class="settings-inner-box bg-white theme-border radius-4 mb-25">
                                                         <div class="tenants-inner-box-block">
-                                                            <div class="add-property-title border-bottom pb-25 mb-25">
+                                                            <div class="settings-inner-box-title border-bottom p-20">
                                                                 <h4>{{ __('Previous Address') }}</h4>
                                                             </div>
+                                                        </div>
+
+                                                        <div class="settings-inner-box-fields p-20 pb-0">
                                                             <div class="row">
-                                                                <div class="col-md-12 mb-25">
+
+                                                                <div class="col-md-4 mb-25">
                                                                     <label
                                                                         class="label-text-title color-heading font-medium mb-2">{{ __('Address') }}</label>
                                                                     <input type="text" name="previous_address"
@@ -185,24 +185,16 @@
                                                                         class="form-control"
                                                                         placeholder="{{ __('Address') }}">
                                                                 </div>
-                                                            </div>
-                                                            <div class="row location" id="previous">
-                                                                <div class="col-md-3 mb-25">
+
+                                                                <div class="col-md-4 mb-25">
                                                                     <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Country') }}</label>
-                                                                    <input type="text" name="previous_country_id"
-                                                                        value="{{ $tenant->previous_country_id }}"
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Zip Code') }}</label>
+                                                                    <input type="text" name="previous_zip_code"
+                                                                        value="{{ $tenant->previous_zip_code }}"
                                                                         class="form-control"
-                                                                        placeholder="{{ __('Country') }}">
+                                                                        placeholder="{{ __('Zip Code') }}">
                                                                 </div>
-                                                                <div class="col-md-3 mb-25">
-                                                                    <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('State') }}</label>
-                                                                    <input type="text" name="previous_state_id"
-                                                                        value="{{ $tenant->previous_state_id }}"
-                                                                        class="form-control"
-                                                                        placeholder="{{ __('State') }}">
-                                                                </div>
+
                                                                 <div class="col-md-3 mb-25">
                                                                     <label
                                                                         class="label-text-title color-heading font-medium mb-2">{{ __('City') }}</label>
@@ -211,26 +203,37 @@
                                                                         class="form-control"
                                                                         placeholder="{{ __('City') }}">
                                                                 </div>
-                                                                <div class="col-md-3 mb-25">
+
+                                                                <div class="col-md-4 mb-25">
                                                                     <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Zip Code') }}</label>
-                                                                    <input type="text" name="previous_zip_code"
-                                                                        value="{{ $tenant->previous_zip_code }}"
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('State') }}</label>
+                                                                    <input type="text" name="previous_state_id"
+                                                                        value="{{ $tenant->previous_state_id }}"
                                                                         class="form-control"
-                                                                        placeholder="{{ __('Zip Code') }}">
+                                                                        placeholder="{{ __('State') }}">
+                                                                </div>
+
+                                                                <div class="col-md-4 mb-25">
+                                                                    <label
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Country') }}</label>
+                                                                    <input type="text" name="previous_country_id"
+                                                                        value="{{ $tenant->previous_country_id }}"
+                                                                        class="form-control"
+                                                                        placeholder="{{ __('Country') }}">
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div
-                                                        class="add-property-inner-box bg-white theme-border radius-4 p-20 pb-0">
+                                                    <div class="settings-inner-box bg-white theme-border radius-4 mb-25">
                                                         <div class="tenants-inner-box-block">
-                                                            <div class="add-property-title border-bottom pb-25 mb-25">
+                                                            <div class="settings-inner-box-title border-bottom p-20">
                                                                 <h4>{{ __('Permanent Address') }}</h4>
                                                             </div>
+                                                        </div>
+                                                        <div class="settings-inner-box-fields p-20 pb-0">
                                                             <div class="row">
-                                                                <div class="col-md-12 mb-25">
+                                                                <div class="col-md-4 mb-25">
                                                                     <label
                                                                         class="label-text-title color-heading font-medium mb-2">{{ __('Address') }}</label>
                                                                     <input type="text" name="permanent_address"
@@ -238,33 +241,8 @@
                                                                         class="form-control"
                                                                         placeholder="{{ __('Address') }}">
                                                                 </div>
-                                                            </div>
-                                                            <div class="row location" id="permanent">
-                                                                <div class="col-md-3 mb-25">
-                                                                    <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Country') }}</label>
-                                                                    <input type="text" name="permanent_country_id"
-                                                                        value="{{ $tenant->permanent_country_id }}"
-                                                                        class="form-control"
-                                                                        placeholder="{{ __('Country') }}">
-                                                                </div>
-                                                                <div class="col-md-3 mb-25">
-                                                                    <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('State') }}</label>
-                                                                    <input type="text" name="permanent_state_id"
-                                                                        value="{{ $tenant->permanent_state_id }}"
-                                                                        class="form-control"
-                                                                        placeholder="{{ __('State') }}">
-                                                                </div>
-                                                                <div class="col-md-3 mb-25">
-                                                                    <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('City') }}</label>
-                                                                    <input type="text" name="permanent_city_id"
-                                                                        value="{{ $tenant->permanent_city_id }}"
-                                                                        class="form-control"
-                                                                        placeholder="{{ __('City') }}">
-                                                                </div>
-                                                                <div class="col-md-3 mb-25">
+
+                                                                <div class="col-md-4 mb-25">
                                                                     <label
                                                                         class="label-text-title color-heading font-medium mb-2">{{ __('Zip Code') }}</label>
                                                                     <input type="text" name="permanent_zip_code"
@@ -272,9 +250,98 @@
                                                                         class="form-control"
                                                                         placeholder="{{ __('Zip Code') }}">
                                                                 </div>
+
+                                                                <div class="col-md-4 mb-25">
+                                                                    <label
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('City') }}</label>
+                                                                    <input type="text" name="permanent_city_id"
+                                                                        value="{{ $tenant->permanent_city_id }}"
+                                                                        class="form-control"
+                                                                        placeholder="{{ __('City') }}">
+                                                                </div>
+
+                                                                <div class="col-md-4 mb-25">
+                                                                    <label
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('State') }}</label>
+                                                                    <input type="text" name="permanent_state_id"
+                                                                        value="{{ $tenant->permanent_state_id }}"
+                                                                        class="form-control"
+                                                                        placeholder="{{ __('State') }}">
+                                                                </div>
+
+                                                                <div class="col-md-4 mb-25">
+                                                                    <label
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Country') }}</label>
+                                                                    <input type="text" name="permanent_country_id"
+                                                                        value="{{ $tenant->permanent_country_id }}"
+                                                                        class="form-control"
+                                                                        placeholder="{{ __('Country') }}">
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="settings-inner-box bg-white theme-border radius-4 mb-25">
+                                                        <div class="tenants-inner-box-block">
+                                                            <div class="settings-inner-box-title border-bottom p-20">
+                                                                <h4>{{ __('Other Infomation') }}</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div class="settings-inner-box-fields p-20 pb-0">
+                                                            <div class="row">
+                                                                <div class="col-md-4 mb-25">
+                                                                    <label
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Job') }}</label>
+                                                                    <input type="text" name="job"
+                                                                        value="{{ $tenant->job }}" class="form-control"
+                                                                        placeholder="{{ __('Job') }}">
+                                                                </div>
+
+                                                                <div class="col-md-4 mb-25">
+                                                                    <label
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Family Members') }}</label>
+                                                                    <input type="number" name="family_member"
+                                                                        value="{{ $tenant->family_member }}"
+                                                                        class="form-control"
+                                                                        placeholder="{{ __('Family Members') }}">
+                                                                </div>
+
+                                                                <div class="col-md-4 mb-25">
+                                                                    <label
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('My Pets') }}</label>
+                                                                    <select class="form-control" name="pet_type">
+                                                                        <option value="">{{ __('Select Pet Type') }}
+                                                                        </option>
+                                                                        <option value="Dog"
+                                                                            {{ $tenant->pets == 'Cat' ? 'selected' : '' }}>
+                                                                            {{ __('Cat') }}</option>
+                                                                        <option value="Dog"
+                                                                            {{ $tenant->pets == 'Dog' ? 'selected' : '' }}>
+                                                                            {{ __('Dog') }}</option>
+                                                                        <option value="Other"
+                                                                            {{ $tenant->pets == 'Other' ? 'selected' : '' }}>
+                                                                            {{ __('Other') }}</option>
+                                                                        <option value="No Pets"
+                                                                            {{ $tenant->pets == 'No Pets' ? 'selected' : '' }}>
+                                                                            {{ __('No Pets') }}
+                                                                        </option>
+                                                                    </select>
+                                                                    @error('pet_type')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
+                                                                </div>
+                                                                <!-- <div class="col-md-4 mb-25">
+                                                                                            <label
+                                                                                                class="label-text-title color-heading font-medium mb-2">{{ __('Age') }}</label>
+                                                                                            <input type="number" name="age"
+                                                                                                value="{{ $tenant->age }}" class="form-control"
+                                                                                                placeholder="{{ __('Age') }}">
+                                                                                        </div> -->
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                                 <!-- Next/Previous Button Start -->
                                                 <button type="submit"
@@ -308,7 +375,8 @@
                                                                         @foreach ($properties as $property)
                                                                             <option value="{{ $property->id }}"
                                                                                 {{ $property->id == $tenant->property_id ? 'selected' : '' }}>
-                                                                                {{ $property->name }}</option>
+                                                                                {{ $property->name }}
+                                                                            </option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
@@ -322,7 +390,8 @@
                                                                         @foreach ($units as $unit)
                                                                             <option value="{{ $unit->id }}"
                                                                                 {{ $unit->id == $tenant->unit_id ? 'selected' : '' }}>
-                                                                                {{ $unit->name }}</option>
+                                                                                {{ $unit->name }}
+                                                                            </option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
@@ -455,10 +524,12 @@
                                                                             class="form-control">
                                                                             <option value="0"
                                                                                 {{ $tenant->security_deposit_type == TYPE_FIXED ? 'selected' : '' }}>
-                                                                                {{ __('Fixed') }}</option>
+                                                                                {{ __('Fixed') }}
+                                                                            </option>
                                                                             <option value="1"
                                                                                 {{ $tenant->security_deposit_type == TYPE_PERCENTAGE ? 'selected' : '' }}>
-                                                                                {{ __('Percentage') }}</option>
+                                                                                {{ __('Percentage') }}
+                                                                            </option>
                                                                         </select>
                                                                         <input type="number" step="any"
                                                                             class="form-control" id="security_deposit"
@@ -476,10 +547,12 @@
                                                                             class="form-control">
                                                                             <option value="0"
                                                                                 {{ $tenant->late_fee_type == TYPE_FIXED ? 'selected' : '' }}>
-                                                                                {{ __('Fixed') }}</option>
+                                                                                {{ __('Fixed') }}
+                                                                            </option>
                                                                             <option value="1"
                                                                                 {{ $tenant->late_fee_type == TYPE_PERCENTAGE ? 'selected' : '' }}>
-                                                                                {{ __('Percentage') }}</option>
+                                                                                {{ __('Percentage') }}
+                                                                            </option>
                                                                         </select>
                                                                         <input type="number" step="any"
                                                                             class="form-control" id="late_fee"
@@ -565,7 +638,8 @@
                                                                                 <div
                                                                                     class="show-uploaded-documents-content flex-grow-1 d-inline-flex align-items-center">
                                                                                     <h5 class="me-3">
-                                                                                        {{ $document->file_name }}</h5>
+                                                                                        {{ $document->file_name }}
+                                                                                    </h5>
                                                                                     <div class="d-inline-flex">
                                                                                         <a href="{{ $document->FileUrl }}"
                                                                                             download

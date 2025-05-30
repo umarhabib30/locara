@@ -25,16 +25,15 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <div class="color-settings-page-area">
                                         <div class="account-settings-content-box">
                                             <div class="account-settings-title border-bottom mb-20 pb-20">
-                                                <div class="align-items-center d-flex justify-content-between">
-                                                    <h4>{{ $pageTitle }}</h4>
-                                                    <a title="{{__('Sync missing gateway')}}" href="{{ route('admin.setting.gateway.sync') }}" class="theme-btn me-3">
-                                                        <i class="fa fa-sync-alt"></i>
-                                                    </a>
+                                                <div class="row align-items-center">
+                                                    <div class="col-md-6">
+                                                        <h4>{{ $pageTitle }}</h4>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="information-table-area">
@@ -233,7 +232,6 @@
     <input type="hidden" id="getCurrencySymbol" value="{{ getCurrencySymbol() }}">
     <input type="hidden" id="allCurrency" value="{{ json_encode(getCurrency()) }}">
     <input type="hidden" id="gatewaySettings" value="{{ gatewaySettings() }}">
-    <input type="hidden" id="supportedCurrency" value="{{json_encode(getGatewaySupportedCurrencies())}}">
 @endsection
 @push('style')
     @include('common.layouts.datatable-style')

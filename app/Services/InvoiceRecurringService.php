@@ -16,7 +16,7 @@ class InvoiceRecurringService
     public function getAllData()
     {
         $invoiceRecurring = InvoiceRecurringSetting::query()
-            ->where('invoice_recurring_settings.owner_user_id', getOwnerUserId())
+            ->where('invoice_recurring_settings.owner_user_id', auth()->id())
             ->join('properties', 'invoice_recurring_settings.property_id', '=', 'properties.id')
             ->join('property_units', 'invoice_recurring_settings.property_unit_id', '=', 'property_units.id')
             ->select(['invoice_recurring_settings.*', 'properties.name as propertyName', 'property_units.unit_name']);
@@ -64,7 +64,7 @@ class InvoiceRecurringService
 
     public function getById($id)
     {
-        return InvoiceRecurringSetting::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+        return InvoiceRecurringSetting::where('owner_user_id', auth()->id())->findOrFail($id);
     }
 
     public function getItemsByInvoiceRecurringId($id)
@@ -82,7 +82,7 @@ class InvoiceRecurringService
             }
             $id = $request->get('id', '');
             if ($id != '') {
-                $invoiceRecurring = InvoiceRecurringSetting::where('owner_user_id', getOwnerUserId())->findOrFail($request->id);
+                $invoiceRecurring = InvoiceRecurringSetting::where('owner_user_id', auth()->id())->findOrFail($request->id);
             } else {
                 if (!getOwnerLimit(RULES_AUTO_INVOICE) > 0) {
                     throw new Exception(__('Your Auto Invoice Settings Limit Finished'));
@@ -91,7 +91,7 @@ class InvoiceRecurringService
             }
             $invoiceRecurring->invoice_prefix = $request->invoice_prefix;
             $invoiceRecurring->tenant_id = $tenant->id;
-            $invoiceRecurring->owner_user_id = getOwnerUserId();
+            $invoiceRecurring->owner_user_id = auth()->id();
             $invoiceRecurring->property_id = $request->property_id;
             $invoiceRecurring->property_unit_id = $request->property_unit_id;
             $invoiceRecurring->start_date = $request->start_date ?? now();
@@ -141,7 +141,7 @@ class InvoiceRecurringService
     {
         DB::beginTransaction();
         try {
-            $invoice = InvoiceRecurringSetting::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $invoice = InvoiceRecurringSetting::where('owner_user_id', auth()->id())->findOrFail($id);
             $invoice->delete();
             DB::commit();
             $message = __(DELETED_SUCCESSFULLY);

@@ -17,7 +17,7 @@ class DomainService
     {
         $data =  Tenancy::query()
             ->join('domains', 'tenancies.id', '=', 'domains.tenant_id')
-            ->whereJsonContains('data', ['owner_user_id' => getOwnerUserId()])
+            ->whereJsonContains('data', ['owner_user_id' => auth()->id()])
             ->select('tenancies.id', 'domains.custom', 'domains.domain')
             ->first();
 
@@ -30,7 +30,7 @@ class DomainService
         try {
             $custom = strtolower(str_replace(' ', '', $request->custom));
             $tenancy = Tenancy::query()
-                ->whereJsonContains('data', ['owner_user_id' => getOwnerUserId()])
+                ->whereJsonContains('data', ['owner_user_id' => auth()->id()])
                 ->first();
             $centralDomains = Config::get('tenancy.central_domains')[0];
             $appUrlDomains = implode('.', array_slice(explode('.', parse_url($centralDomains, PHP_URL_HOST)), -2));
@@ -41,13 +41,13 @@ class DomainService
                 if ($domainExists) {
                     throw new Exception(__('Please Try Again!'));
                 }
-                $tenancy = Tenancy::create(['id' => $randomDomainName, 'owner_user_id' => getOwnerUserId()]);
+                $tenancy = Tenancy::create(['id' => $randomDomainName, 'owner_user_id' => auth()->id()]);
                 $domain = $tenancy->id . '.' . $appUrlDomains;
-                $tenancy->domains()->create(['domain' => $domain, 'custom' => $request->custom, 'owner_user_id' => getOwnerUserId()]);
+                $tenancy->domains()->create(['domain' => $domain, 'custom' => $request->custom, 'owner_user_id' => auth()->id()]);
                 $message = __(CREATED_SUCCESSFULLY);
             } else {
                 $domain = $tenancy->id . '.' . $appUrlDomains;
-                $tenancy->domains()->update(['domain' => $domain, 'custom' => $custom, 'owner_user_id' => getOwnerUserId()]);
+                $tenancy->domains()->update(['domain' => $domain, 'custom' => $custom, 'owner_user_id' => auth()->id()]);
                 $message = __(UPDATED_SUCCESSFULLY);
             }
 
@@ -63,7 +63,7 @@ class DomainService
     public function info()
     {
         $tenancy = Tenancy::query()
-            ->whereJsonContains('data', ['owner_user_id' => getOwnerUserId()])
+            ->whereJsonContains('data', ['owner_user_id' => auth()->id()])
             ->join('domains', 'tenancies.id', '=', 'domains.tenant_id')
             ->select('domains.custom')
             ->first();

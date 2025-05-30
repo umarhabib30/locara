@@ -37,7 +37,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (getNotification(getOwnerUserId()) as $notification)
+                                        @foreach (getNotification(auth()->id()) as $notification)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td><img src="{{ getFileUrl($notification->folder_name, $notification->file_name) }}"

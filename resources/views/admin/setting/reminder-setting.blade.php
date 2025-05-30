@@ -28,13 +28,13 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <div class="language-settings-page-area">
                                         <div class="account-settings-content-box">
                                             <div class="account-settings-title border-bottom mb-20 pb-20">
                                                 <div class="row align-items-center">
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <h4>{{ $pageTitle }}</h4>
                                                     </div>
                                                 </div>
@@ -45,7 +45,7 @@
                                                 <div class="settings-inner-box bg-white theme-border radius-4 mb-25">
                                                     <div class="settings-inner-box-fields p-20 pb-0">
                                                         <div class="row">
-                                                            <div class="col-xl-4 mb-25">
+                                                            <div class="col-md-4 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('Status') }}</label>
                                                                 <select name="remainder_status" class="form-control">
@@ -57,7 +57,7 @@
                                                                         {{ __('Enable') }}</option>
                                                                 </select>
                                                             </div>
-                                                            <div class="col-xl-4 mb-25">
+                                                            <div class="col-md-4 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('Remind day') }}</label>
                                                                 <select name="remainder_everyday_status" id=""
@@ -70,7 +70,8 @@
                                                                         {{ __('Every Day') }}</option>
                                                                 </select>
                                                             </div>
-                                                            <div class="col-xl-4 mb-25 reminder_day {{ getOption('remainder_everyday_status', 0) == REMAINDER_EVERYDAY_STATUS_ACTIVE ? 'd-none' : '' }}">
+                                                            <div
+                                                                class="col-md-4 mb-25 reminder_day {{ getOption('remainder_everyday_status', 0) == REMAINDER_EVERYDAY_STATUS_ACTIVE ? 'd-none' : '' }}">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('Reminder before due days') }}</label>
                                                                 <input type="text" name="reminder_days"

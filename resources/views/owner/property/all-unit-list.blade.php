@@ -37,8 +37,8 @@
                                                 <table id="allDataTable" class="table responsive theme-border p-20">
                                                     <thead>
                                                         <tr>
-                                                            <th>{{ __('SL') }}</th>
-                                                            <th data-priority="1">{{ __('Name') }}</th>
+                                                            {{-- <th>{{ __('SL') }}</th> --}}
+                                                            <th data-priority="1">{{ __('Unit') }}</th>
                                                             <th>{{ __('Image') }}</th>
                                                             <th>{{ __('Property') }}</th>
                                                             <th>{{ __('Tenant') }}</th>
@@ -48,7 +48,7 @@
                                                     <tbody>
                                                         @foreach ($units as $unit)
                                                             <tr>
-                                                                <td>{{ $loop->iteration }}</td>
+                                                                {{-- <td>{{ $loop->iteration }}</td> --}}
                                                                 <td>{{ $unit->unit_name }}</td>
                                                                 <td>
                                                                     <img class="rounded-circle avatar-md tbl-user-image"
@@ -66,18 +66,11 @@
                                                                 </td>
                                                                 <td class="text-center">
                                                                     @if (is_null($unit->first_name))
-                                                                        <button class="p-1 tbl-action-btn deleteItem"
-                                                                            data-formid="delete_row_form_{{ $unit->id }}">
-                                                                            <span class="iconify"
-                                                                                data-icon="ep:delete-filled"></span>
+                                                                        <button class="p-1 tbl-action-btn deleteItem" data-formid="delete_row_form_{{ $unit->id }}">
+                                                                            <span class="iconify" data-icon="ep:delete-filled"></span>
                                                                         </button>
-                                                                        <form
-                                                                            action="{{ route('owner.property.unit.delete', [$unit->id]) }}"
-                                                                            method="post"
-                                                                            id="delete_row_form_{{ $unit->id }}">
-                                                                            {{ method_field('DELETE') }}
-                                                                            <input type="hidden" name="_token"
-                                                                                value="{{ csrf_token() }}">
+                                                                        <form  action="{{ route('owner.property.unit.delete', [$unit->id]) }}"  method="post" id="delete_row_form_{{ $unit->id }}"> {{ method_field('DELETE') }}
+                                                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                                                         </form>
                                                                     @endif
                                                                 </td>

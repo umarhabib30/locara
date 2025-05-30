@@ -86,7 +86,7 @@ class AgreementService
             $accountInfo = $userInfo[0]->getAccounts();
             $apiClient->getConfig()->setHost($accountInfo[0]->getBaseUri() . env('DS_ESIGN_URI_SUFFIX'));
 
-            $user = User::query()->where('owner_user_id', getOwnerUserId())->where('role', USER_ROLE_TENANT)->find($request->user_id);
+            $user = User::query()->where('owner_user_id', auth()->id())->where('role', USER_ROLE_TENANT)->find($request->user_id);
             if (is_null($user)) {
                 throw new Exception(__('No tenant found'));
             }

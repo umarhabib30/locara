@@ -27,7 +27,7 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <div class="currency-settings-page-area">
                                         <div class="account-settings-content-box">
@@ -36,14 +36,12 @@
                                                     <div class="col-md-6">
                                                         <h4>{{ @$pageTitle }}</h4>
                                                     </div>
-                                                    @if($features->count() < 4)
-                                                        <div class="col-md-6">
-                                                            <div class="property-details-right text-end">
-                                                                <button type="button" class="theme-btn" id="add"
-                                                                    title="{{ __('Add Amazing Feature') }}">{{ __('Add Amazing Feature') }}</button>
-                                                            </div>
+                                                    <div class="col-md-6">
+                                                        <div class="property-details-right text-end">
+                                                            <button type="button" class="theme-btn" id="add"
+                                                                title="{{ __('Add Feature') }}">{{ __('Add Feature') }}</button>
                                                         </div>
-                                                    @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="currency-list-table-area">
@@ -52,7 +50,6 @@
                                                         class="table bg-off-white theme-border p-20 dt-responsive">
                                                         <thead>
                                                             <tr>
-                                                                <th>{{ __('Icon') }}</th>
                                                                 <th>{{ __('Title') }}</th>
                                                                 <th>{{ __('Summary') }}</th>
                                                                 <th>{{ __('Status') }}</th>
@@ -62,16 +59,6 @@
                                                         <tbody>
                                                             @foreach ($features as $feature)
                                                                 <tr>
-                                                                    <td>
-                                                                        <div class="upload-profile-photo-box mb-25">
-                                                                            <div
-                                                                                class="profile-user position-relative d-inline-block">
-                                                                                <img src="{{ $feature->icon }}"
-                                                                                     class="rounded-circle avatar-xl maintainer-user-profile-image image"
-                                                                                     alt="">
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
                                                                     <td>{{ $feature->title }}</td>
                                                                     <td>{{ Str::limit($feature->summary, 100, '...') }}
                                                                     </td>
@@ -130,7 +117,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="addModalLabel">{{ __('Add Amazing Feature') }}</h4>
+                    <h4 class="modal-title" id="addModalLabel">{{ __('Add Feature') }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
                             class="iconify" data-icon="akar-icons:cross"></span>
                     </button>
@@ -151,11 +138,6 @@
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Summary') }}</label>
                                     <textarea name="summary" id="summary" class="form-control" placeholder="{{ __('Summery') }}"></textarea>
                                 </div>
-                            </div>
-                            <div class="col-md-12 mb-25">
-                                <label
-                                    class="label-text-title color-heading font-medium mb-2">{{ __('Icon') }}</label>
-                                <input type="file" class="form-control" name="icon">
                             </div>
                             <div class="row">
                                 <div class="col-md-12 mb-25">
@@ -185,7 +167,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="editModalLabel">{{ __('Edit Amazing Feature') }}</h4>
+                    <h4 class="modal-title" id="editModalLabel">{{ __('Edit Feature') }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
                             class="iconify" data-icon="akar-icons:cross"></span>
                     </button>
@@ -207,11 +189,6 @@
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Summary') }}</label>
                                     <textarea name="summary" id="summary" class="form-control" placeholder="{{ __('Summery') }}"></textarea>
                                 </div>
-                            </div>
-                            <div class="col-md-12 mb-25">
-                                <label
-                                    class="label-text-title color-heading font-medium mb-2">{{ __('Icon') }}</label>
-                                <input type="file" class="form-control" name="icon">
                             </div>
                             <div class="row">
                                 <div class="col-md-12 mb-25">

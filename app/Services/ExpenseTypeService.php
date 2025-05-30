@@ -13,7 +13,7 @@ class ExpenseTypeService
 
     public function getAll()
     {
-        return ExpenseType::where('owner_user_id', getOwnerUserId())->get();
+        return ExpenseType::where('owner_user_id', auth()->id())->get();
     }
 
     public function store($request)
@@ -22,12 +22,12 @@ class ExpenseTypeService
         try {
             $id = $request->get('id', '');
             if ($id != '') {
-                $expenseType = ExpenseType::where('owner_user_id', getOwnerUserId())->findOrFail($request->id);
+                $expenseType = ExpenseType::where('owner_user_id', auth()->id())->findOrFail($request->id);
             } else {
                 $expenseType = new ExpenseType();
             }
             $expenseType->name = $request->type_name;
-            $expenseType->owner_user_id = getOwnerUserId();
+            $expenseType->owner_user_id = auth()->id();
             $expenseType->tax = $request->tax ?? 0;
             $expenseType->status = $request->status ?? ACTIVE;
             $expenseType->save();
@@ -45,7 +45,7 @@ class ExpenseTypeService
     {
         DB::beginTransaction();
         try {
-            $expenseType = ExpenseType::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $expenseType = ExpenseType::where('owner_user_id', auth()->id())->findOrFail($id);
             $expenseType->delete();
             DB::commit();
             $message = __(DELETED_SUCCESSFULLY);

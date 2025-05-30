@@ -44,25 +44,19 @@
                                                         </div>
                                                     </div>
                                                     <div class="settings-inner-box-fields p-20 pb-0">
-                                                        <div class="row rg-24">
-                                                            <div class="col-12 d-flex justify-content-between flex-wrap">
+                                                        <div class="row">
+                                                            <div class="col-12 d-flex justify-content-between">
                                                                 <!-- Upload Profile Photo Box Start -->
                                                                 <div
                                                                     class="upload-profile-photo-box upload-profile-photo-with-delete-btn mb-25">
                                                                     <div
                                                                         class="profile-user position-relative d-inline-block">
-                                                                        @if((auth()->user()->role == USER_ROLE_OWNER) || (auth()->user()->role == USER_ROLE_TEAM_MEMBER))
-                                                                        <img src="@if (auth()->user()->image) {{ auth()->user()->image }} @else {{ asset('assets/images/users/empty-user.jpg') }} @endif"
-                                                                            class="rounded-circle avatar-xl default-user-profile-image">
-                                                                        @elseif(auth()->user()->role == USER_ROLE_TENANT)
+                                                                        @if (auth()->user()->role == USER_ROLE_OWNER)
                                                                             <img src="@if (auth()->user()->image) {{ auth()->user()->image }} @else {{ asset('assets/images/users/empty-user.jpg') }} @endif"
-                                                                                 class="rounded-circle avatar-xl default-user-profile-image">
-                                                                        @elseif(auth()->user()->role == USER_ROLE_MAINTAINER)
-                                                                            <img src="@if(auth()->user()->image){{auth()->user()->image}} @else {{ asset('assets/images/users/empty-user.jpg') }} @endif"
-                                                                                 class="rounded-circle avatar-xl default-user-profile-image">
-                                                                        @elseif(auth()->user()->role == USER_ROLE_ADMIN)
-                                                                            <img src="@if(auth()->user()->image){{auth()->user()->image}} @else {{ asset('assets/images/users/empty-user.jpg') }} @endif"
-                                                                                 class="rounded-circle avatar-xl default-user-profile-image">
+                                                                                class="rounded-circle avatar-xl default-user-profile-image">
+                                                                        @elseif(auth()->user()->role == USER_ROLE_TENANT)
+                                                                            <img src="@if ($tenant->image) {{ $tenant->image }} @else {{ asset('assets/images/users/empty-user.jpg') }} @endif"
+                                                                                class="rounded-circle avatar-xl default-user-profile-image">
                                                                         @endif
                                                                         <div
                                                                             class="avatar-xs p-0 rounded-circle default-profile-photo-edit">
@@ -131,29 +125,27 @@
                                                                     <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
-                                                            @if(auth()->user()->role != USER_ROLE_TEAM_MEMBER)
-                                                                <div class="col-md-4 mb-25">
-                                                                    <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Date of birth') }}</label>
-                                                                    <input type="date" class="form-control"
-                                                                           name="date_of_birth"
-                                                                           placeholder="{{ __('Date of birth') }}"
-                                                                           value="{{ auth()->user()->date_of_birth }}">
-                                                                    @error('date_of_birth')
+                                                            <div class="col-md-4 mb-25">
+                                                                <label
+                                                                    class="label-text-title color-heading font-medium mb-2">{{ __('Date of birth') }}</label>
+                                                                <input type="date" class="form-control"
+                                                                    name="date_of_birth"
+                                                                    placeholder="{{ __('Date of birth') }}"
+                                                                    value="{{ auth()->user()->date_of_birth }}">
+                                                                @error('date_of_birth')
                                                                     <span class="text-danger">{{ $message }}</span>
-                                                                    @enderror
-                                                                </div>
-                                                                <div class="col-md-4 mb-25">
-                                                                    <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('NID Number') }}</label>
-                                                                    <input type="text" class="form-control" name="nid_number"
-                                                                           placeholder="{{ __('NID Number') }}"
-                                                                           value="{{ auth()->user()->nid_number }}">
-                                                                    @error('nid_number')
+                                                                @enderror
+                                                            </div>
+                                                            <div class="col-md-4 mb-25">
+                                                                <label
+                                                                    class="label-text-title color-heading font-medium mb-2">{{ __('NID Number') }}</label>
+                                                                <input type="text" class="form-control" name="nid_number"
+                                                                    placeholder="{{ __('NID Number') }}"
+                                                                    value="{{ auth()->user()->nid_number }}">
+                                                                @error('nid_number')
                                                                     <span class="text-danger">{{ $message }}</span>
-                                                                    @enderror
-                                                                </div>
-                                                            @endif
+                                                                @enderror
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -166,6 +158,35 @@
                                                         </div>
                                                         <div class="settings-inner-box-fields p-20 pb-0">
                                                             <div class="row">
+                                                            <div class="col-md-12">
+                                                                    <!-- <label class="label-text-title color-heading font-medium mb-2">{{ __('Print Logo') }}</label> -->
+                                                                    <div class="upload-profile-photo-box mb-25">
+                                                                        <div
+                                                                            class="profile-user position-relative d-inline-block">
+                                                                            @if ($owner->file_name)
+                                                                                <img src="{{ assetUrl($owner->folder_name . '/' . $owner->file_name) }}"
+                                                                                    class="rounded-circle avatar-xl user-profile-image">
+                                                                            @else
+                                                                                <img src="{{ asset('assets/images/users/empty-user.jpg') }}"
+                                                                                    class="rounded-circle avatar-xl user-profile-image">
+                                                                            @endif
+                                                                            <div
+                                                                                class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                                                                                <input id="profile-img-file-input"
+                                                                                    name="print_logo" type="file"
+                                                                                    class="profile-img-file-input">
+                                                                                <label for="profile-img-file-input"
+                                                                                    class="profile-photo-edit avatar-xs">
+                                                                                    <span
+                                                                                        class="avatar-title rounded-circle"
+                                                                                        title="Upload Image">
+                                                                                        <i class="ri-camera-fill"></i>
+                                                                                    </span>
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                                 <div class="col-md-4 mb-25">
                                                                     <label
                                                                         class="label-text-title color-heading font-medium mb-2">{{ __('Print Name') }}</label>
@@ -199,36 +220,18 @@
                                                                         <span class="text-danger">{{ $message }}</span>
                                                                     @enderror
                                                                 </div>
-                                                                <div class="col-md-4">
+                                                                <div class="col-md-4 mb-25">
                                                                     <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Print Logo') }}</label>
-                                                                    <div class="upload-profile-photo-box mb-25">
-                                                                        <div
-                                                                            class="profile-user position-relative d-inline-block">
-                                                                            @if ($owner->file_name)
-                                                                                <img src="{{ assetUrl($owner->folder_name . '/' . $owner->file_name) }}"
-                                                                                    class="rounded-circle avatar-xl user-profile-image">
-                                                                            @else
-                                                                                <img src="{{ asset('assets/images/users/empty-user.jpg') }}"
-                                                                                    class="rounded-circle avatar-xl user-profile-image">
-                                                                            @endif
-                                                                            <div
-                                                                                class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                                                                                <input id="profile-img-file-input"
-                                                                                    name="print_logo" type="file"
-                                                                                    class="profile-img-file-input">
-                                                                                <label for="profile-img-file-input"
-                                                                                    class="profile-photo-edit avatar-xs">
-                                                                                    <span
-                                                                                        class="avatar-title rounded-circle"
-                                                                                        title="Upload Image">
-                                                                                        <i class="ri-camera-fill"></i>
-                                                                                    </span>
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Print Tax Number') }}</label>
+                                                                    <input type="text" class="form-control"
+                                                                        value="{{ $owner->print_tax_number }}"
+                                                                        name="print_tax_number"
+                                                                        placeholder="{{ __('Print Tax Number') }}">
+                                                                    @error('print_tax_number')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
                                                                 </div>
+                                                              
                                                             </div>
                                                         </div>
                                                     </div>
@@ -401,14 +404,30 @@
                                                                 </div>
                                                                 <div class="col-md-4 mb-25">
                                                                     <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Age') }}</label>
-                                                                    <input type="text" class="form-control"
-                                                                        name="age" placeholder="{{ __('Age') }}"
-                                                                        value="{{ $tenant->age }}">
-                                                                    @error('age')
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('My Pets') }}</label>
+                                                                    <select class="form-control" name="pet_type">
+                                                                        <option value="">
+                                                                            {{ __('Select Pet Type') }}
+                                                                        </option>
+                                                                        <option value="Dog"
+                                                                            {{ $tenant->pets == 'Cat' ? 'selected' : '' }}>
+                                                                            {{ __('Cat') }}</option>
+                                                                        <option value="Dog"
+                                                                            {{ $tenant->pets == 'Dog' ? 'selected' : '' }}>
+                                                                            {{ __('Dog') }}</option>
+                                                                        <option value="Other"
+                                                                            {{ $tenant->pets == 'Other' ? 'selected' : '' }}>
+                                                                            {{ __('Other') }}</option>
+                                                                        <option value="No Pets"
+                                                                            {{ $tenant->pets == 'No Pets' ? 'selected' : '' }}>
+                                                                            {{ __('No Pets') }}
+                                                                        </option>
+                                                                    </select>
+                                                                    @error('pet_type')
                                                                         <span class="text-danger">{{ $message }}</span>
                                                                     @enderror
                                                                 </div>
+
 
                                                             </div>
                                                         </div>

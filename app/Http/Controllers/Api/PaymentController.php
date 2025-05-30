@@ -67,7 +67,6 @@ class PaymentController extends Controller
                 $object = [
                     'id' => $order->id,
                     'callback_url' => route('payment.verify'),
-                    'cancel_url' => route('payment.failed'),
                     'currency' => $gatewayCurrency->currency
                 ];
 
@@ -89,22 +88,17 @@ class PaymentController extends Controller
 
     public function placeOrder($invoice, $gateway, $gatewayCurrency, $bank_id = null, $bank_name = null, $bank_account_number = null, $deposit_by = null, $deposit_slip_id = null)
     {
-        $totalAmount = $invoice->amount;
-        if ($invoice->due_date < date('Y-m-d')) {
-            $totalAmount += $invoice->late_fee;
-        }
-
         return Order::create([
             'user_id' => auth()->id(),
             'invoice_id' => $invoice->id,
             'amount' => $invoice->amount,
-            'system_currency' => Currency::where('current_currency', ACTIVE)->first()->currency_code,
+            'system_currency' => Currency::where('current_currency', 'on')->first()->currency_code,
             'gateway_id' => $gateway->id,
             'gateway_currency' => $gatewayCurrency->currency,
             'conversion_rate' => $gatewayCurrency->conversion_rate,
             'subtotal' => $invoice->amount,
-            'total' => $totalAmount,
-            'transaction_amount' => $totalAmount * $gatewayCurrency->conversion_rate,
+            'total' => $invoice->amount,
+            'transaction_amount' => $invoice->amount * $gatewayCurrency->conversion_rate,
             'payment_status' => INVOICE_STATUS_PENDING,
             'bank_id' => $bank_id,
             'bank_name' => $bank_name,

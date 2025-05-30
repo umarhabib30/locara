@@ -24,7 +24,7 @@ class MailService
 
     public function getAllDataByOwnerId()
     {
-        $histories = MailHistory::query()->where('owner_user_id', getOwnerUserId());
+        $histories = MailHistory::query()->where('owner_user_id', auth()->id());
 
         return datatables($histories)
             ->addIndexColumn()

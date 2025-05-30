@@ -91,8 +91,6 @@
     </div>
     <input type="hidden" id="earningReportRoute" value="{{ route('owner.reports.earning') }}">
     <input type="hidden" id="getPropertyUnitsRoute" value="{{ route('owner.property.getPropertyUnits') }}">
-    <input type="hidden" id="allTotal" value="{{__('All Total')}}">
-    <input type="hidden" id="pageTotal" value="{{__('Page Total')}}">
 @endsection
 @push('style')
     @include('common.layouts.datatable-style')

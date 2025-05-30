@@ -31,11 +31,8 @@
                                         <div class="account-settings-content-box">
                                             <div class="account-settings-title border-bottom mb-20 pb-20">
                                                 <div class="row align-items-center">
-                                                    <div class="align-items-center d-flex justify-content-between">
+                                                    <div class="col-md-6">
                                                         <h4>{{ $pageTitle }}</h4>
-                                                        <a title="{{__('Sync missing gateway')}}" href="{{ route('owner.setting.gateway.sync') }}" class="theme-btn me-3">
-                                                            <i class="fa fa-sync-alt"></i>
-                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -235,7 +232,6 @@
     <input type="hidden" id="getCurrencySymbol" value="{{ getCurrencySymbol() }}">
     <input type="hidden" id="allCurrency" value="{{ json_encode(getCurrency()) }}">
     <input type="hidden" id="gatewaySettings" value="{{ gatewaySettings() }}">
-    <input type="hidden" id="supportedCurrency" value="{{json_encode(getGatewaySupportedCurrencies())}}">
 @endsection
 @push('style')
     @include('common.layouts.datatable-style')

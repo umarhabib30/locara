@@ -13,7 +13,7 @@ class TicketTopicService
 
     public function getAll()
     {
-        return TicketTopic::where('owner_user_id', getOwnerUserId())->get();
+        return TicketTopic::where('owner_user_id', auth()->id())->get();
     }
 
     public function getActiveAll()
@@ -33,7 +33,7 @@ class TicketTopicService
                 $ticket = new TicketTopic();
             }
             $ticket->name = $request->name;
-            $ticket->owner_user_id = getOwnerUserId();
+            $ticket->owner_user_id = auth()->id();
             $ticket->status = $request->status;
             $ticket->save();
 
@@ -50,7 +50,7 @@ class TicketTopicService
     public function delete($id)
     {
         try {
-            $ticket = TicketTopic::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $ticket = TicketTopic::where('owner_user_id', auth()->id())->findOrFail($id);
             $ticket->delete();
             return redirect()->back()->with('success', __(DELETED_SUCCESSFULLY));
         } catch (Exception $e) {

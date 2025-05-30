@@ -34,13 +34,4 @@ class GatewayController extends Controller
     {
         return $this->gatewayService->getCurrenciesByGatewayId($request->id);
     }
-
-    public function sync(Request $request)
-    {
-        // Call the syncMissingGateway function
-        syncMissingGateway();
-
-        // Redirect back or to a success page
-        return redirect()->back()->with('success', 'Gateways synced successfully!');
-    }
 }

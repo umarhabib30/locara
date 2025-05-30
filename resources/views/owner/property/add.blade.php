@@ -40,33 +40,35 @@
                                         <!-- progressbar -->
                                         <div class="stepper-progressbar-wrap radius-10 theme-border p-25 mb-25">
                                             <ul id="progressbar" class="text-center">
-                                                <li class="active" id="accountInformationStep">
+                                                <li class="active" id="accountInformationStep" data-step="1">
                                                     <span class="form-stepper-nav-icon"><i
                                                             class="ri-home-4-fill"></i></span>
                                                     <span>{{ __('Property Information') }}</span>
                                                 </li>
-                                                <li id="locationStep">
+                                                <li id="locationStep" data-step="2">
                                                     <span class="form-stepper-nav-icon"><i
                                                             class="ri-map-pin-2-fill"></i></span>
                                                     <span>{{ __('Location') }}</span>
                                                 </li>
-                                                <li id="unitStep">
+                                                <li id="unitStep" data-step="3">
                                                     <span class="form-stepper-nav-icon"><i
                                                             class="ri-layout-4-fill"></i></span>
                                                     <span>{{ __('Unit') }}</span>
                                                 </li>
-                                                <li id="rentChargesStep">
+                                                <li id="rentChargesStep" data-step="4">
                                                     <span class="form-stepper-nav-icon"><i
                                                             class="ri-file-text-fill"></i></span>
                                                     <span>{{ __('Rent & Charges') }}</span>
                                                 </li>
-                                                <li id="imageStep">
+                                                <li id="imageStep" data-step="5">
                                                     <span class="form-stepper-nav-icon"><i
                                                             class="ri-image-add-fill"></i></span>
                                                     <span>{{ __('Image') }}</span>
                                                 </li>
                                             </ul>
                                         </div>
+
+
                                         <!-- Start:: fieldSets -->
                                         <fieldset>
                                             <div id="addHtmlForm"></div>
@@ -100,4 +102,32 @@
 
 @push('script')
     <script src="{{ asset('assets/js/custom/property.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Click event for each step in the progress bar
+            $('#progressbar li').on('click', function() {
+                // Get the step number from data-step attribute
+                let stepValue = $(this).data('step');
+    
+                // Alert the step value
+                alert("Step value: " + stepValue);
+    
+                // Set the step value in a hidden input within the form (if needed)
+                let $form = $('#addHtmlForm form');
+                let $stepInput = $form.find('input[name="step"]');
+                
+                // If the hidden step input doesn't exist, create it
+                if ($stepInput.length === 0) {
+                    $stepInput = $('<input>').attr({ type: 'hidden', name: 'step' });
+                    $form.append($stepInput);
+                }
+                $stepInput.val(stepValue); // Set the step value
+    
+                // Trigger the form's submit event
+                $form.trigger('submit');
+            });
+        });
+    </script>
+    
 @endpush

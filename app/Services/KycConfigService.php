@@ -19,7 +19,7 @@ class KycConfigService
             ->leftJoin('tenants', 'kyc_configs.tenant_id', '=', 'tenants.id')
             ->leftJoin('users', 'tenants.user_id', '=', 'users.id')
             ->select('kyc_configs.*', 'users.first_name', 'users.last_name')
-            ->where('kyc_configs.owner_user_id', getOwnerUserId())
+            ->where('kyc_configs.owner_user_id', auth()->id())
             ->get();
     }
 
@@ -53,13 +53,13 @@ class KycConfigService
         try {
             $kycConfig = KycConfig::updateOrCreate([
                 'id' => $request->id,
-                'owner_user_id' => getOwnerUserId()
+                'owner_user_id' => auth()->id()
             ], [
                 'name' => $request->name,
                 'details' => $request->details,
                 'status' => $request->status,
                 'tenant_id' => $request->tenant_id,
-                'owner_user_id' => getOwnerUserId(),
+                'owner_user_id' => auth()->id(),
                 'is_both' => $request->is_both == 'on' ? ACTIVE : DEACTIVATE,
             ]);
 
@@ -96,12 +96,12 @@ class KycConfigService
 
     public function getInfo($id)
     {
-        return KycConfig::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+        return KycConfig::where('owner_user_id', auth()->id())->findOrFail($id);
     }
 
     public function delete($id)
     {
-        $kycConfig = KycConfig::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+        $kycConfig = KycConfig::where('owner_user_id', auth()->id())->findOrFail($id);
         $kycConfig->delete();
         return redirect()->back()->with('success', __(DELETED_SUCCESSFULLY));
     }

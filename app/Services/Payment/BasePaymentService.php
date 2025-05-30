@@ -11,7 +11,6 @@ class BasePaymentService
 {
     public $paymentMethod;
     public $callbackUrl;
-    public $webhookUrl;
     public $currency;
     public $gateway;
     public $gatewayCurrency;
@@ -22,11 +21,6 @@ class BasePaymentService
     {
         if (isset($object['id'])) {
             $this->callbackUrl = $object['callback_url'] . '?id=' . $object['id'];
-            $this->cancelUrl = $object['cancel_url'];
-        }
-
-        if(isset($object['webhook_url'])){
-            $this->webhookUrl = $object['webhook_url'];
         }
 
         if (isset($object['currency'])) {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Tenant\InformationController;
 use App\Http\Controllers\Tenant\InvoiceController;
 use App\Http\Controllers\Tenant\MaintenanceRequestController;
 use App\Http\Controllers\Tenant\TicketController;
+use App\Http\Controllers\Tenant\MyRentController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'tenant', 'as' => 'tenant.', 'middleware' => ['auth', 'tenant']], function () {
@@ -49,4 +50,9 @@ Route::group(['prefix' => 'tenant', 'as' => 'tenant.', 'middleware' => ['auth', 
         Route::post('store', [MaintenanceRequestController::class, 'store'])->name('store');
         Route::get('get-info', [MaintenanceRequestController::class, 'getInfo'])->name('get.info'); // ajax
     });
+
+    Route::group(['prefix' => 'myrent', 'as' => 'myrent.'], function () {
+        Route::get('/',[MyRentController::class,'index'])->name('index');
+    });
+
 });

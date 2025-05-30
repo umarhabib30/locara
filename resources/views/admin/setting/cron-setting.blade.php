@@ -28,16 +28,16 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <div class="language-settings-page-area">
                                         <div class="account-settings-content-box">
-                                            <div class="account-settings-title">
-                                                <div class="align-items-center row rg-24">
-                                                    <div class="col-xl-6">
+                                            <div class="account-settings-title border-bottom mb-20 pb-20">
+                                                <div class="align-items-center row">
+                                                    <div class="col-md-6">
                                                         <h4>{{ $pageTitle }}</h4>
                                                     </div>
-                                                    <div class="col-xl-6">
+                                                    <div class="col-md-6">
                                                         <div class="input-group">
                                                             <input type="text" value="{{ route('recurring.generate.invoice') }}" class="form-control">
                                                             <button type="button"

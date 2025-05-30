@@ -18,22 +18,6 @@ class Payment
         return $res;
     }
 
-    public function subscribe($productId, $data=NULL)
-    {
-        $res = $this->provider->subscribe($productId, $data);
-        return $res;
-    }
-
-    public function saveProduct($data)
-    {
-        return $this->provider->saveProduct($data);
-    }
-
-    public function handleWebhook($request)
-    {
-        return $this->provider->handleWebhook($request);
-    }
-
     public function paymentConfirmation($payment_id, $payer_id = null)
     {
         if (is_null($payer_id)) {

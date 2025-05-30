@@ -64,7 +64,7 @@
                                                             @foreach ($currencies as $currency)
                                                                 <tr>
                                                                     <td>{{ $currency->currency_code }}
-                                                                        {{ $currency->current_currency == ACTIVE ? '(Current Currency)' : '' }}
+                                                                        {{ $currency->current_currency == 'on' ? '(Current Currency)' : '' }}
                                                                     </td>
                                                                     <td>{{ $currency->symbol }}</td>
                                                                     <td>{{ ucwords($currency->currency_placement) }}</td>
@@ -268,7 +268,7 @@
                 modal.find('input[name=symbol]').val($(this).data('item').symbol)
                 modal.find('select[name=currency_placement]').val($(this).data('item').currency_placement)
                 var current_currency = $(this).data('item').current_currency
-                if (current_currency == 1) {
+                if (current_currency == 'on') {
                     modal.find('input[name=current_currency]').attr('checked', true)
                 } else {
                     modal.find('input[name=current_currency]').attr('checked', false)

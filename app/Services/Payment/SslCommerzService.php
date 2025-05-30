@@ -43,12 +43,13 @@ class SslCommerzService extends BasePaymentService
     public function makePayment($amount)
     {
         $this->setAmount($amount);
+        $order = Order::find($this->orderId);
         $requestData = array();
-        $requestData['tran_id'] = $this->orderId; // tran_id must be unique
+        $requestData['tran_id'] = $order->id; // tran_id must be unique
         $requestData['product_category'] = "Payment for purchase";
 
         $requestData['cus_name'] = auth()->user()->name;
-        $requestData['cus_phone'] = auth()->user()->mobile ?? '01700000000';
+        $requestData['cus_phone'] = auth()->user()->contact_number;
         $requestData['cus_email'] = auth()->user()->email;
         $requestData['cus_add1'] = '';
         $requestData['cus_add2'] = "";
@@ -59,14 +60,14 @@ class SslCommerzService extends BasePaymentService
         $requestData['cus_fax'] = "";
 
         # SHIPMENT INFORMATION
-        $requestData['ship_name'] = getOption('app_name') ?? 'Zaialumni';
+        $requestData['ship_name'] = getOption('app_name') ?? 'ZaiProperty';
         $requestData['ship_add1'] = '';
         $requestData['ship_add2'] =  '';
         $requestData['ship_city'] =  '';
         $requestData['ship_state'] =  '';
         $requestData['ship_postcode'] = '';
-        $requestData['ship_phone'] = auth()->user()->mobile ?? '01700000000';
-        $requestData['ship_country'] = auth()->user()->alumni?->country;
+        $requestData['ship_phone'] = auth()->user()->contact_number;
+        $requestData['ship_country'] = @$order->customer->country->country_name;
 
         $requestData['shipping_method'] = "NO";
         $requestData['product_name'] = "Course Buy";
@@ -289,7 +290,7 @@ class SslCommerzService extends BasePaymentService
                     $new_data[$value] = ($post_data[$value]);
                 }
             }
-            # ADD  OF STORE PASSWORD
+            # ADD MD5 OF STORE PASSWORD
             $new_data['store_passwd'] = md5($store_passwd);
 
             # SORT THE KEY AS BEFORE
@@ -301,7 +302,7 @@ class SslCommerzService extends BasePaymentService
             }
             $hash_string = rtrim($hash_string, '&');
 
-            if (md5($hash_string) == $post_data['verify_sign'] || true) {
+            if (md5($hash_string) == $post_data['verify_sign']) {
 
                 return true;
             } else {

@@ -27,23 +27,21 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <div class="currency-settings-page-area">
                                         <div class="account-settings-content-box">
                                             <div class="account-settings-title border-bottom mb-20 pb-20">
                                                 <div class="row align-items-center">
-                                                    <div class="col-xl-6">
+                                                    <div class="col-md-6">
                                                         <h4>{{ @$pageTitle }}</h4>
                                                     </div>
-                                                    @if($howItWorks->count() < 4)
-                                                        <div class="col-xl-6">
-                                                            <div class="property-details-right text-xl-end">
-                                                                <button type="button" class="theme-btn" id="add"
-                                                                    title="{{ __('Add How it Work') }}">{{ __('Add How it Work') }}</button>
-                                                            </div>
+                                                    <div class="col-md-6">
+                                                        <div class="property-details-right text-end">
+                                                            <button type="button" class="theme-btn" id="add"
+                                                                title="{{ __('Add How it Work') }}">{{ __('Add How it Work') }}</button>
                                                         </div>
-                                                    @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="currency-list-table-area">
@@ -140,13 +138,13 @@
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Summary') }}</label>
                                     <textarea name="summary" id="summary" class="form-control" placeholder="{{ __('Summery') }}"></textarea>
                                 </div>
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Content') }}</label>
                                     <textarea name="content" id="content" class="form-control" placeholder="{{ __('Content') }}"></textarea>
                                     <small class="text-primary">{{ __('Separet by comma') }}(,)</small>
                                 </div>
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Image') }}</label>
                                     <input type="file" class="form-control" name="image">
@@ -200,13 +198,13 @@
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Summary') }}</label>
                                     <textarea name="summary" id="summary" class="form-control" placeholder="{{ __('Summery') }}"></textarea>
                                 </div>
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Content') }}</label>
                                     <textarea name="content" id="content" class="form-control" placeholder="{{ __('Content') }}"></textarea>
                                     <small class="text-primary">{{ __('Separet by comma') }}(,)</small>
                                 </div>
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Image') }}</label>
                                     <input type="file" class="form-control" name="image">

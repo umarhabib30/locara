@@ -18,7 +18,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'a
         Route::get('/', [OwnerController::class, 'index'])->name('index');
         Route::get('get-info', [OwnerController::class, 'getInfo'])->name('get.info');
         Route::get('delete/{id}', [OwnerController::class, 'delete'])->name('delete');
-        Route::post('store', [OwnerController::class, 'store'])->name('store')->middleware('isDemo');
         Route::post('update', [OwnerController::class, 'update'])->name('update')->middleware('isDemo');
     });
 

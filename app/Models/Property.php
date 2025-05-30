@@ -34,8 +34,10 @@ class Property extends Model
 
     public function propertyImages(): HasMany
     {
-        return $this->hasMany(PropertyImage::class);
+        return $this->hasMany(PropertyImage::class)
+                    ->orderByRaw('`order` IS NULL, `order` ASC');
     }
+    
 
     public function propertyUnits(): HasMany
     {

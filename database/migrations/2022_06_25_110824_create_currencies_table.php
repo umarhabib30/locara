@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('currency_code');
             $table->string('symbol');
             $table->string('currency_placement')->comment('before, after')->default('before');
-            $table->string('current_currency')->comment('Active,Deactivate')->default(ACTIVE);
+            $table->string('current_currency')->comment('on, off')->default('on');
             $table->timestamps();
             $table->softDeletes();
         });

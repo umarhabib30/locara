@@ -8,7 +8,6 @@ const USER_ROLE_OWNER = 1;
 const USER_ROLE_TENANT = 2;
 const USER_ROLE_MAINTAINER = 3;
 const USER_ROLE_ADMIN = 4;
-const USER_ROLE_TEAM_MEMBER = 5;
 
 // Gateway
 const GATEWAY_MODE_LIVE = 1;
@@ -166,25 +165,8 @@ const PAYSTACK = 'paystack';
 const SSLCOMMERZ = 'sslcommerz';
 const MERCADOPAGO = 'mercadopago';
 const FLUTTERWAVE = 'flutterwave';
-const BINANCE = 'binance';
-const ALIPAY = 'alipay';
 const BANK = 'bank';
-const CASH = 'cash';
 const WALLET = 'wallet';
-const COINBASE = 'coinbase';
-const PAYTM = 'paytm';
-const MAXICASH = 'maxicash';
-const IYZIPAY = 'iyzipay';
-const BITPAY = 'bitpay';
-const ZITOPAY = 'zitopay';
-const PAYHERE = 'payhere';
-const CINETPAY = 'cinetpay';
-const VOGUEPAY = 'voguepay';
-const TOYYIBPAY = 'toyyibpay';
-const PAYMOB = 'paymob';
-const AUTHORIZE = 'authorize';
-const XENDIT = 'xendit';
-const PADDLE = 'paddle';
 
 // email templates
 const EMAIL_TEMPLATE_CUSTOM = 1;
@@ -233,7 +215,3 @@ const PACKAGE_TYPE_DEFAULT = 0;
 const PACKAGE_TYPE_PROPERTY = 1;
 const PACKAGE_TYPE_UNIT = 2;
 const PACKAGE_TYPE_TENANT = 3;
-
-const LINK_SAAS_ADDON = "https://codecanyon.net/item/zaiproty-property-management-saas-addon/45346185?s_rank=18";
-const LINK_MAIN_SCRIPT = "https://codecanyon.net/item/zaiproty-property-management-laravel-script/43413718";
-const LISTING_ADDON = "https://codecanyon.net/item/zaiproty-agreementdocument-signing-addon/46668990?s_rank=15";

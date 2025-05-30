@@ -9,8 +9,6 @@ use App\Models\OwnerPackage;
 use App\Models\Package;
 use App\Models\SubscriptionOrder;
 use App\Models\User;
-use App\Services\Payment\Payment;
-use App\Services\Payment\StripeService;
 use App\Traits\ResponseTrait;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -58,16 +56,16 @@ class PackageService
             })
             ->addColumn('status', function ($package) {
                 if ($package->status == ACTIVE) {
-                    return '<div class="status-btn status-btn-green font-13 radius-4">'.__('Active').'</div>';
+                    return '<div class="status-btn status-btn-green font-13 radius-4">Active</div>';
                 } else {
-                    return '<div class="status-btn status-btn-orange font-13 radius-4">'.__('Deactivate').'</div>';
+                    return '<div class="status-btn status-btn-orange font-13 radius-4">Deactivate</div>';
                 }
             })
             ->addColumn('trail', function ($package) {
                 if ($package->is_trail == ACTIVE) {
-                    return '<div class="status-btn status-btn-blue font-13 radius-4">'.__('Yes').'</div>';
+                    return '<div class="status-btn status-btn-blue font-13 radius-4">Yes</div>';
                 } else {
-                    return '<div class="status-btn status-btn-red font-13 radius-4">'.__('No').' </div>';
+                    return '<div class="status-btn status-btn-red font-13 radius-4">No</div>';
                 }
             })
             ->addColumn('action', function ($package) {
@@ -108,13 +106,13 @@ class PackageService
                 throw new Exception(__('Name Already Exist'));
             }
 
-            // Save or update package details
             $package->name = $request->name;
-            $package->description = $request->description;
             $package->slug = $slug;
+
             $package->type = 0;
             $package->per_monthly_price = $request->per_monthly_price ?? 0;
             $package->per_yearly_price = $request->per_yearly_price ?? 0;
+
             $package->max_property = $request->max_property ?? 0;
             $package->max_unit = $request->max_unit ?? 0;
             $package->max_tenant = $request->max_tenant ?? 0;
@@ -131,7 +129,7 @@ class PackageService
             $package->yearly_price = $request->yearly_price;
             $package->save();
 
-            // Update user subscription
+            // user subscription update
             OwnerPackage::where('package_id', $package->id)->update([
                 'max_maintainer' => $package->max_maintainer,
                 'max_property' => $package->max_property,
@@ -143,72 +141,19 @@ class PackageService
                 'notice_support' => $package->notice_support,
             ]);
 
-
-            // Dynamically save products to payment gateways
-            $gateways = ['stripe', 'paypal'];  // Add more gateways here
-            $userId = User::where('role', USER_ROLE_ADMIN)->first()->id;
-            foreach ($gateways as $gatewaySlug) {
-                $requestKey= $gatewaySlug.'_subscription';
-                $gateway = Gateway::where(['owner_user_id' => $userId, 'slug' => $gatewaySlug, 'status' => ACTIVE])->first();
-                if(!is_null($gateway)) {
-                    if ($request->$requestKey == 1) {
-                        if ($gateway) {
-                            $gatewayCurrency = GatewayCurrency::where(['gateway_id' => $gateway->id])->first();
-                            $subscriptionPrice = $package->subscriptionPrice->where('gateway_id', $gateway->id)->first();
-
-                            $object = [
-                                'webhook_url' => route('payment.subscription.webhook', ['payment_method' => $gatewaySlug]),
-                                'currency' => $gatewayCurrency->currency,
-                                'type' => 'subscription',
-                            ];
-
-                            $paymentService = new Payment($gatewaySlug, $object);
-
-                            // Prepare price data
-                            $priceData = [
-                                'monthly_price' => $package->monthly_price * 100,
-                                'yearly_price' => $package->yearly_price * 100,
-                                'monthlyPriceId' => $subscriptionPrice ? $subscriptionPrice->monthly_price_id : null,
-                                'yearlyPriceId' => $subscriptionPrice ? $subscriptionPrice->yearly_price_id : null,
-                                'name' => $package->name,
-                            ];
-
-                            // Save or update prices
-                            $priceResponse = $paymentService->saveProduct($priceData);
-
-                            if ($priceResponse['success']) {
-                                // Save subscription price details in the database for the gateway
-                                $package->subscriptionPrice()->updateOrCreate(
-                                    ['gateway_id' => $gateway->id],
-                                    [
-                                        'gateway' => $gatewaySlug,
-                                        'gateway_currency_id' => $gatewayCurrency->id,
-                                        'monthly_price_id' => $priceResponse['data']['monthly_price_id'],
-                                        'yearly_price_id' => $priceResponse['data']['yearly_price_id'],
-                                    ]
-                                );
-                            } else {
-                                return $this->error([], __('Error saving product for ' . ucfirst($gatewaySlug)));
-                            }
-                        }
-                    } else {
-                        $package->subscriptionPrice()->where('gateway_id', $gateway->id)->delete();
-                    }
-                }
-            }
-
             DB::commit();
             $message = $request->id ? __(UPDATED_SUCCESSFULLY) : __(CREATED_SUCCESSFULLY);
             return $this->success([], $message);
         } catch (Exception $e) {
             DB::rollBack();
-            return $this->error([], getErrorMessage($e, $e->getMessage()));
+            $message = getErrorMessage($e, $e->getMessage());
+            return $this->error([], $message);
         }
     }
 
     public function getInfo($id)
     {
-        return Package::with('subscriptionPrice')->findOrFail($id);
+        return Package::findOrFail($id);
     }
 
     public function destroy($id)
@@ -302,7 +247,7 @@ class PackageService
             if (is_null($gatewayCurrency)) {
                 throw new Exception(__('Add currency to the ' . $gateway->title . ' payment gateway'));
             }
-            $currency = Currency::where('current_currency', ACTIVE)->first()->currency_code;
+            $currency = Currency::where('current_currency', 'on')->first()->currency_code;
 
             $price = 0;
             $duration = 0;

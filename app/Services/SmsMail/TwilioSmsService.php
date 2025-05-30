@@ -14,7 +14,7 @@ class TwilioSmsService
 
     public function getAllDataByOwnerId()
     {
-        $histories = SmsHistory::query()->where('owner_user_id', getOwnerUserId());
+        $histories = SmsHistory::query()->where('owner_user_id', auth()->id());
 
         return datatables($histories)
             ->addIndexColumn()

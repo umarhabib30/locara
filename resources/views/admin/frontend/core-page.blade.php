@@ -27,19 +27,19 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <div class="currency-settings-page-area">
                                         <div class="account-settings-content-box">
                                             <div class="account-settings-title border-bottom mb-20 pb-20">
-                                                <div class="row align-items-center rg-24">
-                                                    <div class="col-xl-6">
+                                                <div class="row align-items-center">
+                                                    <div class="col-md-6">
                                                         <h4>{{ @$pageTitle }}</h4>
                                                     </div>
-                                                    <div class="col-xl-6">
-                                                        <div class="property-details-right text-xl-end">
+                                                    <div class="col-md-6">
+                                                        <div class="property-details-right text-end">
                                                             <button type="button" class="theme-btn" id="add"
-                                                                title="{{ __('Add Advance Feature') }}">{{ __('Add Advance Feature') }}</button>
+                                                                title="{{ __('Add Core Page') }}">{{ __('Add Core Page') }}</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -50,6 +50,7 @@
                                                         class="table bg-off-white theme-border p-20 dt-responsive">
                                                         <thead>
                                                             <tr>
+                                                                <th>{{ __('Name') }}</th>
                                                                 <th>{{ __('Image') }}</th>
                                                                 <th>{{ __('Title') }}</th>
                                                                 <th>{{ __('Summary') }}</th>
@@ -60,6 +61,7 @@
                                                         <tbody>
                                                             @foreach ($corePages as $corePage)
                                                                 <tr>
+                                                                    <td>{{ $corePage->name }}</td>
                                                                     <td>
                                                                         <div class="upload-profile-photo-box mb-25">
                                                                             <div
@@ -128,7 +130,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="addModalLabel">{{ __('Add Advance Feature') }}</h4>
+                    <h4 class="modal-title" id="addModalLabel">{{ __('Add Core Page') }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
                             class="iconify" data-icon="akar-icons:cross"></span>
                     </button>
@@ -138,7 +140,7 @@
                     <div class="modal-body">
                         <div class="modal-inner-form-box">
                             <div class="row">
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Name') }}</label>
                                     <input type="text" name="name" class="form-control"
@@ -155,7 +157,7 @@
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Summary') }}</label>
                                     <textarea name="summary" id="summary" class="form-control" placeholder="{{ __('Summery') }}"></textarea>
                                 </div>
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Content') }}</label>
                                     <textarea name="content" id="content" class="form-control" placeholder="{{ __('Content') }}"></textarea>
@@ -193,7 +195,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="editModalLabel">{{ __('Edit Advance Feature') }}</h4>
+                    <h4 class="modal-title" id="editModalLabel">{{ __('Edit Core Page') }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
                             class="iconify" data-icon="akar-icons:cross"></span>
                     </button>
@@ -204,7 +206,7 @@
                     <div class="modal-body">
                         <div class="modal-inner-form-box">
                             <div class="row">
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Name') }}</label>
                                     <input type="text" name="name" class="form-control"
@@ -221,7 +223,7 @@
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Summary') }}</label>
                                     <textarea name="summary" id="summary" class="form-control" placeholder="{{ __('Summery') }}"></textarea>
                                 </div>
-                                <div class="col-md-12 mb-25 d-none">
+                                <div class="col-md-12 mb-25">
                                     <label
                                         class="label-text-title color-heading font-medium mb-2">{{ __('Content') }}</label>
                                     <textarea name="content" id="content" class="form-control" placeholder="{{ __('Content') }}"></textarea>

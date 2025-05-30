@@ -22,7 +22,7 @@ class SettingController extends Controller
         $data['pageTitle'] = __("General Setting");
         $data['subGeneralSettingActiveClass']  = 'active';
         $data['currencies'] = Currency::all();
-        $data['current_currency'] = Currency::where('current_currency', ACTIVE)->first();
+        $data['current_currency'] = Currency::where('current_currency', 'on')->first();
         $data['languages'] = Language::all();
         $data['default_language'] = Language::where('default', 1)->first();
         return view('owner.setting.general-setting')->with($data);
@@ -66,8 +66,8 @@ class SettingController extends Controller
 
             /**  ====== Set Currency ====== */
             if ($request->currency_id) {
-                Currency::where('id', $request->currency_id)->update(['current_currency' => ACTIVE]);
-                Currency::where('id', '!=', $request->currency_id)->update(['current_currency' => DEACTIVATE]);
+                Currency::where('id', $request->currency_id)->update(['current_currency' => 'on']);
+                Currency::where('id', '!=', $request->currency_id)->update(['current_currency' => 'off']);
             }
 
             /**  ====== Set Language ====== */
@@ -108,14 +108,14 @@ class SettingController extends Controller
     {
         $data['pageTitle'] = __("Tax Setting");
         $data['subTaxSettingActiveClass']  = 'active';
-        $data['tax'] = taxSetting(getOwnerUserId());
+        $data['tax'] = taxSetting(auth()->id());
         return view('owner.setting.tax-setting')->with($data);
     }
 
     public function taxSettingUpdate(Request $request)
     {
-        TaxSetting::updateOrCreate(['owner_user_id' => getOwnerUserId()], [
-            'owner_user_id' => getOwnerUserId(),
+        TaxSetting::updateOrCreate(['owner_user_id' => auth()->id()], [
+            'owner_user_id' => auth()->id(),
             'type' => $request->type == TAX_TYPE_PERCENTAGE ? TAX_TYPE_PERCENTAGE : TAX_TYPE_FIXED,
         ]);
 

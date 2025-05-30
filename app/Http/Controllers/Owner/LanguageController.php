@@ -255,7 +255,7 @@ class LanguageController extends Controller
             unlink($path);
             file_put_contents($path, json_encode($file_data));
             DB::commit();
-            $message = __(UPDATED_SUCCESSFULLY);
+            $message = UPDATED_SUCCESSFULLY;
             return $this->success([], $message);
         } catch (Exception $e) {
             DB::rollBack();
@@ -277,7 +277,7 @@ class LanguageController extends Controller
             $contents = file_get_contents(resource_path() . "/lang/$language->code.json");
             file_put_contents(resource_path() . "/lang/$currentLang->code.json", $contents);
             DB::commit();
-            $message = __(UPDATED_SUCCESSFULLY);
+            $message = UPDATED_SUCCESSFULLY;
             return $this->success([], $message);
         } catch (Exception $e) {
             DB::rollBack();

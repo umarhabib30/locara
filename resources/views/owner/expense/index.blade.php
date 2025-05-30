@@ -10,7 +10,12 @@
                             <div
                                 class="page-title-box d-sm-flex align-items-center justify-content-between border-bottom mb-20">
                                 <div class="page-title-left">
-                                    <h3 class="mb-sm-0">{{ $pageTitle }}</h3>
+                                    <div class="d-flex flex-wrap align-items-center gap-3">
+                                        <h3 class="mb-sm-0">{{ $pageTitle }}</h3>
+                                        <button type="button" class="theme-btn  addExpenses"
+                                            title="{{ __('Add New Expenses') }}">{{ __('Add New Expenses') }}
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="page-title-right">
                                     <ol class="breadcrumb mb-0">
@@ -22,9 +27,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="padding-right: calc(var(--bs-gutter-x) * .5); padding-left: calc(var(--bs-gutter-x) * .5);">
                         <div class="property-top-search-bar">
-                            <div class="row align-items-center">
+                            {{-- <div class="row align-items-center">
 
                                 <div class="col-md-12">
                                     <div class="property-top-search-bar-right text-end">
@@ -33,15 +38,16 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="billing-center-area bg-off-white theme-border radius-4 p-25">
-                            <table id="expensesDatatable" class="table responsive theme-border p-20 ">
+                            {{-- DataTable --}}
+                            <table id="expensesDatatable" class="table responsive theme-border p-20">
                                 <thead>
                                     <tr>
                                         <th>{{ __('Name') }}</th>
-                                        <th>{{ __('Property') }}</th>
                                         <th>{{ __('Expenses Type') }}</th>
+                                        <th>{{ __('Property') }}</th>
                                         <th>{{ __('Responsibility') }}</th>
                                         <th>{{ __('Amount') }}</th>
                                         <th>{{ __('Action') }}</th>
@@ -49,6 +55,7 @@
                                 </thead>
                             </table>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -337,4 +344,72 @@
     @include('common.layouts.datatable-script')
 
     <script src="{{ asset('assets/js/custom/expense.js') }}"></script>
+    <script>
+        $('#custom_filters').html(`
+            <div class="d-flex align-items-center gap-2 w-100">
+                <div class="d-flex align-items-center">
+                    <label class="fw-bold mb-0 me-1">{{ __('Search') }}:</label>
+                </div>
+                <div class="flex-grow-1">
+                    <input type="search" id="custom_search_input" class="form-control form-select-sm w-100">
+                </div>
+                <div class="flex-grow-1">
+                    <select class="form-select form-select-sm w-100" id="search_property">
+                        <option value="">{{ __('Select Property') }}</option>
+                        @foreach ($properties as $property)
+                            <option value="{{ $property->id }}">{{ $property->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="flex-grow-1">
+                    <select class="form-select form-select-sm w-100" id="search_unit">
+                        <option value="">{{ __('Select Unit') }}</option>
+                        {{-- populate dynamically if needed --}}
+                    </select>
+                </div>
+                <div class="flex-grow-1">
+                    <select class="form-select form-select-sm w-100" id="search_expense_type">
+                        <option value="">{{ __('Select Expense Type') }}</option>
+                        @foreach ($expenseTypes as $expense)
+                            <option value="{{ $expense->id }}">{{ $expense->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        `);
+
+        // Apply filters on change
+
+        // Custom search input
+        $('#custom_search_input').on('keyup', function() {
+            expensesTable.search($(this).val()).draw();
+        });
+
+        // Dropdown filters
+        $('#search_property, #search_unit, #search_expense_type').on('change', function() {
+            expensesTable.draw();
+        });
+
+        // ---------- Get unit for filters --------------
+        var thisStateSelector;
+        $(document).on('change', '#search_property', function() {
+            thisStateSelector = $(this);
+            var route = "{{ route('owner.property.getPropertyUnits') }}";
+            commonAjax('GET', route, getUnitsResSearch, getUnitsResSearch, {
+                'property_id': $(thisStateSelector).val()
+            });
+        });
+
+        function getUnitsResSearch(response) {
+            if (response.data) {
+                var unitOptionsHtml = response.data.map(function(opt) {
+                    return '<option value="' + opt.id + '">' + opt.unit_name + '</option>';
+                }).join('');
+                var unitsHtml = '<option value="0">--Select Unit--</option>' + unitOptionsHtml
+                $('#search_unit').html(unitsHtml);
+            } else {
+                $('#search_unit').html('<option value="0">--Select Unit--</option>');
+            }
+        }
+    </script>
 @endpush

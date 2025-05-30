@@ -17,43 +17,55 @@ class ExpenseService
     public function getAll()
     {
         $response['pageTitle'] = __('All Expenses');
-        $response['expenses'] = Expense::where('owner_user_id', getOwnerUserId())->get();
-        $response['properties'] = Property::where('owner_user_id', getOwnerUserId())->get();
-        $response['expenseTypes'] = ExpenseType::where('owner_user_id', getOwnerUserId())->active()->get();
+        $response['expenses'] = Expense::where('owner_user_id', auth()->id())->get();
+        $response['properties'] = Property::where('owner_user_id', auth()->id())->get();
+        $response['expenseTypes'] = ExpenseType::where('owner_user_id', auth()->id())->active()->get();
         return $response;
     }
 
     public function getAllExpenses()
     {
-        $data = Expense::where('owner_user_id', getOwnerUserId())->get();
+        $data = Expense::where('owner_user_id', auth()->id())->get();
         return $data?->makeHidden(['created_at', 'updated_at', 'deleted_at']);
     }
 
     public function getById($id)
     {
-        return Expense::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+        return Expense::where('owner_user_id', auth()->id())->findOrFail($id);
     }
 
     public function getAllData($request)
     {
-        $expense = Expense::query()->where('owner_user_id', getOwnerUserId());
-
+        $expense = Expense::query()->where('owner_user_id', auth()->id());
+    
+        // Apply filters if present
+        if ($request->filled('property')) {
+            $expense->where('property_id', $request->property);
+        }
+    
+        if ($request->filled('unit')) {
+            $expense->where('property_unit_id', $request->unit);
+        }
+    
+        if ($request->filled('expense_type')) {
+            $expense->where('expense_type_id', $request->expense_type);
+        }
+    
         return datatables($expense)
             ->addColumn('property', function ($expense) {
-                return '<h6>' . @$expense->property->name . '</h6><p class="font-13">' . @$expense->propertyUnit->unit_name . '</p>';
+                return '<h6>' . optional($expense->property)->name . '</h6><p class="font-13">' . optional($expense->propertyUnit)->unit_name . '</p>';
             })
             ->addColumn('expense_type_name', function ($expense) {
-                return '<div class="status-btn status-btn-blue font-13 radius-4">' . @$expense->expenseType->name . '</div>';
+                return '<div class="status-btn status-btn-blue font-13 radius-4">' . optional($expense->expenseType)->name . '</div>';
             })
             ->addColumn('responsibility', function ($expense) {
                 if ($expense->responsibilities->tenant && $expense->responsibilities->owner) {
-                    $responsibility = 'Tenant, Property Owner';
+                    return 'Tenant, Property Owner';
                 } elseif ($expense->responsibilities->tenant) {
-                    $responsibility = 'Tenant';
+                    return 'Tenant';
                 } else {
-                    $responsibility = 'Property Owner';
+                    return 'Property Owner';
                 }
-                return $responsibility;
             })
             ->addColumn('total_amount', function ($expense) {
                 return currencyPrice($expense->total_amount);
@@ -61,11 +73,13 @@ class ExpenseService
             ->addColumn('action', function ($expense) {
                 return '<div class="tbl-action-btns d-inline-flex">
                             <button type="button" class="p-1 tbl-action-btn edit" data-detailsurl="' . route('owner.expense.details', $expense->id) . '" title="' . __('Edit') . '"><span class="iconify" data-icon="clarity:note-edit-solid"></span></button>
-                            <button onclick="deleteItem(\'' . route('owner.expense.destroy', $expense->id) . '\', \'expensesDatatable\')" class="p-1 tbl-action-btn"   title="' . __('Delete') . '"><span class="iconify" data-icon="ep:delete-filled"></span></button>
+                            <button onclick="deleteItem(\'' . route('owner.expense.destroy', $expense->id) . '\', \'expensesDatatable\')" class="p-1 tbl-action-btn" title="' . __('Delete') . '"><span class="iconify" data-icon="ep:delete-filled"></span></button>
                         </div>';
             })
-            ->rawColumns(['property', 'expense_type_name', 'action'])->make(true);
+            ->rawColumns(['property', 'expense_type_name', 'action'])
+            ->make(true);
     }
+    
 
     public function store($request)
     {
@@ -73,13 +87,13 @@ class ExpenseService
         try {
             $id = $request->get('id', '');
             if ($id != '') {
-                $expense = Expense::where('owner_user_id', getOwnerUserId())->findOrFail($request->id);
+                $expense = Expense::where('owner_user_id', auth()->id())->findOrFail($request->id);
             } else {
                 $expense = new Expense();
             }
             $expense->name = $request->name;
             $expense->property_id = $request->property_id;
-            $expense->owner_user_id = getOwnerUserId();
+            $expense->owner_user_id = auth()->id();
             $expense->property_unit_id = $request->property_unit_id;
             $expense->expense_type_id = $request->expense_type_id;
             $expense->description = $request->description;
@@ -126,7 +140,7 @@ class ExpenseService
     {
         DB::beginTransaction();
         try {
-            $expense = Expense::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $expense = Expense::where('owner_user_id', auth()->id())->findOrFail($id);
             $expense->delete();
             DB::commit();
             $message = __(DELETED_SUCCESSFULLY);
@@ -144,13 +158,13 @@ class ExpenseService
         try {
             $expenseType = new ExpenseType();
             $expenseType->name = $request->type_name;
-            $expenseType->owner_user_id = getOwnerUserId();
+            $expenseType->owner_user_id = auth()->id();
             $expenseType->status = ACTIVE;
             $expenseType->save();
 
             DB::commit();
             $message = __(CREATED_SUCCESSFULLY);
-            $data['types'] = ExpenseType::where('owner_user_id', getOwnerUserId())->active()->get();
+            $data['types'] = ExpenseType::where('owner_user_id', auth()->id())->active()->get();
             return $this->success($data, $message);
         } catch (Exception $e) {
             DB::rollBack();

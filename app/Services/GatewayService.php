@@ -16,7 +16,7 @@ class GatewayService
 
     public function getAll()
     {
-        return Gateway::where('owner_user_id', getOwnerUserId())->get();
+        return Gateway::where('owner_user_id', auth()->id())->get();
     }
 
     public function getActiveAll($ownerUserId)
@@ -53,7 +53,7 @@ class GatewayService
             $data['banks'] = $this->banks();
         }
         $data['image'] = $data['gateway']->icon;
-        $currencies = GatewayCurrency::where('owner_user_id', getOwnerUserId())->where('gateway_id', $id)->get();
+        $currencies = GatewayCurrency::where('owner_user_id', auth()->id())->where('gateway_id', $id)->get();
         foreach ($currencies as $currency) {
             $currency->symbol;
         }
@@ -63,14 +63,14 @@ class GatewayService
 
     public function banks()
     {
-        return Bank::where('owner_user_id', getOwnerUserId())->get();
+        return Bank::where('owner_user_id', auth()->id())->get();
     }
 
     public function store($request)
     {
         DB::beginTransaction();
         try {
-            $ownerUserId = getOwnerUserId();
+            $ownerUserId = auth()->id();
             $id = $request->get('id', '');
             if ($id != '') {
                 $gateway = Gateway::where('owner_user_id', $ownerUserId)->findOrFail($request->id);

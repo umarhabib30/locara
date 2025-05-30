@@ -13,7 +13,7 @@ class MaintenanceIssueService
 
     public function getAll()
     {
-        return MaintenanceIssue::where('owner_user_id', getOwnerUserId())->get();
+        return MaintenanceIssue::where('owner_user_id', auth()->id())->get();
     }
 
     public function getActiveAll()
@@ -28,10 +28,10 @@ class MaintenanceIssueService
         try {
             MaintenanceIssue::updateOrCreate([
                 'id' => $request->id,
-                'owner_user_id' => getOwnerUserId(),
+                'owner_user_id' => auth()->id(),
             ], [
                 'name' => $request->name,
-                'owner_user_id' => getOwnerUserId(),
+                'owner_user_id' => auth()->id(),
                 'status' => $request->status,
             ]);
             DB::commit();
@@ -51,7 +51,7 @@ class MaintenanceIssueService
 
     public function delete($id)
     {
-        $issue = MaintenanceIssue::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+        $issue = MaintenanceIssue::where('owner_user_id', auth()->id())->findOrFail($id);
         $issue->delete();
         return redirect()->back()->with('success', __(DELETED_SUCCESSFULLY));
     }

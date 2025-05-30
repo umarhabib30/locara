@@ -58,8 +58,8 @@
                                 <div class="row" id="gatewayListBlock">
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12 text-end">
-                                        <button type="button" class="theme-btn mb-1 w-100 payNowMaxWidth"
+                                    <div class="col-md-12 text-center">
+                                        <button type="button" class="theme-btn me-2 mb-1 w-75"
                                             id="payBtn">{{ __('Pay Now') }}
                                             <span class="ms-1" id="gatewayCurrencyAmount"></span></button>
                                     </div>

@@ -24,30 +24,30 @@ class InvoiceService
     public function getAllInvoices()
     {
         $response['pageTitle'] = __('All Invoices');
-        $response['invoices'] = Invoice::where('owner_user_id', getOwnerUserId())->with(['property', 'propertyUnit', 'invoiceItems'])->latest()->get();
-        $response['properties'] = Property::where('owner_user_id', getOwnerUserId())->get();
-        $response['invoiceTypes'] = InvoiceType::where('owner_user_id', getOwnerUserId())->get();
-        $response['pendingInvoices'] = Invoice::where('owner_user_id', getOwnerUserId())->pending()->get();
-        $response['paidInvoices'] = Invoice::where('owner_user_id', getOwnerUserId())->paid()->get();
-        $response['overDueInvoices'] = Invoice::where('owner_user_id', getOwnerUserId())->overDue()->get();
-        $response['totalInvoice'] = Invoice::where('owner_user_id', getOwnerUserId())->count();
-        $response['totalPendingInvoice'] = Invoice::where('owner_user_id', getOwnerUserId())->pending()->count();
+        $response['invoices'] = Invoice::where('owner_user_id', auth()->id())->with(['property', 'propertyUnit', 'invoiceItems'])->latest()->get();
+        $response['properties'] = Property::where('owner_user_id', auth()->id())->get();
+        $response['invoiceTypes'] = InvoiceType::where('owner_user_id', auth()->id())->get();
+        $response['pendingInvoices'] = Invoice::where('owner_user_id', auth()->id())->pending()->get();
+        $response['paidInvoices'] = Invoice::where('owner_user_id', auth()->id())->paid()->get();
+        $response['overDueInvoices'] = Invoice::where('owner_user_id', auth()->id())->overDue()->get();
+        $response['totalInvoice'] = Invoice::where('owner_user_id', auth()->id())->count();
+        $response['totalPendingInvoice'] = Invoice::where('owner_user_id', auth()->id())->pending()->count();
         $response['totalBankPendingInvoice'] = Invoice::query()
-            ->where('invoices.owner_user_id', getOwnerUserId())
+            ->where('invoices.owner_user_id', auth()->id())
             ->join('orders', 'invoices.order_id', '=', 'orders.id')
             ->join('gateways', 'orders.gateway_id', '=', 'gateways.id')
             ->where('gateways.slug', 'bank')
             ->where('orders.payment_status', INVOICE_STATUS_PENDING)
             ->count();
-        $response['totalPaidInvoice'] = Invoice::where('owner_user_id', getOwnerUserId())->paid()->count();
-        $response['totalOverDueInvoice'] = Invoice::where('owner_user_id', getOwnerUserId())->overDue()->count();
+        $response['totalPaidInvoice'] = Invoice::where('owner_user_id', auth()->id())->paid()->count();
+        $response['totalOverDueInvoice'] = Invoice::where('owner_user_id', auth()->id())->overDue()->count();
         return $response;
     }
 
     public function getAll()
     {
         $data = Invoice::query()
-            ->where('invoices.owner_user_id', getOwnerUserId())
+            ->where('invoices.owner_user_id', auth()->id())
             ->leftJoin('orders', 'invoices.order_id', '=', 'orders.id')
             ->leftJoin('properties', 'invoices.property_id', '=', 'properties.id')
             ->leftJoin('gateways', 'orders.gateway_id', '=', 'gateways.id')
@@ -60,7 +60,7 @@ class InvoiceService
     public function  getAllInvoicesData($request)
     {
         $invoice = Invoice::query()
-            ->where('invoices.owner_user_id', getOwnerUserId())
+            ->where('invoices.owner_user_id', auth()->id())
             ->leftJoin('orders', 'invoices.order_id', '=', 'orders.id')
             ->leftJoin('properties', 'invoices.property_id', '=', 'properties.id')
             ->leftJoin('property_units', 'property_units.id', '=', 'invoices.property_unit_id')
@@ -123,7 +123,7 @@ class InvoiceService
 
     public function getPaidInvoicesData($request)
     {
-        $invoice = Invoice::where('invoices.owner_user_id', getOwnerUserId())
+        $invoice = Invoice::where('invoices.owner_user_id', auth()->id())
             ->leftJoin('properties', 'invoices.property_id', '=', 'properties.id')
             ->leftJoin('property_units', 'property_units.id', '=', 'invoices.property_unit_id')
             ->select(['invoices.*', 'properties.name as property_name', 'property_units.unit_name'])
@@ -175,12 +175,13 @@ class InvoiceService
 
     public function getPendingInvoicesData($request)
     {
-        $invoice = Invoice::where('invoices.owner_user_id', getOwnerUserId())
+        $invoice = Invoice::where('invoices.owner_user_id', auth()->id())
             ->leftJoin('properties', 'invoices.property_id', '=', 'properties.id')
             ->leftJoin('property_units', 'property_units.id', '=', 'invoices.property_unit_id')
             ->select(['invoices.*', 'properties.name as property_name', 'property_units.unit_name'])
             ->orderByDesc('invoices.id')
-            ->where('invoices.status', INVOICE_STATUS_PENDING);
+            ->where('invoices.status', INVOICE_STATUS_PENDING)
+            ->where('invoices.due_date', '>=', date('Y-m-d'));
         return datatables($invoice)
             ->addColumn('invoice', function ($invoice) {
                 return '<h6>' . $invoice->invoice_no . '</h6>
@@ -239,7 +240,7 @@ class InvoiceService
             ->join('file_managers', ['orders.deposit_slip_id' => 'file_managers.id', 'file_managers.origin_type' => (DB::raw("'App\\\Models\\\Order'"))])
             ->select(['invoices.*', 'gateways.title as gatewayTitle', 'gateways.slug as gatewaySlug', 'file_managers.file_name', 'file_managers.folder_name'])
             ->where('gateways.slug', 'bank')
-            ->where('invoices.owner_user_id', getOwnerUserId())
+            ->where('invoices.owner_user_id', auth()->id())
             ->orderByDesc('invoices.id')
             ->where('orders.payment_status', INVOICE_STATUS_PENDING);
         return datatables($invoice)
@@ -292,49 +293,53 @@ class InvoiceService
             ->make(true);
     }
 
-    public function getOverDueInvoicesData($request)
+    public function getOverdueInvoicesData($request)
     {
-        $invoice = Invoice::where('owner_user_id', getOwnerUserId())->overDue();
+        $invoice = Invoice::where('invoices.owner_user_id', auth()->id())
+            ->leftJoin('properties', 'invoices.property_id', '=', 'properties.id')
+            ->leftJoin('property_units', 'property_units.id', '=', 'invoices.property_unit_id')
+            ->select(['invoices.*', 'properties.name as property_name', 'property_units.unit_name'])
+            ->where('invoices.status', INVOICE_STATUS_PENDING) // Pending invoices
+            ->where('invoices.due_date', '<', date('Y-m-d'))   // Due date is in the past
+            ->orderByDesc('invoices.id');
+    
         return datatables($invoice)
             ->addColumn('invoice', function ($invoice) {
                 return '<h6>' . $invoice->invoice_no . '</h6>
                         <p class="font-13">' . $invoice->name . '</p>';
             })
             ->addColumn('property', function ($invoice) {
-                return '<h6>' . @$invoice->property->name . '</h6>
-                        <p class="font-13">' . @$invoice->propertyUnit->unit_name . '</p>';
+                return '<h6>' . $invoice->property_name . '</h6>
+                        <p class="font-13">' . $invoice->unit_name . '</p>';
             })
             ->addColumn('due_date', function ($item) {
-                return $item->due_date;
+                $html = $item->due_date;
+                $html .= '<div class="status-btn status-btn-red mx-1" title="' . __('Over Due') . '">' . __('Over Due') . '</div>';
+                return $html;
             })
             ->addColumn('amount', function ($invoice) {
                 return currencyPrice(invoiceItemTotalAmount($invoice->id));
             })
             ->addColumn('status', function ($invoice) {
-                if ($invoice->status == INVOICE_STATUS_PAID) {
-                    return '<div class="status-btn status-btn-blue font-13 radius-4">Paid</div>';
-                } elseif ($invoice->status == INVOICE_STATUS_OVER_DUE) {
-                    return '<div class="status-btn status-btn-red font-13 radius-4">Due</div>';
-                } else {
-                    return '<div class="status-btn status-btn-orange font-13 radius-4">Pending</div>';
-                }
+                return '<div class="status-btn status-btn-red font-13 radius-4">Overdue</div>';
             })
             ->addColumn('action', function ($invoice) {
-                return '<div class="tbl-action-btns d-inline-flex">
-                            <a href="#" data-updateurl="' . route('owner.invoice.update', $invoice->id) . '" class="p-1 tbl-action-btn edit" data-id="' . $invoice->id . '" data-detailsurl="' . route('owner.invoice.details', $invoice->id) . '" title="' . __('Edit') . '"><span class="iconify" data-icon="clarity:note-edit-solid"></span></a>
-                            <a href="#" class="p-1 tbl-action-btn" title="View"><span class="iconify" data-icon="carbon:view-filled"></span></a>
-                            <button onclick="deleteItem(\'' . route('owner.invoice.destroy', $invoice->id) . '\', \'overdueInvoiceDatatable\')" class="p-1 tbl-action-btn" title="' . __('Delete') . '"><span class="iconify" data-icon="ep:delete-filled"></span></button>
-                        </div>';
+                $html = '<div class="tbl-action-btns d-inline-flex">';
+                $html .= '<button type="button" class="p-1 tbl-action-btn view" data-detailsurl="' . route('owner.invoice.details', $invoice->id) . '" title="' . __('View') . '"><span class="iconify" data-icon="carbon:view-filled"></span></button>';
+                $html .= '<button type="button" onclick="deleteItem(\'' . route('owner.invoice.destroy', $invoice->id) . '\', \'overdueInvoiceDatatable\')" class="p-1 tbl-action-btn" title="Delete"><span class="iconify" data-icon="ep:delete-filled"></span></button>';
+                $html .= '</div>';
+                return $html;
             })
-            ->rawColumns(['invoice', 'property', 'status', 'action'])
+            ->rawColumns(['invoice', 'property', 'due_date', 'status', 'action'])
             ->make(true);
     }
+    
 
     public function store($request)
     {
         DB::beginTransaction();
         try {
-            $tenant = Tenant::where('owner_user_id', getOwnerUserId())->where('unit_id', $request->property_unit_id)->where('status', TENANT_STATUS_ACTIVE)->first();
+            $tenant = Tenant::where('owner_user_id', auth()->id())->where('unit_id', $request->property_unit_id)->where('status', TENANT_STATUS_ACTIVE)->first();
             if (!$tenant) {
                 throw new Exception(__('Tenant Not Found'));
             }
@@ -342,7 +347,7 @@ class InvoiceService
             $invoiceExist = Invoice::query()
                 ->where('property_id', $request->property_id)
                 ->where('property_unit_id', $request->property_unit_id)
-                ->where('owner_user_id', getOwnerUserId())
+                ->where('owner_user_id', auth()->id())
                 ->where('month', $request->month)
                 ->whereYear('created_at', '=', date('Y'))
                 ->where(function ($q) use ($id) {
@@ -364,7 +369,7 @@ class InvoiceService
             }
             $invoice->name = $request->name;
             $invoice->tenant_id = $tenant->id;
-            $invoice->owner_user_id = getOwnerUserId();
+            $invoice->owner_user_id = auth()->id();
             $invoice->property_id = $request->property_id;
             $invoice->property_unit_id = $request->property_unit_id;
             $invoice->month = $request->month;
@@ -374,7 +379,7 @@ class InvoiceService
             $totalAmount = 0;
             $totalTax = 0;
             $now = now();
-            $tax = taxSetting(getOwnerUserId());
+            $tax = taxSetting(auth()->id());
             if (is_null($request->invoiceItem)) {
                 throw new Exception(__('Add invoice item at least one'));
             }
@@ -416,7 +421,7 @@ class InvoiceService
                 $subject = __('Invoice') . ' ' . $invoice->invoice_no . ' ' . __('due on date') . ' ' . $request->due_date;
                 $title = __('A new invoice was generated!');
                 $message = __('You have a new invoice');
-                $ownerUserId = getOwnerUserId();
+                $ownerUserId = auth()->id();
                 $amount = $totalAmount;
                 $dueDate = $request->due_date;
                 $month = $request->month;
@@ -454,14 +459,14 @@ class InvoiceService
     public function sendSingleNotification($request)
     {
         try {
-            $invoice = Invoice::where('owner_user_id', getOwnerUserId())->findOrFail($request->invoice_id);
-            addNotification($request->title, $request->body, null, null, $invoice->tenant->user_id, getOwnerUserId());
+            $invoice = Invoice::where('owner_user_id', auth()->id())->findOrFail($request->invoice_id);
+            addNotification($request->title, $request->body, null, null, $invoice->tenant->user_id, auth()->id());
             $message = __("Notification Sent Successfully");
             if (getOption('send_email_status', 0) == ACTIVE) {
                 $emails = [$invoice->tenant->user->email];
                 $subject = $request->title;
                 $message = $request->body;
-                $ownerUserId = getOwnerUserId();
+                $ownerUserId = auth()->id();
 
                 $mailService = new MailService;
                 $template = EmailTemplate::where('owner_user_id', $ownerUserId)->where('category', EMAIL_TEMPLATE_REMINDER)->where('status', ACTIVE)->first();
@@ -487,7 +492,7 @@ class InvoiceService
     {
         try {
             $tenants = Tenant::query()
-                ->where('owner_user_id', getOwnerUserId())
+                ->where('owner_user_id', auth()->id())
                 ->where('status', TENANT_STATUS_ACTIVE)
                 ->when($request->property_id, function ($q) use ($request) {
                     $q->where('property_id', $request->property_id);
@@ -500,12 +505,12 @@ class InvoiceService
 
             $mailService = new MailService;
             foreach ($tenants as $tenant) {
-                addNotification($request->title, $request->body, null, null, $tenant->user_id, getOwnerUserId());
+                addNotification($request->title, $request->body, null, null, $tenant->user_id, auth()->id());
                 if (getOption('send_email_status', 0) == ACTIVE) {
                     $emails = [$tenant->user->email];
                     $subject = $request->title;
                     $message = $request->body;
-                    $ownerUserId = getOwnerUserId();
+                    $ownerUserId = auth()->id();
 
                     $template = EmailTemplate::where('owner_user_id', $ownerUserId)->where('category', EMAIL_TEMPLATE_REMINDER)->where('status', ACTIVE)->first();
                     if ($template) {
@@ -531,7 +536,7 @@ class InvoiceService
     {
         DB::beginTransaction();
         try {
-            $invoice = Invoice::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $invoice = Invoice::where('owner_user_id', auth()->id())->findOrFail($id);
             $invoice->delete();
             DB::commit();
             $message = __(DELETED_SUCCESSFULLY);
@@ -545,7 +550,7 @@ class InvoiceService
 
     public function types()
     {
-        $data = InvoiceType::where('owner_user_id', getOwnerUserId())->get();
+        $data = InvoiceType::where('owner_user_id', auth()->id())->get();
         return $data?->makeHidden(['created_at', 'updated_at', 'deleted_at']);
     }
 
@@ -557,7 +562,7 @@ class InvoiceService
             $userId = auth()->user()->owner_user_id;
         }
         $data = Invoice::where('owner_user_id', $userId)->findOrFail($id);
-        return $data?->makeHidden(['created_at', 'updated_at', 'deleted_at', 'invoice_recurring_setting_id']);
+        return $data?->makeHidden([ 'deleted_at', 'invoice_recurring_setting_id']);
     }
 
     public function getByIdCheckTenantAuthId($id)
@@ -571,7 +576,12 @@ class InvoiceService
 
     public function getItemsByInvoiceId($id)
     {
-        $data = InvoiceItem::where('invoice_id', $id)->get();
+        $data = InvoiceItem::join('invoice_types', 'invoice_items.invoice_type_id', '=', 'invoice_types.id')
+
+        ->where('invoice_items.invoice_id', $id)
+        ->select('invoice_items.*', 'invoice_types.tax as tax_rate')
+        ->get();
+    
         return $data?->makeHidden(['created_at', 'updated_at', 'deleted_at']);
     }
 
@@ -580,7 +590,7 @@ class InvoiceService
         $data = Owner::query()
             ->leftJoin('file_managers', 'owners.logo_id', '=', 'file_managers.id')
             ->where('user_id', $ownerUserId)
-            ->select(['owners.print_name', 'owners.print_address', 'owners.print_contact', 'file_managers.folder_name', 'file_managers.file_name'])
+            ->select(['owners.print_name', 'owners.print_address', 'owners.print_contact','owners.print_tax_number', 'file_managers.folder_name', 'file_managers.file_name'])
             ->first();
         return $data;
     }
@@ -599,7 +609,7 @@ class InvoiceService
             ->where('orders.payment_status', INVOICE_STATUS_PAID)
             ->where('orders.id', $id)
             ->first();
-        return $order?->makeHidden(['created_at', 'updated_at', 'deleted_at']);
+        return $order?->makeHidden(['updated_at', 'deleted_at']);
     }
 
     public function getCurrencyByGatewayId($id)
@@ -617,14 +627,14 @@ class InvoiceService
         try {
 
             if ($request->status == INVOICE_STATUS_PAID) {
-                $invoice = Invoice::where('owner_user_id', getOwnerUserId())->findOrFail($request->id);
+                $invoice = Invoice::where('owner_user_id', auth()->id())->findOrFail($request->id);
                 $order = Order::find($invoice->order_id);
                 if (is_null($order)) {
                     $order = Order::create([
                         'user_id' => $invoice->tenant->user->id,
                         'invoice_id' => $invoice->id,
                         'amount' => $invoice->amount,
-                        'system_currency' => Currency::where('current_currency', ACTIVE)->first()->currency_code,
+                        'system_currency' => Currency::where('current_currency', 'on')->first()->currency_code,
                         'conversion_rate' => 1,
                         'subtotal' => $invoice->amount,
                         'total' => $invoice->amount,

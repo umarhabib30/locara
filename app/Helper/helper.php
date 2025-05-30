@@ -49,7 +49,7 @@ if (!function_exists('getSlug')) {
 
 function number_parser($value)
 {
-    return (float)str_replace(',', '', number_format(($value), 2));
+    return (float) str_replace(',', '', number_format(($value), 2));
 }
 
 function assetUrl($path)
@@ -60,149 +60,9 @@ function assetUrl($path)
     return asset('assets/images/no-image.jpg');
 }
 
-if (!function_exists('gatewaySettings')) {
-    function gatewaySettings()
-    {
-        $gatewaySettings = [
-            "paypal" => [
-                ["label" => "Url", "name" => "url", "is_show" => 0],
-                ["label" => "Client ID", "name" => "key", "is_show" => 1],
-                ["label" => "Secret", "name" => "secret", "is_show" => 1]
-            ],
-            "stripe" => [
-                ["label" => "Url", "name" => "url", "is_show" => 0],
-                ["label" => "Public Key", "name" => "key", "is_show" => 1],
-                ["label" => "Secret Key", "name" => "secret", "is_show" => 0]
-            ],
-            "razorpay" => [
-                ["label" => "Url", "name" => "url", "is_show" => 0],
-                ["label" => "Key", "name" => "key", "is_show" => 1],
-                ["label" => "Secret", "name" => "secret", "is_show" => 1]
-            ],
-            "instamojo" => [
-                ["label" => "Url", "name" => "url", "is_show" => 0],
-                ["label" => "Api Key", "name" => "key", "is_show" => 1],
-                ["label" => "Auth Token", "name" => "secret", "is_show" => 1]
-            ],
-            "mollie" => [
-                ["label" => "Url", "name" => "url", "is_show" => 0],
-                ["label" => "Mollie Key", "name" => "key", "is_show" => 1],
-                ["label" => "Secret", "name" => "secret", "is_show" => 0]
-            ],
-            "paystack" => [
-                ["label" => "Url", "name" => "url", "is_show" => 0],
-                ["label" => "Public Key", "name" => "key", "is_show" => 1],
-                ["label" => "Secret Key", "name" => "secret", "is_show" => 0]
-            ],
-            "mercadopago" => [
-                ["label" => "Url", "name" => "url", "is_show" => 0],
-                ["label" => "Client ID", "name" => "key", "is_show" => 1],
-                ["label" => "Client Secret", "name" => "secret", "is_show" => 1]
-            ],
-            "sslcommerz" => [
-                ["label" => "Url", "name" => "url", "is_show" => 0],
-                ["label" => "Store ID", "name" => "key", "is_show" => 1],
-                ["label" => "Store Password", "name" => "secret", "is_show" => 1]
-            ],
-            "flutterwave" => [
-                ["label" => "Hash", "name" => "url", "is_show" => 1],
-                ["label" => "Public Key", "name" => "key", "is_show" => 1],
-                ["label" => "Client Secret", "name" => "secret", "is_show" => 1]
-            ],
-            "coinbase" => [
-                ["label" => "Hash", "name" => "url", "is_show" => 0],
-                ["label" => "API Key", "name" => "key", "is_show" => 1],
-                ["label" => "Client Secret", "name" => "secret", "is_show" => 0]
-            ],
-            "binance" => [
-                ["label" => "Url", "name" => "url", "is_show" => 0],
-                ["label" => "Client ID", "name" => "key", "is_show" => 1],
-                ["label" => "Client Secret", "name" => "secret", "is_show" => 1]
-            ],
-            "bitpay" => [
-                ["label" => "Url", "name" => "url", "is_show" => 0],
-                ["label" => "Key", "name" => "key", "is_show" => 1],
-                ["label" => "Client Secret", "name" => "secret", "is_show" => 0]
-            ],
-            "iyzipay" => [
-                ["label" => "Url", "name" => "url", "is_show" => 0],
-                ["label" => "Key", "name" => "key", "is_show" => 1],
-                ["label" => "Secret", "name" => "secret", "is_show" => 1]
-            ],
-            "payhere" => [
-                ["label" => "Url", "name" => "url", "is_show" => 0],
-                ["label" => "Merchant ID", "name" => "key", "is_show" => 1],
-                ["label" => "Merchant Secret", "name" => "secret", "is_show" => 1]
-            ],
-            "maxicash" => [
-                ["label" => "Url", "name" => "url", "is_show" => 0],
-                ["label" => "Merchant ID", "name" => "key", "is_show" => 1],
-                ["label" => "Password", "name" => "secret", "is_show" => 1]
-            ],
-            "paytm" => [
-                ["label" => "Industry Type", "name" => "url", "is_show" => 1],
-                ["label" => "Merchant Key", "name" => "key", "is_show" => 1],
-                ["label" => "Merchant ID", "name" => "secret", "is_show" => 1]
-            ],
-            "zitopay" => [
-                ["label" => "Industry Type", "name" => "url", "is_show" => 0],
-                ["label" => "Key", "name" => "key", "is_show" => 1],
-                ["label" => "Merchant ID", "name" => "secret", "is_show" => 0]
-            ],
-            "cinetpay" => [
-                ["label" => "Industry Type", "name" => "url", "is_show" => 0],
-                ["label" => "API Key", "name" => "key", "is_show" => 1],
-                ["label" => "Site ID", "name" => "secret", "is_show" => 1]
-            ],
-            "voguepay" => [
-                ["label" => "Industry Type", "name" => "url", "is_show" => 0],
-                ["label" => "Merchant ID", "name" => "key", "is_show" => 1],
-                ["label" => "Merchant ID", "name" => "secret", "is_show" => 0]
-            ],
-            "toyyibpay" => [
-                ["label" => "Industry Type", "name" => "url", "is_show" => 0],
-                ["label" => "Secret Key", "name" => "key", "is_show" => 1],
-                ["label" => "Category Code", "name" => "secret", "is_show" => 1]
-            ],
-            "paymob" => [
-                ["label" => "Industry Type", "name" => "url", "is_show" => 0],
-                ["label" => "API Key", "name" => "key", "is_show" => 1],
-                ["label" => "Integration ID", "name" => "secret", "is_show" => 1]
-            ],
-            "alipay" => [
-                ["label" => "APP ID", "name" => "url", "is_show" => 1],
-                ["label" => "Public Key", "name" => "key", "is_show" => 1],
-                ["label" => "Private Key", "name" => "secret", "is_show" => 1]
-            ],
-            "authorize" => [
-                ["label" => "Industry Type", "name" => "url", "is_show" => 0],
-                ["label" => "Login ID", "name" => "key", "is_show" => 1],
-                ["label" => "Transaction Key", "name" => "secret", "is_show" => 1]
-            ],
-            "xendit" => [
-                ["label" => "APP ID", "name" => "url", "is_show" => 0],
-                ["label" => "Public Key", "name" => "key", "is_show" => 1],
-                ["label" => "Secret", "name" => "secret", "is_show" => 0]
-            ],
-            "paddle" => [
-                [ "label" => "Url", "name" => "url", "is_show" => 1],
-                [ "label" => "Public Key", "name" => "key", "is_show" => 1],
-                [ "label" => "Secret", "name" => "secret", "is_show" => 0]
-            ],
-            "bank" => [
-                ["label" => "Hash", "name" => "url", "is_show" => 0],
-                ["label" => "API Key", "name" => "key", "is_show" => 0],
-                ["label" => "Client Secret", "name" => "secret", "is_show" => 0]
-            ],
-            "cash" => [
-                ["label" => "Hash", "name" => "url", "is_show" => 0],
-                ["label" => "API Key", "name" => "key", "is_show" => 0],
-                ["label" => "Client Secret", "name" => "secret", "is_show" => 0]
-            ]
-        ];
-
-        return json_encode($gatewaySettings);
-    }
+function gatewaySettings()
+{
+    return '{"paypal":[{"label":"Url","name":"url","is_show":0},{"label":"Client ID","name":"key","is_show":1},{"label":"Secret","name":"secret","is_show":1}],"stripe":[{"label":"Url","name":"url","is_show":0},{"label":"Secret Key","name":"key","is_show":1},{"label":"Secret Key","name":"secret","is_show":0}],"razorpay":[{"label":"Url","name":"url","is_show":0},{"label":"Key","name":"key","is_show":1},{"label":"Secret","name":"secret","is_show":1}],"instamojo":[{"label":"Url","name":"url","is_show":0},{"label":"Api Key","name":"key","is_show":1},{"label":"Auth Token","name":"secret","is_show":1}],"mollie":[{"label":"Url","name":"url","is_show":0},{"label":"Mollie Key","name":"key","is_show":1},{"label":"Secret","name":"secret","is_show":0}],"paystack":[{"label":"Url","name":"url","is_show":0},{"label":"Public Key","name":"key","is_show":1},{"label":"Secret Key","name":"secret","is_show":0}],"mercadopago":[{"label":"Url","name":"url","is_show":0},{"label":"Client ID","name":"key","is_show":1},{"label":"Client Secret","name":"secret","is_show":1}],"sslcommerz":[{"label":"Url","name":"url","is_show":0},{"label":"Store ID","name":"key","is_show":1},{"label":"Store Password","name":"secret","is_show":1}],"flutterwave":[{"label":"Hash","name":"url","is_show":1},{"label":"Public Key","name":"key","is_show":1},{"label":"Client Secret","name":"secret","is_show":1}],"coinbase":[{"label":"Hash","name":"url","is_show":0},{"label":"API Key","name":"key","is_show":1},{"label":"Client Secret","name":"secret","is_show":0}],"bank":[{"label":"Hash","name":"url","is_show":0},{"label":"API Key","name":"key","is_show":0},{"label":"Client Secret","name":"secret","is_show":0}],"cash":[{"label":"Hash","name":"url","is_show":0},{"label":"API Key","name":"key","is_show":0},{"label":"Client Secret","name":"secret","is_show":0}]}';
 }
 
 function getSettingImage($option_key)
@@ -257,7 +117,7 @@ function getErrorMessage($e, $customMsg = null)
     if (env('APP_DEBUG')) {
         return $e->getMessage() . $e->getLine();
     } else {
-        return __(SOMETHING_WENT_WRONG);
+        return SOMETHING_WENT_WRONG;
     }
 }
 
@@ -405,14 +265,14 @@ function convertToReadableSize($size)
 
 function getSystemCurrency()
 {
-    return Currency::where('current_currency', ACTIVE)
+    return Currency::where('current_currency', 'on')
         ->select(['currency_code', 'symbol', 'currency_placement', 'current_currency'])
         ->first();
 }
 
 function getCurrencySymbol()
 {
-    $currency = Currency::where('current_currency', ACTIVE)->first();
+    $currency = Currency::where('current_currency', 'on')->first();
     if ($currency) {
         $symbol = $currency->symbol . ' ';
         return $symbol;
@@ -422,7 +282,7 @@ function getCurrencySymbol()
 
 function getCurrencyPlacement()
 {
-    $currency = Currency::where('current_currency', ACTIVE)->first();
+    $currency = Currency::where('current_currency', 'on')->first();
     $placement = 'before';
     if ($currency) {
         $placement = $currency->currency_placement;
@@ -548,7 +408,6 @@ if (!function_exists('getLayout')) {
             USER_ROLE_OWNER => 'owner',
             USER_ROLE_TENANT => 'tenant',
             USER_ROLE_MAINTAINER => 'maintainer',
-            USER_ROLE_TEAM_MEMBER => 'owner',
         ];
 
         return $output[auth()->user()->role];
@@ -657,7 +516,7 @@ if (!function_exists('getCustomerCurrentBuildVersion')) {
             return 1;
         }
 
-        return (int)$buildVersion;
+        return (int) $buildVersion;
     }
 }
 
@@ -668,7 +527,7 @@ if (!function_exists('getCustomerAddonBuildVersion')) {
         if (is_null($buildVersion)) {
             return 0;
         }
-        return (int)$buildVersion;
+        return (int) $buildVersion;
     }
 }
 
@@ -680,7 +539,7 @@ if (!function_exists('isAddonInstalled')) {
         if (is_null($buildVersion) || $codeBuildVersion == 0) {
             return 0;
         }
-        return (int)$buildVersion;
+        return (int) $buildVersion;
     }
 }
 
@@ -852,9 +711,9 @@ if (!function_exists('reviewStar')) {
         $html = '';
         for ($i = 1; $i <= 5; $i++) {
             if ($i > $star) {
-                $html .= '<li class="d-flex"><i class="fa-regular fa-star"></i></li>';
+                $html .= '<span class="iconify" data-icon="ic:baseline-star"></span>';
             } else {
-                $html .= '<li class="d-flex"><i class="fa-solid fa-star"></i></li>';
+                $html .= '<span class="iconify star-filled" data-icon="ic:baseline-star"></span>';
             }
         }
         return $html;
@@ -878,7 +737,7 @@ if (!function_exists('getOwnerLimit')) {
         if (isAddonInstalled('PROTYSAAS') < 1) {
             return true;
         }
-        $userId = is_null($userId) ? getOwnerUserId() : $userId;
+        $userId = is_null($userId) ? auth()->id() : $userId;
         $ownerPlan = OwnerPackage::where('status', ACTIVE)->where('user_id', $userId)->whereDate('end_date', '>=', now()->toDateTimeString())->first();
 
         // custom package limit check
@@ -1120,14 +979,6 @@ if (!function_exists('getExistingAutoInvoice')) {
 }
 
 
-if (!function_exists('getOwnerUserId')) {
-    function getOwnerUserId($user_id = null)
-    {
-        $user = is_null($user_id) ? auth()->user() : User::find($user_id);
-        return $user->owner_user_id ? $user->owner_user_id : $user->id;
-    }
-}
-
 if (!function_exists('getPackageOtherFields')) {
     function getPackageOtherFields($userId = null)
     {
@@ -1138,83 +989,6 @@ if (!function_exists('getPackageOtherFields')) {
         } else {
             $package = Package::find($userPackage->package_id);
             return json_decode($package->others);
-        }
-    }
-}
-
-
-if (!function_exists('syncMissingGateway')) {
-    function syncMissingGateway(): void
-    {
-        $owners = \App\Models\Owner::all();
-        $gateways = getPaymentServiceClass(); // Get all the available gateways
-
-        // Loop through each tenant
-        foreach ($owners as $owner) {
-            // Get all existing gateways for the current tenant
-            $existingGateways = \App\Models\Gateway::where('owner_user_id', $owner->user_id)->pluck('slug')->toArray();
-
-            // Loop through each gateway in the payment services list
-            foreach ($gateways as $gatewaySlug => $gatewayService) {
-                // If the gateway doesn't exist for the tenant, insert it
-                if (!in_array($gatewaySlug, $existingGateways)) {
-                    // Insert missing gateway for the tenant
-                    $gateway = new \App\Models\Gateway();
-                    $gateway->owner_user_id = $owner->user_id;
-                    $gateway->title = ucfirst($gatewaySlug);
-                    $gateway->slug = $gatewaySlug;
-                    $gateway->image = 'assets/images/gateway-icon/' . $gatewaySlug . '.png';
-                    $gateway->status = 1;
-                    $gateway->mode = 2; // Assuming '2' is the default mode
-                    $gateway->created_at = now();
-                    $gateway->updated_at = now();
-                    $gateway->save();
-
-                    // Insert currency for the new gateway
-                    $currency = new \App\Models\GatewayCurrency();
-                    $currency->owner_user_id = $owner->user_id;
-                    $currency->gateway_id = $gateway->id;
-                    $currency->currency = 'USD';
-                    $currency->conversion_rate = 1.0;
-                    $currency->created_at = now();
-                    $currency->updated_at = now();
-                    $currency->save();
-                }
-            }
-        }
-
-        //super admin
-        $admin = \App\Models\User::where('role', USER_ROLE_ADMIN)->first();
-
-        // Get all existing gateways for the current tenant
-        $existingGateways = \App\Models\Gateway::where('owner_user_id', $admin->id)->pluck('slug')->toArray();
-
-        // Loop through each gateway in the payment services list
-        foreach ($gateways as $gatewaySlug => $gatewayService) {
-            // If the gateway doesn't exist for the tenant, insert it
-            if (!in_array($gatewaySlug, $existingGateways)) {
-                // Insert missing gateway for the tenant
-                $gateway = new \App\Models\Gateway();
-                $gateway->owner_user_id = $admin->id;
-                $gateway->title = ucfirst($gatewaySlug);
-                $gateway->slug = $gatewaySlug;
-                $gateway->image = 'assets/images/gateway-icon/' . $gatewaySlug . '.png';
-                $gateway->status = 1;
-                $gateway->mode = 2; // Assuming '2' is the default mode
-                $gateway->created_at = now();
-                $gateway->updated_at = now();
-                $gateway->save();
-
-                // Insert currency for the new gateway
-                $currency = new \App\Models\GatewayCurrency();
-                $currency->owner_user_id = $admin->id;
-                $currency->gateway_id = $gateway->id;
-                $currency->currency = 'USD';
-                $currency->conversion_rate = 1.0;
-                $currency->created_at = now();
-                $currency->updated_at = now();
-                $currency->save();
-            }
         }
     }
 }

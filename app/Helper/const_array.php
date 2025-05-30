@@ -137,97 +137,15 @@ function getPaymentServiceClass($input = null)
         RAZORPAY => 'App\Services\Payment\RazorpayService',
         INSTAMOJO => 'App\Services\Payment\InstamojoService',
         MOLLIE => 'App\Services\Payment\MollieService',
-        COINBASE => 'App\Services\Payment\CoinbaseService',
         PAYSTACK => 'App\Services\Payment\PaystackService',
         SSLCOMMERZ => 'App\Services\Payment\SslCommerzService',
         MERCADOPAGO => 'App\Services\Payment\MercadoPagoService',
         FLUTTERWAVE => 'App\Services\Payment\FlutterwaveService',
-        IYZIPAY => 'App\Services\Payment\IyzipayService',
-        BITPAY => 'App\Services\Payment\BitPayService',
-        ZITOPAY => 'App\Services\Payment\ZitoPayService',
-        BINANCE => 'App\Services\Payment\BinancePaymentService',
-        PAYTM => 'App\Services\Payment\PaytmService',
-        PAYHERE => 'App\Services\Payment\PayHerePaymentService',
-        MAXICASH => 'App\Services\Payment\MaxiCashService',
-        CINETPAY => 'App\Services\Payment\CinetPayService',
-        VOGUEPAY => 'App\Services\Payment\VoguePayService',
-        TOYYIBPAY => 'App\Services\Payment\ToyyibPayService',
-        PAYMOB => 'App\Services\Payment\PaymobService',
-        AUTHORIZE  => 'App\Services\Payment\AuthorizeNetService',
-        ALIPAY => 'App\Services\Payment\AlipayService',
-        XENDIT => 'App\Services\Payment\XenditService',
-        PADDLE => 'App\Services\Payment\PaddleService',
-        BANK => 'App\Services\Payment\BankService',  // Add the bank service here
-        CASH => 'App\Services\Payment\CashService',  // Add the bank service here
     );
     if (is_null($input)) {
         return $output;
     } else {
         return $output[$input] ?? '';
-    }
-}
-
-if (!function_exists("getGatewaySupportedCurrencies")) {
-    function getGatewaySupportedCurrencies($gateway = null)
-    {
-        $supported_currencies = array(
-            PAYPAL => [
-                'AUD', 'BRL', 'CAD', 'CNY', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF', 'INR',
-                'ILS', 'JPY', 'MYR', 'MXN', 'TWD', 'NZD', 'NOK', 'PHP', 'PLN', 'GBP',
-                'RUB', 'SGD', 'SEK', 'CHF', 'THB', 'USD', 'VND', 'ZAR'
-            ],
-            STRIPE => [
-                // Comprehensive global currency support
-                'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AUD', 'AWG', 'AZN',
-                'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BMD', 'BND', 'BOB', 'BRL',
-                'BSD', 'BTN', 'BWP', 'BYN', 'BZD', 'CAD', 'CDF', 'CHF', 'CLP', 'CNY',
-                'COP', 'CRC', 'CUC', 'CUP', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD',
-                'EGP', 'ERN', 'ETB', 'EUR', 'FJD', 'FKP', 'GBP', 'GEL', 'GGP', 'GHS',
-                'GIP', 'GMD', 'GNF', 'GTQ', 'GYD', 'HKD', 'HNL', 'HRK', 'HTG', 'HUF',
-                'IDR', 'ILS', 'IMP', 'INR', 'IQD', 'IRR', 'ISK', 'JEP', 'JMD', 'JOD',
-                'JPY', 'KES', 'KGS', 'KHR', 'KMF', 'KPW', 'KRW', 'KWD', 'KYD', 'KZT',
-                'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD',
-                'MMK', 'MNT', 'MOP', 'MRU', 'MUR', 'MVR', 'MWK', 'MXN', 'MYR', 'MZN',
-                'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'OMR', 'PAB', 'PEN', 'PGK',
-                'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR',
-                'SBD', 'SCR', 'SDG', 'SEK', 'SGD', 'SHP', 'SLL', 'SOS', 'SRD', 'STN',
-                'SVC', 'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD',
-                'TVD', 'TWD', 'TZS', 'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VES', 'VND',
-                'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'XPF', 'YER', 'ZAR', 'ZMW', 'ZWL'
-            ],
-            RAZORPAY => ['INR', 'USD', 'EUR', 'GBP', 'AED', 'AUD', 'CAD', 'SGD'],
-            INSTAMOJO => ['INR'],
-            MOLLIE => ['EUR', 'GBP', 'USD', 'CHF', 'PLN', 'SEK', 'NOK', 'DKK', 'AUD', 'CAD'],
-            COINBASE => ['BTC', 'ETH', 'LTC', 'BCH', 'XRP', 'USDC', 'USDT', 'ADA', 'DOGE', 'MATIC', 'SHIB', 'APE', 'SOL', 'DOT', 'UNI', 'ATOM'],
-            PAYSTACK => ['NGN', 'USD', 'ZAR', 'GHS', 'EUR', 'GBP'],
-            SSLCOMMERZ => ['BDT', 'USD', 'INR', 'EUR', 'GBP'],
-            MERCADOPAGO => ['ARS', 'BRL', 'CLP', 'COP', 'MXN', 'PEN', 'UYU', 'USD'],
-            FLUTTERWAVE => ['NGN', 'USD', 'KES', 'GHS', 'ZAR', 'GBP', 'EUR'],
-            IYZIPAY => ['TRY', 'USD', 'EUR', 'GBP'],
-            BITPAY => ['BTC', 'BCH', 'ETH', 'USDT', 'DOGE', 'SHIB', 'LTC', 'WBTC', 'GUSD', 'USDC', 'DAI', 'EUROC'],
-            ZITOPAY => ['USD', 'EUR', 'GBP', 'NGN'],  // Assuming major currencies based on typical global coverage
-            BINANCE => ['BTC', 'ETH', 'BNB', 'USDT', 'BUSD', 'ADA', 'DOT', 'SOL'],  // Cryptocurrencies
-            PAYTM => ['INR'],
-            PAYHERE => ['LKR', 'USD', 'EUR', 'GBP'],
-            MAXICASH => ['USD', 'XAF', 'XOF'],
-            CINETPAY => ['XOF', 'XAF', 'EUR', 'USD'],
-            VOGUEPAY => ['NGN', 'USD', 'GBP'],
-            TOYYIBPAY => ['MYR'],
-            PAYMOB => ['EGP'],
-            AUTHORIZE => ['USD', 'CAD', 'GBP', 'EUR', 'AUD', 'NZD'],
-            ALIPAY => [
-                'CNY', 'USD', 'EUR', 'GBP', 'HKD', 'JPY', 'AUD', 'SGD', 'CAD', 'NZD',
-                'KRW', 'THB'
-            ],
-            XENDIT => ['IDR', 'PHP', 'USD', 'VND', 'THB', 'MYR','SGD'],
-            PADDLE => ['USD','EUR','GBP','AUD','CAD']
-        );
-
-        if (is_null($gateway)) {
-            return $supported_currencies;
-        } else {
-            return $supported_currencies[$gateway] ?? [];
-        }
     }
 }
 
@@ -791,8 +709,7 @@ function getCurrency($currency = null, $only_symbol = false)
         "VEF" => array("name" => "Venezuelan BolÃvar", "symbol" => "Bs"),
         "VND" => array("name" => "Vietnamese Dong", "symbol" => "₫"),
         "YER" => array("name" => "Yemeni Rial", "symbol" => "﷼"),
-        "ZMK" => array("name" => "Zambian Kwacha", "symbol" => "ZK"),
-        "maxiDollar" => array("name" => "Maxi Dollar", "symbol" => "$"),
+        "ZMK" => array("name" => "Zambian Kwacha", "symbol" => "ZK")
     );
     if (is_null($currency)) {
         $all_currency = [];
@@ -820,7 +737,6 @@ function getRoleName($input = null)
         USER_ROLE_OWNER => 'Owner',
         USER_ROLE_TENANT => 'Tenant',
         USER_ROLE_MAINTAINER => 'Maintainer',
-        USER_ROLE_TEAM_MEMBER => 'Team Member',
     ];
 
 

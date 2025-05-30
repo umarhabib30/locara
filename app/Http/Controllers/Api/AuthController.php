@@ -57,8 +57,7 @@ class AuthController extends Controller
                 setUserPackage($user->id, $defaultPackage, $duration, 1);
             }
 
-            syncMissingGateway();
-//            setOwnerGateway($user->id);
+            setOwnerGateway($user->id);
             DB::commit();
             // login credential
             $response['email_verification_status'] = false;

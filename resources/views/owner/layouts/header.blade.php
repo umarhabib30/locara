@@ -22,17 +22,17 @@
             </div> --}}
         </div>
         @if (isAddonInstalled('PROTYSAAS') > 1)
-            @if (!ownerCurrentPackage(getOwnerUserId()))
+            @if (!ownerCurrentPackage(auth()->id()))
                 <div class="d-flex exclamation">
                     <button class="text-danger exclamation-btu">
                         <i class="fas fa-exclamation-circle"></i>
                     </button>
-                    <div class="bg-button-primary-color exclamation-area text-center text-white">
+                    <div class="text-center exclamation-area">
                         {{ __('Currently you doesn\'t have any subscription!') }} <a
                             href="{{ route('owner.subscription.index', ['current_plan' => 'no']) }}"
-                            class="bg-white px-1 px-2 rounded-pill text-button-primary-color" title="{{ __('Choose a plan') }}">{{ __('Choose a plan') }}</a>
+                            class="text-danger px-1" title="{{ __('Choose a plan') }}">{{ __('Choose a plan') }}</a>
                     </div>
-                    <button type="button" class="close ms-2 text-white topBannerClose"><span>&times;</span></button>
+                    <button type="button" class="close topBannerClose ms-2"><span>&times;</span></button>
                 </div>
             @endif
         @endif
@@ -78,7 +78,7 @@
                         </div>
                     </div>
                     <div data-simplebar>
-                        @foreach (getNotificationLimit(getOwnerUserId()) as $notification)
+                        @foreach (getNotificationLimit(auth()->id()) as $notification)
                             <a href="{{ route('notification.status', $notification->id) }}" class="notification-item">
                                 <div class="d-flex">
                                     <img src="{{ getFileUrl($notification->folder_name, $notification->file_name) }}"

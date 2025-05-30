@@ -77,7 +77,7 @@
                             <div class="modal-inner-form-box border-bottom mb-25">
                                 <div class="row">
                                     <div class="col-md-6 mb-25">
-                                        <label class="label-text-title color-heading font-medium mb-2 w-100">{{ __('Owner') }}
+                                        <label class="label-text-title color-heading font-medium mb-2">{{ __('Owner') }}
                                             <span class="text-danger">*</span></label>
                                         <select name="user_id" class="form-control select2">
                                             @foreach ($owners as $owner)

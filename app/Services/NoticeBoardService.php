@@ -20,7 +20,7 @@ class NoticeBoardService
     {
         $noticeboards = NoticeBoard::query()
             ->leftJoin('properties', 'notice_boards.property_id', '=', 'properties.id')
-            ->where('notice_boards.owner_user_id', getOwnerUserId())
+            ->where('notice_boards.owner_user_id', auth()->id())
             ->select('notice_boards.*', 'properties.name as property_name')
             ->get();
         return $noticeboards;
@@ -30,7 +30,7 @@ class NoticeBoardService
     {
         $noticeboard = NoticeBoard::query()
             ->leftJoin('properties', 'notice_boards.property_id', '=', 'properties.id')
-            ->where('notice_boards.owner_user_id', getOwnerUserId())
+            ->where('notice_boards.owner_user_id', auth()->id())
             ->select('notice_boards.*', 'properties.name as property_name');
         return datatables($noticeboard)
             ->addIndexColumn()
@@ -59,12 +59,12 @@ class NoticeBoardService
         try {
             $id = $request->get('id', '');
             if ($id != '') {
-                $noticeboard = NoticeBoard::where('owner_user_id', getOwnerUserId())->findOrFail($request->id);
+                $noticeboard = NoticeBoard::where('owner_user_id', auth()->id())->findOrFail($request->id);
             } else {
                 $noticeboard = new NoticeBoard();
             }
             $noticeboard->title = $request->title;
-            $noticeboard->owner_user_id = getOwnerUserId();
+            $noticeboard->owner_user_id = auth()->id();
             $noticeboard->details = $request->details;
             $noticeboard->start_date = $request->start_date;
             $noticeboard->end_date = $request->end_date;
@@ -75,7 +75,7 @@ class NoticeBoardService
             $noticeboard->save();
             $tenants = Tenant::query()
                 ->where('status', TENANT_STATUS_ACTIVE)
-                ->where('owner_user_id', getOwnerUserId())
+                ->where('owner_user_id', auth()->id())
                 ->when($request->property_id, function ($q) use ($request) {
                     $q->where('property_id', $request->property_id);
                 })
@@ -146,7 +146,7 @@ class NoticeBoardService
     {
         DB::beginTransaction();
         try {
-            $noticeboard =  NoticeBoard::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $noticeboard =  NoticeBoard::where('owner_user_id', auth()->id())->findOrFail($id);
             $noticeboard->delete();
             DB::commit();
             $message = __(DELETED_SUCCESSFULLY);

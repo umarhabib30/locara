@@ -8,18 +8,16 @@
                 <div class="page-content-wrapper bg-white p-30 radius-20">
                     <div class="row">
                         <div class="col-12">
-                            <div class="page-title-box d-flex flex-column flex-sm-row align-items-sm-center justify-content-between g-20">
+                            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                                 <div class="page-title-left">
                                     <h2 class="mb-sm-0">{{ __('Dashboard') }}</h2>
                                     <p>{{ __('Welcome back') }}, {{ auth()->user()->name }} <span class="iconify font-24"
                                             data-icon="openmoji:waving-hand"></span></p>
                                 </div>
-                                @can('Manage Property')
                                 <div class="page-title-right">
                                     <a href="{{ route('owner.property.add') }}" class="theme-btn"
                                         title="{{ __('Add Property') }}">{{ __('Add Property') }}</a>
                                 </div>
-                                @endcan
                             </div>
                         </div>
                     </div>
@@ -95,7 +93,6 @@
                     <!-- Chart row -->
 
                     <div class="row">
-                        @can('Manage Property')
                         <div class="col-lg-7">
                             <div class="dashboard-properties-table bg-off-white theme-border p-20 radius-4 mb-25">
                                 <div class="">
@@ -154,10 +151,7 @@
                                 </div>
                             </div>
                         </div>
-                        @endcan
-                        @if (isAddonInstalled('PROTYSAAS') < 1 || ownerCurrentPackage(getOwnerUserId())?->ticket_support == ACTIVE)
                         <div class="col-lg-5">
-                            @can('Manage Ticket')
                             <div class="dashboard-properties-table bg-off-white theme-border p-20 radius-4 mb-25">
                                 <div class="">
                                     <div class="row align-items-center">
@@ -214,9 +208,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @endcan
                         </div>
-                        @endif
                     </div>
                 </div>
             </div>

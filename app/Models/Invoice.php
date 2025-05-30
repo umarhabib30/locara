@@ -16,7 +16,8 @@ class Invoice extends Model
 
     public function scopePending($query)
     {
-        return $query->whereStatus(INVOICE_STATUS_PENDING);
+        return $query->where('status', INVOICE_STATUS_PENDING)
+        ->where('due_date', '>=', now()->format('Y-m-d'));
     }
 
     public function scopePaid($query)
@@ -26,7 +27,8 @@ class Invoice extends Model
 
     public function scopeOverDue($query)
     {
-        return $query->whereStatus(INVOICE_STATUS_OVER_DUE);
+        return $query->where('status', INVOICE_STATUS_PENDING)
+                 ->where('due_date', '<', now()->format('Y-m-d'));
     }
 
     public function property(): BelongsTo

@@ -20,11 +20,11 @@ class ProfileController extends Controller
     public function myProfile()
     {
         $data['pageTitle'] = __('My Profile');
-        if ((auth()->user()->role == USER_ROLE_OWNER) || (auth()->user()->role == USER_ROLE_TEAM_MEMBER)) {
+        if (auth()->user()->role == USER_ROLE_OWNER) {
             $data['owner'] = Owner::query()
                 ->leftJoin('file_managers', 'owners.logo_id', '=', 'file_managers.id')
                 ->where('user_id', auth()->id())
-                ->select(['owners.print_name', 'owners.print_address', 'owners.print_contact', 'file_managers.folder_name', 'file_managers.file_name'])
+                ->select(['owners.print_name', 'owners.print_address', 'owners.print_contact','owners.print_tax_number', 'file_managers.folder_name', 'file_managers.file_name'])
                 ->first();
         }
 
@@ -36,7 +36,7 @@ class ProfileController extends Controller
     }
 
     public function profileUpdate(Request $request)
-    {
+    {  
         $authId = auth()->id();
         $request->validate([
             'first_name' => 'required|max:191',
@@ -53,7 +53,7 @@ class ProfileController extends Controller
             $user->contact_number = $request->contact_number;
             $user->date_of_birth = $request->date_of_birth;
             $user->nid_number = $request->nid_number;
-            if (auth()->user()->role == USER_ROLE_ADMIN || auth()->user()->role == USER_ROLE_OWNER || auth()->user()->role == USER_ROLE_TEAM_MEMBER) {
+            if (auth()->user()->role == USER_ROLE_ADMIN || auth()->user()->role == USER_ROLE_OWNER) {
                 $user->email = $request->email;
             }
             $user->save();
@@ -62,6 +62,7 @@ class ProfileController extends Controller
                 $owner->print_name = $request->print_name;
                 $owner->print_address = $request->print_address;
                 $owner->print_contact = $request->print_contact;
+                $owner->print_tax_number = $request->print_tax_number;
                 $owner->save();
 
                 if ($request->hasFile('print_logo')) {
@@ -86,10 +87,11 @@ class ProfileController extends Controller
                 }
             }
             if (auth()->user()->role == USER_ROLE_TENANT) {
+                // dd($request->pet_type);
                 $tenant = Tenant::where('user_id', auth()->id())->first();
                 $tenant->job = $request->job;
                 $tenant->family_member = $request->family_member;
-                $tenant->age = $request->age;
+                $tenant->pets = $request->pet_type;
                 $tenant->save();
 
                 $details = TenantDetails::where('tenant_id', $tenant->id)->first();

@@ -27,7 +27,7 @@
                             <div class="row">
                                 @if (getOption('app_card_data_show', 1) == 1)
                                     @forelse ($tickets as $ticket)
-                                        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-4">
+                                        <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3">
                                             <div class="ticket-item bg-off-white theme-border radius-10 mb-25">
                                                 <div class="ticket-item-content p-20">
                                                     <div

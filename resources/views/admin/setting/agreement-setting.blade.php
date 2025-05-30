@@ -28,17 +28,17 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <div class="language-settings-page-area">
                                         <div class="account-settings-content-box">
                                             <div class="account-settings-title border-bottom mb-20 pb-20">
-                                                <div class="row rg-24 align-items-center">
-                                                    <div class="col-xl-6">
+                                                <div class="row align-items-center">
+                                                    <div class="col-md-6">
                                                         <h4>{{ $pageTitle }}</h4>
                                                     </div>
-                                                    <div class="col-xl-6">
-                                                        <div class="property-details-right text-xl-end">
+                                                    <div class="col-md-6">
+                                                        <div class="property-details-right text-end">
                                                             @if (env('DS_CLIENT_ID'))
                                                                 <a href="https://{{ env('DS_AUTH_SERVER') }}/oauth/auth?response_type=code&scope={{ env('DS_JWT_SCOPE') }}&client_id={{ env('DS_CLIENT_ID') }}&redirect_uri={{ url('/') }}/admin/agreement/callback"
                                                                     class="theme-btn-green"
@@ -61,7 +61,7 @@
                                                 <div class="settings-inner-box bg-white theme-border radius-4 mb-25">
                                                     <div class="settings-inner-box-fields p-20 pb-0">
                                                         <div class="row">
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('Status') }}</label>
                                                                 <select name="DS_STATUS" class="form-control">
@@ -73,7 +73,7 @@
                                                                         {{ __('Enable') }}</option>
                                                                 </select>
                                                             </div>
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('DS Client Id') }}
                                                                     / {{ __('Integration Key') }}</label>
@@ -84,7 +84,7 @@
                                                                         href="https://admindemo.docusign.com/apps-and-keys"
                                                                         target="_blank">{{ __('Integration Key') }}</a></small>
                                                             </div>
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('DS User Id') }}</label>
                                                                 <input type="password" name="DS_IMPERSONATED_USER_ID"
@@ -92,7 +92,7 @@
                                                                     class="form-control"
                                                                     placeholder="{{ __('DS User Id') }}">
                                                             </div>
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('DS Auth Server') }}</label>
                                                                 <select name="DS_AUTH_SERVER" class="form-control">
@@ -104,7 +104,7 @@
                                                                         {{ __('Live') }}</option>
                                                                 </select>
                                                             </div>
-                                                            <div class="col-xl-6 mb-25 d-none">
+                                                            <div class="col-md-6 mb-25 d-none">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('DS JWT Scope') }}</label>
                                                                 <input type="text" name="DS_JWT_SCOPE"
@@ -112,7 +112,7 @@
                                                                     class="form-control"
                                                                     placeholder="{{ __('DS JWT SCOPE') }}">
                                                             </div>
-                                                            <div class="col-xl-6 mb-25 d-none">
+                                                            <div class="col-md-6 mb-25 d-none">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('DS URI Suffix') }}</label>
                                                                 <input type="text" name="DS_ESIGN_URI_SUFFIX"
@@ -120,7 +120,7 @@
                                                                     class="form-control"
                                                                     placeholder="{{ __('DS URI Suffix') }}">
                                                             </div>
-                                                            <div class="col-xl-6 mb-25 d-none">
+                                                            <div class="col-md-6 mb-25 d-none">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('DS Key Path') }}</label>
                                                                 <input type="text" name="DS_KEY_PATH"
@@ -128,7 +128,7 @@
                                                                     class="form-control"
                                                                     placeholder="{{ __('DS Key Path') }}">
                                                             </div>
-                                                            <div class="col-xl-6 mb-25">
+                                                            <div class="col-md-6 mb-25">
                                                                 <label
                                                                     class="label-text-title color-heading font-medium mb-2">{{ __('DS Private Key') }}
                                                                     ({{ __('RSA Private Key') }})</label>

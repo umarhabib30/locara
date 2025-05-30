@@ -28,7 +28,7 @@
                     <div class="settings-page-layout-wrap position-relative">
                         <div class="row">
                             @include('admin.setting.sidebar')
-                            <div class="col-md-12 col-lg-8 col-xxl-9">
+                            <div class="col-md-12 col-lg-12 col-xl-8 col-xxl-9">
                                 <div class="account-settings-rightside bg-off-white theme-border radius-4 p-25">
                                     <!-- Payment Method Page Start -->
                                     <div class="language-settings-page-area">
@@ -141,7 +141,7 @@
                                                             <div class="col-md-12 mb-25">
                                                                 <div class="app-logo-favicon-preloader-box">
                                                                     <div class="row">
-                                                                        <div class="col-xl-4 col-md-6">
+                                                                        <div class="col-md-4">
                                                                             <label
                                                                                 class="label-text-title color-heading font-medium mb-2">{{ __('App Logo') }}
                                                                                 {{ __('Black') }}</label>
@@ -178,7 +178,7 @@
                                                                                 class="text-info">{{ __('Recomended size') }}
                                                                                 : {{ __('150 x 50') }}</span>
                                                                         </div>
-                                                                        <div class="col-xl-4 col-md-6">
+                                                                        <div class="col-md-4">
                                                                             <label
                                                                                 class="label-text-title color-heading font-medium mb-2">{{ __('App Logo') }}
                                                                                 {{ __('White') }}</label>
@@ -216,7 +216,7 @@
                                                                                 class="text-info">{{ __('Recomended size') }}
                                                                                 : {{ __('150 x 50') }}</span>
                                                                         </div>
-                                                                        <div class="col-xl-4 col-md-6">
+                                                                        <div class="col-md-4">
                                                                             <label
                                                                                 class="label-text-title color-heading font-medium mb-2">{{ __('App Favicon') }}</label>
                                                                             <div
@@ -252,7 +252,7 @@
                                                                                 class="text-info">{{ __('Recomended size') }}
                                                                                 : {{ __('64 x 64') }}</span>
                                                                         </div>
-                                                                        <div class="col-xl-4 col-md-6">
+                                                                        <div class="col-md-4">
                                                                             <label
                                                                                 class="label-text-title color-heading font-medium mb-2">{{ __('Preloader') }}</label>
                                                                             <div

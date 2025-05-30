@@ -19,7 +19,7 @@ class Owner
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->role != USER_ROLE_OWNER && Auth::user()->role != USER_ROLE_TEAM_MEMBER) {
+        if (Auth::user()->role != USER_ROLE_OWNER) {
             if ($request->wantsJson()) {
                 $message = __("Unauthorized");
                 return $this->error([], $message);

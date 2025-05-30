@@ -32,12 +32,12 @@ class DashboardController extends Controller
     public function dashboard()
     {
         $data['pageTitle'] = __('Dashboard');
-        $data['totalProperties'] = Property::where('owner_user_id', getOwnerUserId())->count();
-        $data['totalUnits'] = PropertyUnit::query()->join('properties', 'property_units.property_id', '=', 'properties.id')->where('properties.owner_user_id', getOwnerUserId())->count();
-        $data['totalTenants'] = Tenant::where('owner_user_id', getOwnerUserId())->where('status', TENANT_STATUS_ACTIVE)->count();
+        $data['totalProperties'] = Property::where('owner_user_id', auth()->id())->count();
+        $data['totalUnits'] = PropertyUnit::query()->join('properties', 'property_units.property_id', '=', 'properties.id')->where('properties.owner_user_id', auth()->id())->count();
+        $data['totalTenants'] = Tenant::where('owner_user_id', auth()->id())->where('status', TENANT_STATUS_ACTIVE)->count();
         $data['properties'] = $this->propertyService->getAllCount()->take(3);
         $data['tickets'] = $this->ticketService->getAll();
-        $data['totalMaintainers'] = Maintainer::where('owner_user_id', getOwnerUserId())->count();
+        $data['totalMaintainers'] = Maintainer::where('owner_user_id', auth()->id())->count();
 
         // Chart Rent overview
         $data['months'] = array_values(month());
@@ -49,7 +49,7 @@ class DashboardController extends Controller
             )
             ->whereYear('created_at', date('Y'))
             ->groupBy('month')
-            ->where('owner_user_id', getOwnerUserId())
+            ->where('owner_user_id', auth()->id())
             ->where('status', INVOICE_STATUS_PAID)
             ->get();
         $data['yearlyTotalAmount'] = $invoices->sum('total');
@@ -72,7 +72,7 @@ class DashboardController extends Controller
         $data['pageTitle'] = __('Notification');
         Notification::query()
             ->where(function ($q) {
-                $q->where('notifications.user_id', getOwnerUserId())
+                $q->where('notifications.user_id', auth()->id())
                     ->orWhere('notifications.user_id', null);
             })
             ->update(['is_seen' => ACTIVE]);

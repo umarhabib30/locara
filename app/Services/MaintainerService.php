@@ -25,7 +25,7 @@ class MaintainerService
             ->join('users as owner', 'maintainers.owner_user_id', '=', 'owner.id')
             ->leftJoin('file_managers', ['file_managers.origin_id' => 'users.id', 'file_managers.origin_type' => (DB::raw("'App\\\Models\\\User'"))])
             ->whereNull('users.deleted_at')
-            ->where('maintainers.owner_user_id', getOwnerUserId())
+            ->where('maintainers.owner_user_id', auth()->id())
             ->select(DB::raw('CONCAT(owner.first_name, " " ,owner.last_name) as owner'), 'maintainers.id', 'maintainers.user_id', 'users.first_name', 'users.last_name', 'users.email', 'users.status', 'users.contact_number', 'file_managers.file_name', 'file_managers.folder_name');
         return datatables($maintainer)
             ->addIndexColumn()
@@ -79,7 +79,7 @@ class MaintainerService
         $maintainers = Maintainer::query()
             ->join('users', 'maintainers.user_id', '=', 'users.id')
             ->leftJoin('file_managers', ['file_managers.origin_id' => 'users.id', 'file_managers.origin_type' => (DB::raw("'App\\\Models\\\User'"))])
-            ->where('maintainers.owner_user_id', getOwnerUserId())
+            ->where('maintainers.owner_user_id', auth()->id())
             ->select('maintainers.id', 'users.first_name', 'users.last_name', 'users.email', 'users.status', 'users.contact_number', 'file_managers.folder_name', 'file_managers.file_name')
             ->get();
 
@@ -94,7 +94,7 @@ class MaintainerService
     {
         return  Maintainer::query()
             ->join('users', 'maintainers.user_id', '=', 'users.id')
-            ->where('maintainers.owner_user_id', getOwnerUserId())
+            ->where('maintainers.owner_user_id', auth()->id())
             ->select('maintainers.user_id', 'users.*')
             ->get();
     }
@@ -105,8 +105,8 @@ class MaintainerService
         try {
             $id = $request->get('id', '');
             if ($id != '') {
-                $maintainer = Maintainer::where('owner_user_id', getOwnerUserId())->findOrFail($request->id);
-                $user = User::where('owner_user_id', getOwnerUserId())->findOrFail($maintainer->user_id);
+                $maintainer = Maintainer::where('owner_user_id', auth()->id())->findOrFail($request->id);
+                $user = User::where('owner_user_id', auth()->id())->findOrFail($maintainer->user_id);
             } else {
                 if (!getOwnerLimit(RULES_MAINTAINER) > 0) {
                     throw new Exception(__('Your Maintainer Limit finished'));
@@ -124,7 +124,7 @@ class MaintainerService
                 $user->password = Hash::make($request->password);
             }
             $user->role = USER_ROLE_MAINTAINER;
-            $user->owner_user_id = getOwnerUserId();
+            $user->owner_user_id = auth()->id();
             $user->status = $request->status;
             $user->save();
 
@@ -138,7 +138,7 @@ class MaintainerService
                         ->update(['maintainer_id' =>  $maintainer->user_id]);
                 }
             }
-            $maintainer->owner_user_id = getOwnerUserId();
+            $maintainer->owner_user_id = auth()->id();
             $maintainer->save();
 
             /*File Manager Call upload*/
@@ -167,7 +167,7 @@ class MaintainerService
                     $emails = [$user->email];
                     $subject = getOption('app_name') . ' ' . __('welcome you');
                     $message = __('You have successfully been registered');
-                    $ownerUserId = getOwnerUserId();
+                    $ownerUserId = auth()->id();
                     $password = $request->password;
 
                     $mailService = new MailService;
@@ -205,7 +205,7 @@ class MaintainerService
             ->with('properties:maintainer_id,id')
             ->join('users', 'maintainers.user_id', '=', 'users.id')
             ->select('maintainers.id', 'maintainers.user_id', 'users.first_name', 'users.last_name', 'users.email', 'users.contact_number','users.status')
-            ->where('maintainers.owner_user_id', getOwnerUserId())
+            ->where('maintainers.owner_user_id', auth()->id())
             ->findOrFail($id);
 
         $maintainer->property_id = array_map('strval', $maintainer->properties->pluck('id')->toArray());
@@ -220,7 +220,7 @@ class MaintainerService
             ->join('users', 'maintainers.user_id', '=', 'users.id')
             ->leftJoin('file_managers', ['file_managers.origin_id' => 'users.id', 'file_managers.origin_type' => (DB::raw("'App\\\Models\\\User'"))])
             ->select('maintainers.id', 'maintainers.user_id', 'users.first_name', 'users.last_name', 'users.email', 'users.contact_number', DB::raw('CONCAT(file_managers.folder_name,"/",file_managers.file_name) as image'))
-            ->where('maintainers.owner_user_id', getOwnerUserId())
+            ->where('maintainers.owner_user_id', auth()->id())
             ->findOrFail($id);
         $maintainer->property_id = array_map('strval', $maintainer->properties->pluck('id')->toArray());
         return $maintainer;
@@ -230,7 +230,7 @@ class MaintainerService
     {
         DB::beginTransaction();
         try {
-            $maintainer =  Maintainer::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $maintainer =  Maintainer::where('owner_user_id', auth()->id())->findOrFail($id);
             $user = User::find($maintainer->user_id);
             $user->delete();
             $maintainer->delete();

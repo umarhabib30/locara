@@ -29,9 +29,9 @@ class CurrencyController extends Controller
         $currency->symbol = $request->symbol;
         $currency->currency_placement = $request->currency_placement;
         $currency->save();
-        if ($request->current_currency == ACTIVE) {
-            Currency::where('id', $currency->id)->update(['current_currency' => ACTIVE]);
-            Currency::where('id', '!=', $currency->id)->update(['current_currency' => DEACTIVATE]);
+        if ($request->current_currency == 'on') {
+            Currency::where('id', $currency->id)->update(['current_currency' => 'on']);
+            Currency::where('id', '!=', $currency->id)->update(['current_currency' => 'off']);
         }
         return redirect()->route('owner.setting.currency.index')->with('success', __('Created Successfully.'));
     }
@@ -50,8 +50,8 @@ class CurrencyController extends Controller
         $currency->currency_placement = $request->currency_placement;
         $currency->save();
         if ($request->current_currency) {
-            Currency::where('id', $currency->id)->update(['current_currency' => ACTIVE]);
-            Currency::where('id', '!=', $currency->id)->update(['current_currency' => DEACTIVATE]);
+            Currency::where('id', $currency->id)->update(['current_currency' => 'on']);
+            Currency::where('id', '!=', $currency->id)->update(['current_currency' => 'off']);
         }
         return redirect()->route('owner.setting.currency.index')->with('success', __('Updated Successfully.'));
     }

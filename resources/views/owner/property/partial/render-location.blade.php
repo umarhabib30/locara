@@ -53,6 +53,6 @@
     </div>
 
     <!-- Next/Previous Button Start -->
-    <input type="button" name="previous" class="locationBack action-button-previous theme-btn mt-25" value="{{__("Back")}}">
+    <input type="button" name="previous" class="locationBack action-button-previous theme-btn mt-25" value="Back">
     <button type="submit" class="action-button theme-btn mt-25">{{ __('Save & Go to Next') }}</button>
 </form>

@@ -17,7 +17,7 @@ class TicketService
     public function getAll()
     {
         $data = Ticket::query()
-            ->where('owner_user_id', getOwnerUserId())
+            ->where('owner_user_id', auth()->id())
             ->with('topic')
             ->get();
         return $data?->makeHidden(['created_at', 'updated_at', 'deleted_at']);
@@ -26,7 +26,7 @@ class TicketService
     public function getAllData()
     {
         $tickets = Ticket::query()
-            ->where('owner_user_id', getOwnerUserId())
+            ->where('owner_user_id', auth()->id())
             ->with('topic');
         return datatables($tickets)
             ->addIndexColumn()
@@ -243,7 +243,7 @@ class TicketService
 
             $reply = TicketReply::create([
                 'ticket_id' => $ticket->id,
-                'user_id' => getOwnerUserId(),
+                'user_id' => auth()->id(),
                 'reply' => $request->reply
             ]);
 

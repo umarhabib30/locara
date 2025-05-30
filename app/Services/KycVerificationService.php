@@ -23,7 +23,7 @@ class KycVerificationService
             ->join('properties', 'tenants.property_id', '=', 'properties.id')
             ->join('property_units', 'tenants.unit_id', '=', 'property_units.id')
             ->where('users.status', '!=', USER_STATUS_DELETED)
-            ->where('kyc_verifications.owner_user_id', getOwnerUserId())
+            ->where('kyc_verifications.owner_user_id', auth()->id())
             ->select('kyc_verifications.*', 'kyc_configs.name as config_name', 'users.first_name', 'users.last_name', 'properties.name as property_name', 'property_units.unit_name')
             ->get();
 
@@ -53,7 +53,7 @@ class KycVerificationService
             ->when($unit_id != 0, function ($q) use ($unit_id) {
                 $q->where('property_units.id', $unit_id);
             })
-            ->where('kyc_verifications.owner_user_id', getOwnerUserId())
+            ->where('kyc_verifications.owner_user_id', auth()->id())
             ->select('kyc_verifications.*', 'kyc_configs.name as config_name', 'users.first_name', 'users.last_name', 'properties.name as property_name', 'property_units.unit_name');
 
         return datatables($kycVerifications)
@@ -233,7 +233,7 @@ class KycVerificationService
     public function statusChange($id)
     {
         try {
-            $kycVerification = KycVerification::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $kycVerification = KycVerification::where('owner_user_id', auth()->id())->findOrFail($id);
             $kycVerification->status = KYC_STATUS_ACCEPTED;
             $kycVerification->save();
             $message = __(STATUS_UPDATED_SUCCESSFULLY);
@@ -248,7 +248,7 @@ class KycVerificationService
     {
         DB::beginTransaction();
         try {
-            $kycVerification = KycVerification::where('owner_user_id', getOwnerUserId())->findOrFail($request->id);
+            $kycVerification = KycVerification::where('owner_user_id', auth()->id())->findOrFail($request->id);
             $kycVerification->reason = $request->reason;
             $kycVerification->status = KYC_STATUS_REJECTED;
             $kycVerification->save();
@@ -265,7 +265,7 @@ class KycVerificationService
     public function delete($id)
     {
         if (auth()->user()->role == USER_ROLE_OWNER) {
-            $ownerUserId = getOwnerUserId();
+            $ownerUserId = auth()->id();
         } else {
             $ownerUserId = auth()->user()->owner_user_id;
         }
@@ -288,7 +288,7 @@ class KycVerificationService
     {
         try {
             if (auth()->user()->role == USER_ROLE_OWNER) {
-                $ownerUserId = getOwnerUserId();
+                $ownerUserId = auth()->id();
             } else {
                 $ownerUserId = auth()->user()->owner_user_id;
             }

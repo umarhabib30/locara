@@ -73,7 +73,6 @@ class PaymentSubscriptionController extends Controller
                 $object = [
                     'id' => $order->id,
                     'callback_url' => url('api/payment-subscription/verify'),
-                    'cancel_url' => url('api/payment-subscription/failed'),
                     'currency' => $gatewayCurrency->currency,
                     'type' => 'subscription'
                 ];
@@ -112,7 +111,7 @@ class PaymentSubscriptionController extends Controller
             'package_id' => $package->id,
             'package_type' => $package->type,
             'quantity' => $quantity,
-            'system_currency' => Currency::where('current_currency', ACTIVE)->first()->currency_code,
+            'system_currency' => Currency::where('current_currency', 'on')->first()->currency_code,
             'gateway_id' => $gateway->id,
             'duration_type' => $durationType,
             'gateway_currency' => $gatewayCurrency->currency,
@@ -207,10 +206,5 @@ class PaymentSubscriptionController extends Controller
             DB::rollBack();
             return $this->error([], __('Payment Failed!'));
         }
-    }
-
-    public function failed(Request $request)
-    {
-        return $this->error([], __('Payment Failed!'));
     }
 }

@@ -11,6 +11,7 @@ use App\Models\Property;
 use App\Services\PropertyService;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
+use App\Models\PropertyImage;
 
 class PropertyController extends Controller
 {
@@ -140,7 +141,7 @@ class PropertyController extends Controller
     public function getImageDoc(Request $request)
     {
         $id = $request->get('id',0);
-        $property = Property::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+        $property = Property::where('owner_user_id', auth()->id())->findOrFail($id);
         $response['property'] = $property;
         $response['step'] = IMAGE_ACTIVE_CLASS;
         $response['view'] = view('owner.property.partial.render-image', $response)->render();
@@ -149,6 +150,22 @@ class PropertyController extends Controller
     public function imageStore(Request $request, $id)
     {
         return $this->propertyService->imageStore($request, $id);
+    }
+
+    public function reorderImages(Request $request)
+    {
+        // Validate the input
+        $data = $request->validate([
+            '*.id' => 'required|integer|exists:property_images,id',
+            '*.order' => 'required|integer',
+        ]);
+
+        // Update each image's order in the database
+        foreach ($data as $item) {
+            PropertyImage::where('id', $item['id'])->update(['order' => $item['order']]);
+        }
+
+        return $this->success([], __(UPDATED_SUCCESSFULLY));
     }
 
     public function imageDelete($id)

@@ -42,7 +42,6 @@
     <link rel="stylesheet" href="{{ asset('/') }}assets/libs/owl-carousel/owl.theme.default.min.css">
 
     <link rel="stylesheet" href="{{ asset('/') }}assets/libs/venobox/venobox.min.css">
-
     <link href="{{ asset('/') }}assets/css/icons.min.css" rel="stylesheet">
     <link href="{{ asset('/') }}assets/css/style.css" rel="stylesheet">
 
@@ -88,20 +87,6 @@
 
     @yield('content')
 
-    @if(session('payment_form_html'))
-        <div id="virtualPaymentForm" style="display: none;">
-            {!! session('payment_form_html') !!}
-        </div>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                // Find the form inside the hidden div and submit it automatically
-                var virtualForm = document.getElementById('virtualPaymentForm').querySelector('form');
-                if (virtualForm) {
-                    virtualForm.submit();
-                }
-            });
-        </script>
-    @endif
     <script src="{{ asset('/') }}assets/libs/jquery/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('/') }}assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('/') }}assets/libs/jquery-easing/jquery.easing.min.js"></script>

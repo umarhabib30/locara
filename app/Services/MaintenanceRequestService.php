@@ -20,7 +20,7 @@ class MaintenanceRequestService
             ->join('properties', 'maintenance_requests.property_id', '=', 'properties.id')
             ->leftJoin('property_units', 'maintenance_requests.unit_id', '=', 'property_units.id')
             ->join('maintenance_issues', 'maintenance_requests.issue_id', '=', 'maintenance_issues.id')
-            ->where('maintenance_requests.owner_user_id', getOwnerUserId())
+            ->where('maintenance_requests.owner_user_id', auth()->id())
             ->select('maintenance_requests.id', 'maintenance_requests.details', 'maintenance_requests.status', 'properties.name as property_name', 'maintenance_issues.name as issue_name', 'property_units.unit_name')
             ->get();
         return $maintenance;
@@ -32,7 +32,7 @@ class MaintenanceRequestService
             ->join('properties', 'maintenance_requests.property_id', '=', 'properties.id')
             ->leftJoin('property_units', 'maintenance_requests.unit_id', '=', 'property_units.id')
             ->join('maintenance_issues', 'maintenance_requests.issue_id', '=', 'maintenance_issues.id')
-            ->where('maintenance_requests.owner_user_id', getOwnerUserId())
+            ->where('maintenance_requests.owner_user_id', auth()->id())
             ->select('maintenance_requests.*', 'properties.name as property_name', 'maintenance_issues.name as issue_name', 'property_units.unit_name');
         return datatables($maintenance)
             ->addIndexColumn()
@@ -129,8 +129,8 @@ class MaintenanceRequestService
         DB::beginTransaction();
         try {
             $authUser = auth()->user();
-            if (($authUser->role == USER_ROLE_OWNER) || ($authUser->role == USER_ROLE_TEAM_MEMBER)) {
-                $userId = getOwnerUserId();
+            if ($authUser->role == USER_ROLE_OWNER) {
+                $userId = $authUser->id;
             } else {
                 $userId = $authUser->owner_user_id;
                 if ($authUser->tenant->property_id != $request->property_id || $authUser->tenant->unit_id != $request->unit_id) {
@@ -180,7 +180,7 @@ class MaintenanceRequestService
             /*End*/
             $property = Property::find($request->property_id);
             if (isset($property)) {
-                addNotification(__('New maintenance Request'), $request->details, null, null, $property->maintainer_id, getOwnerUserId());
+                addNotification(__('New maintenance Request'), $request->details, null, null, $property->maintainer_id, auth()->id());
             }
 
             DB::commit();
@@ -254,7 +254,7 @@ class MaintenanceRequestService
     {
         DB::beginTransaction();
         try {
-            $information = MaintenanceRequest::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $information = MaintenanceRequest::where('owner_user_id', auth()->id())->findOrFail($id);
             $information->delete();
             DB::commit();
             $message = __(DELETED_SUCCESSFULLY);

@@ -25,7 +25,6 @@ class PackageRequest extends FormRequest
     {
         return [
             'name' => 'required|unique:packages,name,' . $this->id,
-            'description' => 'required',
 //            'pricing_type' => 'required|in:1,2,3',
             'max_maintainer' => 'required|numeric',
             'max_invoice' => 'required|numeric',

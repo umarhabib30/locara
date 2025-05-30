@@ -32,7 +32,7 @@ class GatewayRequest extends FormRequest
                 'bank.status.*' => 'required_if:slug,bank',
                 'key' => 'required_unless:slug,bank,cash',
                 'url' => 'required_if:slug,flutterwave',
-                'secret' => 'required_unless:slug,bank,cash,mollie,paystack,stripe,coinbase,paddle,xendit',
+                'secret' => 'required_unless:slug,bank,cash,mollie,paystack,stripe,coinbase',
                 'currency.*' => 'required',
                 'conversion_rate.*' => 'required',
             ];

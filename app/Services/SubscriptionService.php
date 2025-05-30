@@ -14,7 +14,7 @@ class SubscriptionService
 
     public function getCurrentPlan($userId = null)
     {
-        $userId = $userId == null ? getOwnerUserId() : $userId;
+        $userId = $userId == null ? auth()->id() : $userId;
         $ownerPackage = OwnerPackage::query()
             ->leftJoin('subscription_orders', 'subscription_orders.id', '=', 'owner_packages.order_id')
             ->where('owner_packages.user_id', $userId)

@@ -21,7 +21,7 @@ class SettingController extends Controller
         $data['navApplicationSettingParentActiveClass'] = 'mm-active';
         $data['subNavGeneralSettingActiveClass'] = 'mm-active';
         $data['currencies'] = Currency::all();
-        $data['current_currency'] = Currency::where('current_currency', ACTIVE)->first();
+        $data['current_currency'] = Currency::where('current_currency', 'on')->first();
         $data['languages'] = Language::all();
         $data['default_language'] = Language::where('default', 1)->first();
         return view('admin.setting.general-setting')->with($data);
@@ -67,12 +67,8 @@ class SettingController extends Controller
                 $upload = settingImageStoreUpdate($option->id, $request->home_features_image, 'home-feature');
                 $option->option_value = $upload;
                 $option->save();
-            } elseif ($request->hasFile('home_about_us_image_one') && $key == 'home_about_us_image_one') {
-                $upload = settingImageStoreUpdate($option->id, $request->home_about_us_image_one, 'home-about');
-                $option->option_value = $upload;
-                $option->save();
-            }elseif ($request->hasFile('home_about_us_image_two') && $key == 'home_about_us_image_two') {
-                $upload = settingImageStoreUpdate($option->id, $request->home_about_us_image_two, 'home-about');
+            } elseif ($request->hasFile('home_about_us_image') && $key == 'home_about_us_image') {
+                $upload = settingImageStoreUpdate($option->id, $request->home_about_us_image, 'home-about');
                 $option->option_value = $upload;
                 $option->save();
             } elseif ($request->hasFile('home_integration_section_image') && $key == 'home_integration_section_image') {
@@ -87,8 +83,8 @@ class SettingController extends Controller
 
         /**  ====== Set Currency ====== */
         if ($request->currency_id) {
-            Currency::where('id', $request->currency_id)->update(['current_currency' => ACTIVE]);
-            Currency::where('id', '!=', $request->currency_id)->update(['current_currency' => DEACTIVATE]);
+            Currency::where('id', $request->currency_id)->update(['current_currency' => 'on']);
+            Currency::where('id', '!=', $request->currency_id)->update(['current_currency' => 'off']);
         }
 
         /**  ====== Set Language ====== */

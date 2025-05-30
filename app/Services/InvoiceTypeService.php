@@ -13,7 +13,7 @@ class InvoiceTypeService
 
     public function getAll()
     {
-        return InvoiceType::where('owner_user_id', getOwnerUserId())->get();
+        return InvoiceType::where('owner_user_id', auth()->id())->get();
     }
 
     public function store($request)
@@ -28,7 +28,7 @@ class InvoiceTypeService
             }
             $invoiceType->name = $request->name;
             $invoiceType->tax = $request->tax;
-            $invoiceType->owner_user_id = getOwnerUserId();
+            $invoiceType->owner_user_id = auth()->id();
             $invoiceType->status = $request->status ?? ACTIVE;
             $invoiceType->save();
             DB::commit();
@@ -45,7 +45,7 @@ class InvoiceTypeService
     {
         DB::beginTransaction();
         try {
-            $invoiceType = InvoiceType::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $invoiceType = InvoiceType::where('owner_user_id', auth()->id())->findOrFail($id);
             $invoiceType->delete();
             DB::commit();
             $message = __(DELETED_SUCCESSFULLY);

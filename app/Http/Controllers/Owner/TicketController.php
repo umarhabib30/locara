@@ -19,7 +19,7 @@ class TicketController extends Controller
     public function index(Request $request)
     {
         if (isAddonInstalled('PROTYSAAS') > 1) {
-            if (ownerCurrentPackage(getOwnerUserId())?->ticket_support != ACTIVE) {
+            if (ownerCurrentPackage(auth()->id())?->ticket_support != ACTIVE) {
                 return abort(403);
             }
         }

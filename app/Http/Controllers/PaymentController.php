@@ -72,7 +72,6 @@ class PaymentController extends Controller
         $object = [
             'id' => $order->id,
             'callback_url' => route('payment.verify'),
-            'cancel_url' => route('payment.failed'),
             'currency' => $gatewayCurrency->currency
         ];
 
@@ -97,7 +96,7 @@ class PaymentController extends Controller
             'user_id' => auth()->id(),
             'invoice_id' => $invoice->id,
             'amount' => $invoice->amount,
-            'system_currency' => Currency::where('current_currency', ACTIVE)->first()->currency_code,
+            'system_currency' => Currency::where('current_currency', 'on')->first()->currency_code,
             'gateway_id' => $gateway->id,
             'gateway_currency' => $gatewayCurrency->currency,
             'conversion_rate' => $gatewayCurrency->conversion_rate,
@@ -155,11 +154,6 @@ class PaymentController extends Controller
             DB::rollBack();
             return redirect()->route('tenant.invoice.index')->with('error', __('Payment Failed!'));
         }
-    }
-
-    public function failed(Request $request)
-    {
-        return redirect()->route('tenant.invoice.index')->with('error', __('Payment Failed!'));
     }
 
     public function verifyRedirect($type = 'error')

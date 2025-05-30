@@ -41,9 +41,4 @@ class SubscriptionOrder extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
-
-    public function gateway()
-    {
-        return $this->belongsTo(Gateway::class);
-    }
 }

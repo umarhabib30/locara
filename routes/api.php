@@ -55,6 +55,5 @@ Route::group(['middleware' => ['auth:api']], function () {
 });
 
 Route::match(array('GET', 'POST'), 'payment-subscription/verify', [PaymentSubscriptionController::class, 'verify']);
-Route::match(array('GET', 'POST'), 'payment-subscription/failed', [PaymentSubscriptionController::class, 'failed']);
 Route::match(array('GET', 'POST'), 'payment-verify', [PaymentController::class, 'verify']);
 // payment route end

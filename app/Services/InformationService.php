@@ -16,7 +16,7 @@ class InformationService
     {
         $information = Information::query()
             ->join('properties', 'information.property_id', '=', 'properties.id')
-            ->where('information.owner_user_id', getOwnerUserId())
+            ->where('information.owner_user_id', auth()->id())
             ->select('information.id', 'information.name', 'information.distance', 'information.additional_information', 'information.contact_number', 'properties.name as property_name')
             ->get();
         return $information?->makeHidden(['created_at', 'updated_at', 'deleted_at', 'owner_user_id']);
@@ -26,7 +26,7 @@ class InformationService
     {
         $information = Information::query()
             ->join('properties', 'information.property_id', '=', 'properties.id')
-            ->where('information.owner_user_id', getOwnerUserId())
+            ->where('information.owner_user_id', auth()->id())
             ->select('information.id', 'information.name', 'information.distance', 'information.additional_information', 'information.contact_number', 'properties.name as property_name');
         return datatables($information)
             ->addIndexColumn()
@@ -63,10 +63,10 @@ class InformationService
         try {
             $information =  Information::updateOrCreate([
                 'id' => $request->id,
-                'owner_user_id' => getOwnerUserId()
+                'owner_user_id' => auth()->id()
             ], [
                 'property_id' => $request->property_id,
-                'owner_user_id' => getOwnerUserId(),
+                'owner_user_id' => auth()->id(),
                 'name' => $request->name,
                 'distance' => $request->distance,
                 'additional_information' => $request->additional_information,
@@ -141,7 +141,7 @@ class InformationService
     {
         DB::beginTransaction();
         try {
-            $information =  Information::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $information =  Information::where('owner_user_id', auth()->id())->findOrFail($id);
             $information->delete();
             DB::commit();
             $message = __(DELETED_SUCCESSFULLY);

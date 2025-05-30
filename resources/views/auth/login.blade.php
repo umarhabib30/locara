@@ -84,16 +84,8 @@
                                                     <tbody>
                                                         <tr>
                                                             <td colspan="2" id="adminCredentialShow" class="login-info">
-                                                                <b>Admin:</b> admin@gmail.com | 123456  <strong></strong>
-                                                                <span class="badge bg-danger "><a href="{{LINK_SAAS_ADDON}}" target="_blank" style="color: white">{{ __('SAAS Addon') }}</a></span>
-
-                                                                {{--                                                            </td>--}}
-{{--                                                        </tr>--}}
-{{--                                                        <tr>--}}
-{{--                                                            <td colspan="2" id="adminCredentialShow" class="login-info">--}}
-                                                                <p class="font-16 pt-2">
-                                                                    <a  href="/" class="secondary-color font-medium">SAAS Landing Page</a>
-                                                                </p>
+                                                                <b>Admin:</b> admin@gmail.com | 123456 <span
+                                                                    class="badge bg-danger">{{ __('Addon') }}</span>
                                                             </td>
                                                         </tr>
                                                         <tr>

@@ -44,6 +44,27 @@ class TestimonialService
             $testimonial->status = $request->status;
             $testimonial->save();
 
+            /*File Manager Call upload*/
+            if ($request->hasFile('image')) {
+                $new_file = FileManager::where('origin_type', 'App\Models\Testimonial')->where('origin_id', $testimonial->id)->first();
+                if ($new_file) {
+                    $new_file->removeFile();
+                    $upload = $new_file->updateUpload($new_file->id, 'Testimonial', $request->image);
+                } else {
+                    $new_file = new FileManager();
+                    $upload = $new_file->upload('Testimonial', $request->image);
+                }
+
+                if ($upload['status']) {
+                    $upload['file']->origin_id = $testimonial->id;
+                    $upload['file']->origin_type = "App\Models\Testimonial";
+                    $upload['file']->save();
+                } else {
+                    throw new Exception($upload['message']);
+                }
+            }
+            /*End*/
+
             DB::commit();
             $message = $request->id ? __(UPDATED_SUCCESSFULLY) : __(CREATED_SUCCESSFULLY);
             return $this->success([], $message);

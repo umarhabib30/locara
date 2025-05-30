@@ -12,9 +12,4 @@ class Package extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
-
-    public function subscriptionPrice()
-    {
-        return $this->hasMany(PackageGatewayPrice::class, 'package_id', 'id');
-    }
 }

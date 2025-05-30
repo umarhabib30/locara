@@ -62,7 +62,7 @@ class TenantController extends Controller
         $data['subNavAllTenantMMActiveClass'] = 'mm-active';
         $data['subNavAllTenantActiveClass'] = 'active';
         $data['countries'] = $this->locationService->getCountry()->getData()->data;
-        $data['properties'] = Property::query()->with('propertyUnits')->where('owner_user_id', getOwnerUserId())->get();
+        $data['properties'] = Property::query()->with('propertyUnits')->where('owner_user_id', auth()->id())->get();
         return view('owner.tenants.add', $data);
     }
 
@@ -72,6 +72,7 @@ class TenantController extends Controller
         $data['subNavAllTenantMMActiveClass'] = 'mm-active';
         $data['subNavAllTenantActiveClass'] = 'active';
         $data['tenant'] = $this->tenantService->getDetailsById($id);
+        
         $data['countries'] = $this->locationService->getCountry()->getData()->data;
         $data['previousStates'] = $this->locationService->getStateByCountryId($data['tenant']->previous_country_id)->getData()->data->states;
         $data['previousSities'] = $this->locationService->getCitiesByStateId($data['tenant']->previous_state_id)->getData()->data->cities;
@@ -84,6 +85,7 @@ class TenantController extends Controller
 
     public function store(TenantRequest $request)
     {
+
         if ($request->step == FORM_STEP_ONE) {
             return $this->tenantService->step1($request);
         } elseif ($request->step == FORM_STEP_TWO) {

@@ -24,6 +24,14 @@ use Illuminate\Support\Facades\App;
 |
 */
 
+
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('optimize:clear');
+    // return what you want
+    dd($exitCode);
+});
+
+
 Auth::routes(['register' => false]);
 
 Route::get('/local/{ln}', function ($ln) {
@@ -44,11 +52,6 @@ Route::get('/local/{ln}', function ($ln) {
 Route::group(['middleware' => ['version.update', 'addon.update', 'isFrontend']], function () {
     Route::get('/', [CommonController::class, 'index'])->name('frontend');
     Route::get('recurring-generate-invoice', [CommonController::class, 'generateInvoice'])->name('recurring.generate.invoice');
-    Route::get('about-us', [CommonController::class, 'aboutUs'])->name('about-us');
-    Route::get('contact-us', [CommonController::class, 'contactUs'])->name('contact-us');
-    Route::get('blog-list', [CommonController::class, 'blogList'])->name('blog-list');
-    Route::get('blog-details/{blog_slug}', [CommonController::class, 'blogDetails'])->name('blog-details');
-    Route::get('feature', [CommonController::class, 'feature'])->name('feature');
 });
 
 Route::group(['middleware' => ['auth', 'version.update']], function () {
@@ -73,7 +76,6 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
 Route::group(['prefix' => 'payment'], function () {
     Route::post('/', [PaymentController::class, 'checkout'])->name('payment.checkout');
     Route::match(array('GET', 'POST'), 'verify', [PaymentController::class, 'verify'])->name('payment.verify');
-    Route::match(array('GET', 'POST'), 'failed', [PaymentController::class, 'failed'])->name('payment.failed');
     Route::get('verify-redirect/{type?}', [PaymentController::class, 'verifyRedirect'])->name('payment.verify.redirect');
 });
 

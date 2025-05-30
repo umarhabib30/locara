@@ -88,24 +88,22 @@
                                                 </div>
                                                 <!-- Payment History Table Start -->
                                                 <!-- datatable Start -->
-                                                <div class="table-responsive">
-                                                    <table id="allInvoicePaymentDataTable"
-                                                        class="table theme-border p-20 responsive">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="all">{{ __('SL') }}</th>
-                                                                <th class="all">{{ __('Property') }}</th>
-                                                                <th class="all">{{ __('Unit') }}</th>
-                                                                <th class="all">{{ __('Month') }}</th>
-                                                                <th class="all">{{ __('Invoice') }}</th>
-                                                                <th class="all">{{ __('Issues Date') }}</th>
-                                                                <th class="all">{{ __('Due Date') }}</th>
-                                                                <th class="all">{{ __('Amount') }}</th>
-                                                                <th class="all">{{ __('Status') }}</th>
-                                                            </tr>
-                                                        </thead>
-                                                    </table>
-                                                </div>
+                                                <table id="allInvoicePaymentDataTable"
+                                                    class="table theme-border p-20 responsive">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="all">{{ __('SL') }}</th>
+                                                            <th class="all">{{ __('Property') }}</th>
+                                                            <th class="all">{{ __('Unit') }}</th>
+                                                            <th class="all">{{ __('Month') }}</th>
+                                                            <th class="all">{{ __('Invoice') }}</th>
+                                                            <th class="all">{{ __('Issues Date') }}</th>
+                                                            <th class="all">{{ __('Due Date') }}</th>
+                                                            <th class="all">{{ __('Amount') }}</th>
+                                                            <th class="all">{{ __('Status') }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
                                                 <!-- datatable End -->
                                             </div>
                                         </div>

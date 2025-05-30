@@ -30,7 +30,7 @@
                         <!-- Property Top Search Bar Start -->
                         <div class="property-top-search-bar">
                             <div class="row align-items-center">
-                                <div class="col-md-12 text-end">
+                                <div class="col-md-12">
                                     <div class="property-top-search-bar-right">
                                         <button type="button" class="theme-btn mb-25" id="add"
                                             title="{{ __('Add New Notice') }}">{{ __('Add New Notice') }}</button>

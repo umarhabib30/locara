@@ -29,7 +29,7 @@ class TenantService
             ->leftJoin(DB::raw('(select tenant_id, MAX(updated_at) as last_payment from invoices where status = 1 AND deleted_at IS NULL group By tenant_id) as inv_last'), ['inv_last.tenant_id' => 'tenants.id'])
             ->whereNull('users.deleted_at')
             ->select(['tenants.*', 'inv.due', 'inv_last.last_payment', 'users.first_name', 'users.last_name', 'users.status as userStatus', 'users.contact_number', 'users.email', 'property_units.unit_name', 'properties.name as property_name'])
-            ->where('tenants.owner_user_id', getOwnerUserId())
+            ->where('tenants.owner_user_id', auth()->id())
             ->get();
         return $data?->makeHidden(['created_at', 'updated_at', 'deleted_at']);
     }
@@ -41,7 +41,7 @@ class TenantService
             ->whereNull('users.deleted_at')
             ->select(['tenants.*', 'users.first_name', 'users.last_name', 'users.contact_number', 'users.email'])
             ->where('tenants.status', TENANT_STATUS_ACTIVE)
-            ->where('tenants.owner_user_id', getOwnerUserId())
+            ->where('tenants.owner_user_id', auth()->id())
             ->get();
     }
 
@@ -55,7 +55,7 @@ class TenantService
             ->leftJoin(DB::raw('(select tenant_id, SUM(amount) as due from invoices where status = 0 AND deleted_at IS NULL group By tenant_id) as inv'), ['inv.tenant_id' => 'tenants.id'])
             ->leftJoin(DB::raw('(select tenant_id, MAX(updated_at) as last_payment from invoices where status = 1 AND deleted_at IS NULL group By tenant_id) as inv_last'), ['inv_last.tenant_id' => 'tenants.id'])
             ->select(['tenants.*', 'inv.due', 'inv_last.last_payment', 'users.first_name', 'users.last_name', 'users.status as userStatus', 'users.contact_number', 'users.email', 'property_units.unit_name', 'properties.name as property_name'])
-            ->where('tenants.owner_user_id', getOwnerUserId());
+            ->where('tenants.owner_user_id', auth()->id());
 
         return datatables($tenants)
             ->addIndexColumn()
@@ -124,7 +124,7 @@ class TenantService
             ->leftJoin('properties', 'tenants.property_id', '=', 'properties.id')
             ->leftJoin('property_units', 'tenants.unit_id', '=', 'property_units.id')
             ->select(['tenants.*', 'users.first_name', 'users.last_name', 'users.status as userStatus', 'users.contact_number', 'users.email', 'property_units.unit_name', 'properties.name as property_name'])
-            ->where('tenants.owner_user_id', getOwnerUserId());
+            ->where('tenants.owner_user_id', auth()->id());
 
         return datatables($tenants)
             ->addIndexColumn()
@@ -175,7 +175,7 @@ class TenantService
 
     public function getById($id)
     {
-        $data = Tenant::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+        $data = Tenant::where('owner_user_id', auth()->id())->findOrFail($id);
         return $data?->makeHidden(['created_at', 'updated_at', 'deleted_at']);
     }
 
@@ -193,7 +193,7 @@ class TenantService
             ->leftJoin('properties', 'tenants.property_id', '=', 'properties.id')
             ->leftJoin('property_details', 'properties.id', '=', 'property_details.property_id')
             ->leftJoin('property_units', 'tenants.unit_id', '=', 'property_units.id')
-            ->select(['tenants.*', 'users.first_name', 'users.last_name', 'users.contact_number', 'users.email', 'property_units.unit_name', 'properties.name as property_name', 'property_details.address as property_address', 'tenant_details.previous_address', 'tenant_details.previous_country_id', 'tenant_details.previous_state_id', 'tenant_details.previous_city_id', 'tenant_details.previous_zip_code', 'tenant_details.permanent_address', 'tenant_details.permanent_country_id', 'tenant_details.permanent_state_id', 'tenant_details.permanent_city_id', 'tenant_details.permanent_zip_code'])
+            ->select(['tenants.*', 'users.first_name', 'users.last_name', 'users.contact_number', 'users.email','users.nid_number','users.date_of_birth','property_units.unit_name','property_units.keycode', 'properties.name as property_name', 'property_details.address as property_address', 'property_details.zip_code as property_zip_code', 'property_details.city_id as property_city_id', 'tenant_details.previous_address', 'tenant_details.previous_country_id', 'tenant_details.previous_state_id', 'tenant_details.previous_city_id', 'tenant_details.previous_zip_code', 'tenant_details.permanent_address', 'tenant_details.permanent_country_id', 'tenant_details.permanent_state_id', 'tenant_details.permanent_city_id', 'tenant_details.permanent_zip_code'])
             ->where('tenants.owner_user_id', $userId)
             ->where('tenants.id', $id)
             ->firstOrFail();
@@ -202,7 +202,7 @@ class TenantService
 
     public function closingStatusHistory($id)
     {
-        return Tenant::query()->where('owner_user_id', getOwnerUserId())->where('status', TENANT_STATUS_CLOSE)->findOrFail($id);
+        return Tenant::query()->where('owner_user_id', auth()->id())->where('status', TENANT_STATUS_CLOSE)->findOrFail($id);
     }
 
     public function getPaymentByTenantId($id)
@@ -210,7 +210,7 @@ class TenantService
         $data = Invoice::query()
             ->join('tenants', 'invoices.property_unit_id', '=', 'tenants.unit_id')
             ->select('invoices.*')
-            ->where('tenants.owner_user_id', getOwnerUserId())
+            ->where('tenants.owner_user_id', auth()->id())
             ->where('tenants.id', $id)
             ->get();
         return $data?->makeHidden(['created_at', 'updated_at', 'deleted_at']);
@@ -222,7 +222,7 @@ class TenantService
             ->leftJoin('properties', 'invoices.property_id', '=', 'properties.id')
             ->leftJoin('property_units', 'invoices.property_unit_id', '=', 'property_units.id')
             ->select('invoices.*', 'property_units.unit_name', 'properties.name as property_name')
-            ->where('invoices.owner_user_id', getOwnerUserId())
+            ->where('invoices.owner_user_id', auth()->id())
             ->where('invoices.tenant_id', $id);
 
         return datatables($invoices)
@@ -262,7 +262,7 @@ class TenantService
             ->select('invoices.*')
             ->join('tenants', 'invoices.property_unit_id', '=', 'tenants.unit_id')
             ->whereNot('invoices.status', INVOICE_STATUS_PAID)
-            ->where('tenants.owner_user_id', getOwnerUserId())
+            ->where('tenants.owner_user_id', auth()->id())
             ->where('tenants.id', $id)
             ->get();
     }
@@ -270,7 +270,7 @@ class TenantService
     public function documentDestroy($id)
     {
         $document = FileManager::where('origin_type', 'App\Models\Tenant')->where('id', $id)->first();
-        $tenantExists = Tenant::where('id', $document->origin_id)->where('owner_user_id', getOwnerUserId())->exists();
+        $tenantExists = Tenant::where('id', $document->origin_id)->where('owner_user_id', auth()->id())->exists();
         if (!is_null($document) && $tenantExists) {
             $document->delete();
         } else {
@@ -286,8 +286,8 @@ class TenantService
         try {
             $id = $request->get('id', '');
             if ($id != '') {
-                $tenant = Tenant::where('owner_user_id', getOwnerUserId())->findOrFail($request->id);
-                $user = User::where('owner_user_id', getOwnerUserId())->findOrFail($tenant->user_id);
+                $tenant = Tenant::where('owner_user_id', auth()->id())->findOrFail($request->id);
+                $user = User::where('owner_user_id', auth()->id())->findOrFail($tenant->user_id);
                 $details = TenantDetails::firstOrNew(['tenant_id' => $tenant->id]);
             } else {
                 if (!getOwnerLimit(RULES_TENANT) > 0) {
@@ -308,14 +308,14 @@ class TenantService
             }
             $user->role = USER_ROLE_TENANT;
             $user->status = ACTIVE;
-            $user->owner_user_id = getOwnerUserId();
+            $user->owner_user_id = auth()->id();
             $user->save();
 
             // Tenant
             $tenant->user_id = $user->id;
-            $tenant->owner_user_id = getOwnerUserId();
+            $tenant->owner_user_id = auth()->id();
             $tenant->job = $request->job;
-            $tenant->age = $request->age;
+            $tenant->pets = $request->pet_type;
             $tenant->family_member = $request->family_member;
             $tenant->status = TENANT_STATUS_DRAFT;
             $tenant->save();
@@ -363,7 +363,7 @@ class TenantService
                     $emails = [$user->email];
                     $subject = getOption('app_name') . ' ' . __('welcome you');
                     $message = __('You have successfully been registered');
-                    $ownerUserId = getOwnerUserId();
+                    $ownerUserId = auth()->id();
                     $password = $request->password;
 
                     $mailService = new MailService;
@@ -396,11 +396,11 @@ class TenantService
     {
         DB::beginTransaction();
         try {
-            $unitExist = Tenant::where('owner_user_id', getOwnerUserId())->where('unit_id', $request->unit_id)->where('status', TENANT_STATUS_ACTIVE)->whereNot('id', $request->id)->first();
+            $unitExist = Tenant::where('owner_user_id', auth()->id())->where('unit_id', $request->unit_id)->where('status', TENANT_STATUS_ACTIVE)->whereNot('id', $request->id)->first();
             if (!is_null($unitExist)) {
                 throw new Exception(__('Unit already Used'));
             }
-            $tenant = Tenant::where('owner_user_id', getOwnerUserId())->findOrFail($request->id);
+            $tenant = Tenant::where('owner_user_id', auth()->id())->findOrFail($request->id);
             $tenant->property_id = $request->property_id;
             $tenant->unit_id = $request->unit_id;
             $tenant->lease_start_date = $request->lease_start_date;
@@ -430,7 +430,7 @@ class TenantService
     {
         DB::beginTransaction();
         try {
-            $tenant = Tenant::where('owner_user_id', getOwnerUserId())->findOrFail($request->id);
+            $tenant = Tenant::where('owner_user_id', auth()->id())->findOrFail($request->id);
             $tenant->status = TENANT_STATUS_ACTIVE;
             $tenant->save();
             /*File Manager Call upload*/
@@ -463,7 +463,7 @@ class TenantService
     {
         DB::beginTransaction();
         try {
-            $tenant = Tenant::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $tenant = Tenant::where('owner_user_id', auth()->id())->findOrFail($id);
             $tenant->status = TENANT_STATUS_CLOSE;
             $tenant->close_refund_amount = $request->close_refund_amount;
             $tenant->close_charge = $request->close_charge;
@@ -485,7 +485,7 @@ class TenantService
     {
         DB::beginTransaction();
         try {
-            $tenant = Tenant::where('owner_user_id', getOwnerUserId())->findOrFail($request->tenant_id);
+            $tenant = Tenant::where('owner_user_id', auth()->id())->findOrFail($request->tenant_id);
             if ($tenant->user->email != $request->email) {
                 throw new Exception(__('Tenant Not Found'));
             }

@@ -27,7 +27,7 @@ class ListingService
             ->leftJoin('file_managers', function ($q) {
                 $q->on('file_managers.origin_id', '=', 'listing_images.id')->where('file_managers.origin_type', '=', 'App\Models\ListingImage');
             })
-            ->where('listings.owner_user_id', getOwnerUserId())
+            ->where('listings.owner_user_id', auth()->id())
             ->select('listings.*', 'file_managers.file_name', 'file_managers.folder_name')
             ->groupBy('listings.id')
             ->get();
@@ -78,7 +78,7 @@ class ListingService
     {
         $contacts = ListingContact::query()
             ->join('listings', 'listing_contacts.listing_id', '=', 'listings.id')
-            ->where('listing_contacts.owner_user_id', getOwnerUserId())
+            ->where('listing_contacts.owner_user_id', auth()->id())
             ->select('listing_contacts.*', 'listings.name as listing_name');
 
         return datatables($contacts)
@@ -138,26 +138,18 @@ class ListingService
         try {
             $id = $request->get('id', '');
             if ($id != '') {
-                $listing = Listing::where('owner_user_id', getOwnerUserId())->findOrFail($request->id);
+                $listing = Listing::where('owner_user_id', auth()->id())->findOrFail($request->id);
             } else {
                 $listing = new Listing();
             }
-            $listing->owner_user_id = getOwnerUserId();
+            $listing->owner_user_id = auth()->id();
             $listing->name = $request->name;
-
-             if (Listing::where('slug', getSlug($request->name))->where('id', '!=', $id)->count() > 0) {
-                $slug = getSlug($request->name) . '-' . rand(100000, 999999);
-            }
-            else {
-                $slug = getSlug($request->name);
-            }
-
-            $listing->slug = $slug;
+            $listing->slug = Str::slug($request->name, '-');
             $listing->address = $request->address;
-            $listing->country = $request->country;
-            $listing->state = $request->state;
-            $listing->city = $request->city;
-            $listing->zip_code = $request->zip_code;
+            $listing->country = Str::lower($request->country);
+            $listing->state = Str::lower($request->state);
+            $listing->city = Str::lower($request->city);
+            $listing->zip_code = Str::lower($request->zip_code);
             $listing->latitude = $request->latitude;
             $listing->longitude = $request->longitude;
             $listing->price = $request->price;
@@ -183,7 +175,7 @@ class ListingService
                     $upload = $newFile->upload('ListingImage', $image);
                     if ($upload['status']) {
                         $propertyImage = new ListingImage();
-                        $propertyImage->owner_user_id = getOwnerUserId();
+                        $propertyImage->owner_user_id = auth()->id();
                         $propertyImage->listing_id = $listing->id;
                         $propertyImage->file_id = $upload['file']->id;
                         $propertyImage->save();
@@ -202,9 +194,9 @@ class ListingService
                 foreach ($request->info['name'] as $key => $name) {
                     $listingInformation = ListingInformation::updateOrCreate([
                         'id' => $request->info['id'][$key] ?? null,
-                        'owner_user_id' => getOwnerUserId()
+                        'owner_user_id' => auth()->id()
                     ], [
-                        'owner_user_id' => getOwnerUserId(),
+                        'owner_user_id' => auth()->id(),
                         'listing_id' => $listing->id,
                         'name' => $name,
                         'distance' => $request->info['distance'][$key],
@@ -248,7 +240,7 @@ class ListingService
 
     public function getById($id)
     {
-        $data = Listing::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+        $data = Listing::where('owner_user_id', auth()->id())->findOrFail($id);
         return $data->makeHidden(['created_at', 'updated_at', 'deleted_at']);
     }
 
@@ -316,7 +308,7 @@ class ListingService
     public function delete($id)
     {
         try {
-            $listing = Listing::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $listing = Listing::where('owner_user_id', auth()->id())->findOrFail($id);
             ListingInformation::where('listing_id', $listing->id)->delete();
             $listingImages =  ListingImage::query()->where('listing_id', $listing->id)->get();
             foreach ($listingImages as $listingImage) {
@@ -338,7 +330,7 @@ class ListingService
     {
         try {
             $listingImage =  ListingImage::query()
-                ->where('owner_user_id', getOwnerUserId())
+                ->where('owner_user_id', auth()->id())
                 ->findOrFail($id);
             $file = FileManager::where('origin_type', 'App\Models\ListingImage')->find($listingImage->file_id);
             if ($file) {
@@ -397,7 +389,7 @@ class ListingService
     {
         DB::beginTransaction();
         try {
-            $contact = ListingContact::where('owner_user_id', getOwnerUserId())->find($request->id);
+            $contact = ListingContact::where('owner_user_id', auth()->id())->find($request->id);
             if (is_null($contact)) {
                 throw new Exception(__('No Contact Found'));
             }
@@ -407,7 +399,7 @@ class ListingService
 
             if (getOption('send_email_status', 0) == ACTIVE) {
                 $emails = [$contact->email];
-                $ownerUserId = getOwnerUserId();
+                $ownerUserId = auth()->id();
 
                 $mailService = new MailService;
                 $template = EmailTemplate::where('owner_user_id', $ownerUserId)->where('category', EMAIL_TEMPLATE_LISTING_REPLY)->where('status', ACTIVE)->first();

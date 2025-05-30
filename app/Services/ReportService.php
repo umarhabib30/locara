@@ -20,7 +20,7 @@ class ReportService
             ->join('properties', 'invoices.property_id', '=', 'properties.id')
             ->join('property_units', 'invoices.property_unit_id', '=', 'property_units.id')
             ->select('invoices.name', 'invoices.invoice_no', 'invoices.amount', 'invoices.tax_amount', 'invoices.created_at', 'properties.name as property_name', 'property_units.unit_name')
-            ->where('invoices.owner_user_id', getOwnerUserId())
+            ->where('invoices.owner_user_id', auth()->id())
             ->where('invoices.status', INVOICE_STATUS_PAID);
 
         if ($request['property_id'] != null) {
@@ -129,7 +129,7 @@ class ReportService
         $expenses = Expense::query()
             ->join('properties', 'expenses.property_id', '=', 'properties.id')
             ->join('property_units', 'expenses.property_unit_id', '=', 'property_units.id')
-            ->where('expenses.owner_user_id', getOwnerUserId())
+            ->where('expenses.owner_user_id', auth()->id())
             ->select('expenses.name',  'expenses.total_amount', 'expenses.created_at', 'properties.name as property_name', 'property_units.unit_name');
 
         if ($request['property_id'] != null) {
@@ -176,7 +176,7 @@ class ReportService
             ->join('properties', 'tenants.property_id', '=', 'properties.id')
             ->join('property_units', 'tenants.unit_id', '=', 'property_units.id')
             ->whereNull('users.deleted_at')
-            ->where('tenants.owner_user_id', getOwnerUserId())
+            ->where('tenants.owner_user_id', auth()->id())
             ->select('tenants.*', 'users.first_name', 'users.last_name', 'properties.name as property_name', 'property_units.unit_name');
 
 
@@ -207,7 +207,7 @@ class ReportService
             ->leftJoin('tenants', ['properties.id' => 'tenants.property_id', 'tenants.status' => (DB::raw(TENANT_STATUS_ACTIVE))])
             ->selectRaw('properties.number_of_unit - (COUNT(tenants.id)) as available_unit,properties.*')
             ->groupBy('properties.id')
-            ->where('properties.owner_user_id', getOwnerUserId());
+            ->where('properties.owner_user_id', auth()->id());
 
         return datatables($properties)
             ->addIndexColumn()
@@ -240,7 +240,7 @@ class ReportService
             ->join('users', 'tenants.user_id', '=', 'users.id')
             ->join('maintenance_issues', 'maintenance_requests.issue_id', '=', 'maintenance_issues.id')
             ->whereNull('users.deleted_at')
-            ->where('maintenance_requests.owner_user_id', getOwnerUserId())
+            ->where('maintenance_requests.owner_user_id', auth()->id())
             ->select('maintenance_requests.*', 'properties.name as property_name', 'maintenance_issues.name as issue_name', 'property_units.unit_name', 'users.first_name', 'users.last_name');
         return datatables($maintenance)
             ->addIndexColumn()
@@ -270,7 +270,7 @@ class ReportService
             ->leftJoin(DB::raw('(select tenant_id, SUM(amount) as paid from invoices where status = 1 group By tenant_id) as inv_paid'), ['inv_paid.tenant_id' => 'tenants.id'])
             ->leftJoin(DB::raw('(select tenant_id, SUM(amount) as due from invoices where status = 0 group By tenant_id) as inv_due'), ['inv_due.tenant_id' => 'tenants.id'])
             ->select(['tenants.*', 'inv_paid.paid', 'inv_due.due', 'users.first_name', 'users.last_name', 'users.contact_number', 'users.email', 'property_units.unit_name', 'properties.name as property_name'])
-            ->where('tenants.owner_user_id', getOwnerUserId());
+            ->where('tenants.owner_user_id', auth()->id());
 
         return datatables($tenants)
             ->addIndexColumn()

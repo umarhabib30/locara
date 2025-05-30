@@ -133,14 +133,42 @@
                                                                 </div>
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-md-6 mb-25">
+                                                                <!-- <div class="col-md-6 mb-25">
+                                                                                                    <label
+                                                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Age') }}
+                                                                                                        <span class="text-danger">*</span></label>
+                                                                                                    <input type="number" name="age"
+                                                                                                        class="form-control"
+                                                                                                        placeholder="{{ __('Age') }}">
+                                                                                                </div> -->
+                                                                <div class="col-md-4 mb-25">
                                                                     <label
-                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('Age') }}
-                                                                        <span class="text-danger">*</span></label>
-                                                                    <input type="number" name="age"
-                                                                        class="form-control"
-                                                                        placeholder="{{ __('Age') }}">
+                                                                        class="label-text-title color-heading font-medium mb-2">{{ __('My Pets') }}</label>
+                                                                    <select class="form-control" name="pet_type">
+                                                                        <option value="">{{ __('Select Pet Type') }}
+                                                                        </option>
+                                                                        <option value="Cat"
+                                                                            {{ old('pet_type') == 'Cat' ? 'selected' : '' }}>
+                                                                            {{ __('Cat') }}
+                                                                        </option>
+                                                                        <option value="Dog"
+                                                                            {{ old('pet_type') == 'Dog' ? 'selected' : '' }}>
+                                                                            {{ __('Dog') }}
+                                                                        </option>
+                                                                        <option value="Other"
+                                                                            {{ old('pet_type') == 'Other' ? 'selected' : '' }}>
+                                                                            {{ __('Other') }}
+                                                                        </option>
+                                                                        <option value="No Pets"
+                                                                            {{ old('pet_type') == 'No Pets' ? 'selected' : '' }}>
+                                                                            {{ __('No Pets') }}
+                                                                        </option>
+                                                                    </select>
+                                                                    @error('pet_type')
+                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                    @enderror
                                                                 </div>
+
                                                                 <div class="col-md-6 mb-25">
                                                                     <label
                                                                         class="label-text-title color-heading font-medium mb-2">{{ __('Family Members') }}
@@ -304,7 +332,8 @@
                                                                             --{{ __('Select Property') }}--</option>
                                                                         @foreach ($properties as $property)
                                                                             <option value="{{ $property->id }}">
-                                                                                {{ $property->name }}</option>
+                                                                                {{ $property->name }}
+                                                                            </option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
@@ -441,9 +470,11 @@
                                                                         <select name="security_deposit_type"
                                                                             class="form-control">
                                                                             <option value="0">
-                                                                                {{ __('Fixed') }}</option>
+                                                                                {{ __('Fixed') }}
+                                                                            </option>
                                                                             <option value="1">
-                                                                                {{ __('Percentage') }}</option>
+                                                                                {{ __('Percentage') }}
+                                                                            </option>
                                                                         </select>
                                                                         <input type="number" step="any"
                                                                             class="form-control" id="security_deposit"
@@ -458,9 +489,11 @@
                                                                     <div class="input-group custom-input-group">
                                                                         <select name="late_fee_type" class="form-control">
                                                                             <option value="0">
-                                                                                {{ __('Fixed') }}</option>
+                                                                                {{ __('Fixed') }}
+                                                                            </option>
                                                                             <option value="1">
-                                                                                {{ __('Percentage') }}</option>
+                                                                                {{ __('Percentage') }}
+                                                                            </option>
                                                                         </select>
                                                                         <input type="number" step="any"
                                                                             class="form-control" id="late_fee"

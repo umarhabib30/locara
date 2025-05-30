@@ -54,9 +54,8 @@ class InstamojoService extends BasePaymentService
             Log::info(json_encode($response));
             return $data;
         } catch (\Exception $ex) {
-            $data['message'] = $ex->getMessage();
+            return $data['message'] = $ex->getMessage();
         }
-        return $data;
     }
 
     public function paymentConfirmation($payment_id)

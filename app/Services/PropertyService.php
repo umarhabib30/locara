@@ -29,7 +29,7 @@ class PropertyService
             })
             ->selectRaw('properties.number_of_unit - (COUNT(users.id)) as available_unit,(SUM(property_units.bedroom)) as rooms,properties.*')
             ->groupBy('properties.id')
-            ->where('properties.owner_user_id', getOwnerUserId())
+            ->where('properties.owner_user_id', auth()->id())
             ->get();
         return $data?->makeHidden(['updated_at', 'created_at', 'deleted_at']);
     }
@@ -83,7 +83,7 @@ class PropertyService
             ->leftJoin('file_managers', ['property_units.id' => 'file_managers.origin_id', 'file_managers.origin_type' => (DB::raw("'App\\\Models\\\PropertyUnit'"))])
             ->select('property_units.*', 'properties.name as property_name', 'users.first_name', 'users.last_name', 'file_managers.file_name', 'file_managers.folder_name')
             ->orderBy('properties.id', 'asc')
-            ->where('properties.owner_user_id', getOwnerUserId())
+            ->where('properties.owner_user_id', auth()->id())
             ->get();
         return $data?->makeHidden(['updated_at', 'created_at', 'deleted_at']);
     }
@@ -97,14 +97,14 @@ class PropertyService
             ->selectRaw('COUNT(DISTINCT tenants.id) as total_tenant,COUNT(DISTINCT maintainers.id) as total_maintainers,properties.*,property_details.address')
             ->groupBy('properties.id')
             ->orderBy('properties.id')
-            ->where('properties.owner_user_id', getOwnerUserId())
+            ->where('properties.owner_user_id', auth()->id())
             ->get();
         return $data?->makeHidden(['updated_at', 'created_at', 'deleted_at']);
     }
 
     public function getById($id)
     {
-        return Property::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+        return Property::where('owner_user_id', auth()->id())->findOrFail($id);
     }
 
     public function getDetailsById($id)
@@ -130,7 +130,7 @@ class PropertyService
              property_details.map_link,users.first_name,
              users.last_name')
             ->groupBy('properties.id')
-            ->where('properties.owner_user_id', getOwnerUserId())
+            ->where('properties.owner_user_id', auth()->id())
             ->findOrFail($id);
         return $data?->makeHidden(['updated_at', 'created_at', 'deleted_at']);
     }
@@ -145,7 +145,7 @@ class PropertyService
             ->selectRaw('properties.number_of_unit - (COUNT(users.id)) as available_unit,properties.*')
             ->groupBy('properties.id')
             ->where('properties.property_type', $type)
-            ->where('properties.owner_user_id', getOwnerUserId())
+            ->where('properties.owner_user_id', auth()->id())
             ->get();
     }
 
@@ -153,7 +153,7 @@ class PropertyService
     {
         return Property::query()
             ->where('property_type', $type)
-            ->where('owner_user_id', getOwnerUserId())
+            ->where('owner_user_id', auth()->id())
             ->count();
     }
 
@@ -164,7 +164,7 @@ class PropertyService
             ->selectRaw('properties.number_of_unit - (COUNT(tenants.id)) as available_unit,properties.*')
             ->groupBy('properties.id')
             ->where('properties.property_type', $type)
-            ->where('properties.owner_user_id', getOwnerUserId());
+            ->where('properties.owner_user_id', auth()->id());
 
         return datatables($properties)
             ->addIndexColumn()
@@ -213,7 +213,7 @@ class PropertyService
             $property = Property::query()
                 ->join('property_details', 'properties.id', '=', 'property_details.property_id')
                 ->select('properties.name', 'properties.id', 'properties.thumbnail_image_id', 'property_details.address')
-                ->where('properties.owner_user_id', getOwnerUserId())
+                ->where('properties.owner_user_id', auth()->id())
                 ->findOrFail($id);
             $propertyUnits = PropertyUnit::query()
                 ->select('id', 'unit_name as name', 'general_rent', 'security_deposit', 'late_fee', 'security_deposit_type', 'late_fee_type', 'incident_receipt', 'rent_type', 'monthly_due_day', 'yearly_due_day')
@@ -235,7 +235,7 @@ class PropertyService
         DB::beginTransaction();
         try {
             if ($request->property_id) {
-                $property = Property::with('propertyDetail')->where('owner_user_id', getOwnerUserId())->where('id', $request->property_id)->firstOrFail();
+                $property = Property::with('propertyDetail')->where('owner_user_id', auth()->id())->where('id', $request->property_id)->firstOrFail();
             } else {
                 if (getOwnerLimit(RULES_PROPERTY) < 1) {
                     throw new Exception(__('Your property Limit finished'));
@@ -243,7 +243,7 @@ class PropertyService
                 $property = new Property();
             }
             $property->property_type = $request->property_type;
-            $property->owner_user_id = getOwnerUserId();
+            $property->owner_user_id = auth()->id();
             $property->name = ($request->property_type == PROPERTY_TYPE_OWN) ? $request->own_property_name : $request->lease_property_name;
             $property->number_of_unit = ($request->property_type == PROPERTY_TYPE_OWN) ? $request->own_number_of_unit : $request->lease_number_of_unit;
             $property->description = ($request->property_type == PROPERTY_TYPE_OWN) ? $request->own_description : $request->lease_description;
@@ -277,7 +277,7 @@ class PropertyService
     {
         DB::beginTransaction();
         try {
-            $property = Property::where('owner_user_id', getOwnerUserId())->findOrFail($request->property_id);
+            $property = Property::where('owner_user_id', auth()->id())->findOrFail($request->property_id);
             $propertyDetail = PropertyDetail::wherePropertyId($property->id)->first();
             if (!$propertyDetail) {
                 $propertyDetail = new PropertyDetail();
@@ -307,7 +307,7 @@ class PropertyService
     {
         DB::beginTransaction();
         try {
-            $property = Property::where('owner_user_id', getOwnerUserId())->findOrFail($request->property_id);
+            $property = Property::where('owner_user_id', auth()->id())->findOrFail($request->property_id);
             $property->unit_type = $request->unit_type;
             $property->save();
 
@@ -327,6 +327,12 @@ class PropertyService
                     $property_unit->bedroom = $request->single['bedroom'][$i];
                     $property_unit->bath = $request->single['bath'][$i];
                     $property_unit->kitchen = $request->single['kitchen'][$i];
+
+                    // Encrypt and save the keycode
+                    if (isset($request->single['keycode'][$i])) {
+                        $property_unit->keycode = encrypt($request->single['keycode'][$i]);
+                    }
+
                     $property_unit->save();
                 }
             } else {
@@ -349,6 +355,12 @@ class PropertyService
                     $property_unit->condition = $request->multiple['condition'][$i];
                     $property_unit->parking = $request->multiple['parking'][$i];
                     $property_unit->description = $request->multiple['description'][$i];
+
+                    // Encrypt and save the keycode
+                    if (isset($request->multiple['keycode'][$i])) {
+                        $property_unit->keycode = encrypt($request->multiple['keycode'][$i]);
+                    }
+
                     $property_unit->save();
 
                     if (isset($request->multiple['images'][$i])) {
@@ -390,11 +402,12 @@ class PropertyService
         }
     }
 
+
     public function rentChargeStore($request)
     {
         DB::beginTransaction();
         try {
-            $property = Property::where('owner_user_id', getOwnerUserId())->findOrFail($request->property_id);
+            $property = Property::where('owner_user_id', auth()->id())->findOrFail($request->property_id);
 
             for ($i = 0; $i < count($request->propertyUnit['id']); $i++) {
                 $property_unit = PropertyUnit::find($request->propertyUnit['id'][$i]);
@@ -428,7 +441,7 @@ class PropertyService
     {
         DB::beginTransaction();
         try {
-            $property = Property::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $property = Property::where('owner_user_id', auth()->id())->findOrFail($id);
             /*File Manager Call upload*/
             if ($request->file('file')) {
                 $new_file = new FileManager();
@@ -437,7 +450,10 @@ class PropertyService
                 if ($upload['status']) {
                     $propertyImage = new PropertyImage();
                     $propertyImage->property_id = $property->id;
+
+                    
                     $propertyImage->file_id = $upload['file']->id;
+                    
                     $propertyImage->save();
 
                     $upload['file']->origin_id = $propertyImage->id;
@@ -465,7 +481,7 @@ class PropertyService
             $existsImage = PropertyImage::query()
                 ->join('properties', 'property_images.property_id', '=', 'properties.id')
                 ->where('property_images.id', $id)
-                ->where('properties.owner_user_id', getOwnerUserId())
+                ->where('properties.owner_user_id', auth()->id())
                 ->exists();
             if ($existsImage) {
                 $propertyImage = PropertyImage::findOrFail($id);
@@ -491,7 +507,7 @@ class PropertyService
         DB::beginTransaction();
         try {
             /*File Manager Call upload for Thumbnail Image*/
-            $property = Property::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $property = Property::where('owner_user_id', auth()->id())->findOrFail($id);
             if ($request->file) {
                 $new_file = new FileManager();
                 $upload = $new_file->upload('Property', $request->file);
@@ -521,7 +537,7 @@ class PropertyService
         try {
             $response = [];
             if ($request->property_id) {
-                $response['property'] = Property::where('owner_user_id', getOwnerUserId())->findOrFail($request->property_id);
+                $response['property'] = Property::where('owner_user_id', auth()->id())->findOrFail($request->property_id);
             }
 
             $view = view('owner.property.partial.render-property-information', $response)->render();
@@ -536,7 +552,7 @@ class PropertyService
     public function getLocation($request)
     {
         try {
-            $response['property'] = Property::where('owner_user_id', getOwnerUserId())->findOrFail($request->property_id);
+            $response['property'] = Property::where('owner_user_id', auth()->id())->findOrFail($request->property_id);
             $country_file = public_path('file/countries.csv');
             $response['countries'] = csvToArray($country_file);
             $response['view'] = view('owner.property.partial.render-location', $response)->render();
@@ -549,7 +565,7 @@ class PropertyService
     public function getUnitByPropertyId($request)
     {
         try {
-            $response['property'] = Property::where('owner_user_id', getOwnerUserId())->findOrFail($request->property_id);
+            $response['property'] = Property::where('owner_user_id', auth()->id())->findOrFail($request->property_id);
             $response['propertyUnits'] = PropertyUnit::where('property_id', $response['property']->id)->get();
             $response['view'] = view('owner.property.partial.render-unit', $response)->render();
             return $this->success($response);
@@ -565,7 +581,7 @@ class PropertyService
                 ->when(!in_array('all', $request->property_ids ?? []), function ($q) use ($request) {
                     $q->whereIn('id', $request->property_ids ?? []);
                 })
-                ->where('owner_user_id', getOwnerUserId())
+                ->where('owner_user_id', auth()->id())
                 ->select('id')
                 ->pluck('id')
                 ->toArray();
@@ -579,7 +595,7 @@ class PropertyService
     public function getRentCharge($request)
     {
         try {
-            $response['property'] = Property::where('owner_user_id', getOwnerUserId())->findOrFail($request->property_id);
+            $response['property'] = Property::where('owner_user_id', auth()->id())->findOrFail($request->property_id);
             $response['propertyUnits'] = PropertyUnit::where('property_id', $response['property']->id)->get();
             $response['propertyUnitIds'] = PropertyUnit::where('property_id', $response['property']->id)->pluck('id')->toArray();
             $response['view'] = view('owner.property.partial.render-rent-charge', $response)->render();
@@ -597,7 +613,7 @@ class PropertyService
             if ($tenant) {
                 throw new Exception('Tenant Available! You can\'t delete');
             }
-            $property = Property::where('owner_user_id', getOwnerUserId())->findOrFail($id);
+            $property = Property::where('owner_user_id', auth()->id())->findOrFail($id);
             if ($property) {
                 foreach (@$property->propertyImages as $propertyImage) {
                     $propertyImage = PropertyImage::find($propertyImage->id);
@@ -646,7 +662,7 @@ class PropertyService
             }
 
             $propertyIds = Property::query()
-                ->where('owner_user_id', getOwnerUserId())
+                ->where('owner_user_id', auth()->id())
                 ->withTrashed()
                 ->select('id')
                 ->get()
@@ -679,9 +695,7 @@ class PropertyService
             ->groupBy('properties.id')
             ->where('properties.property_type', $type)
             ->where('properties.name', 'LIKE', "%{$searchItem}%")
-            ->where('properties.owner_user_id', getOwnerUserId())
+            ->where('properties.owner_user_id', auth()->id())
             ->get();
     }
-
-
 }
